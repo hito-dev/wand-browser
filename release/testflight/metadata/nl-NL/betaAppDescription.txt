@@ -1,3 +1,0 @@
-Met Wand Browser kunnen HTTPS-websites Bluetooth Low Energy en NFC gebruiken op iPhone. Ontdek de opensourcebrowser, probeer de hardwaretests en bouw websites die met apparaten in de buurt en NDEF-tags communiceren.
-
-Voor hardwaretoegang zijn iOS 18 of nieuwer en een fysieke iPhone vereist. De app-interface is momenteel Engels. Websites hebben HTTPS, een pagina op het hoogste niveau en een sessie op de voorgrond nodig. Elke site heeft je toestemming nodig; die vervalt bij navigeren, herladen, naar de achtergrond gaan of intrekken.

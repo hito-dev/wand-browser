@@ -1,7 +1,0 @@
-Éléments à tester
-
-Touchez « Choisir un appareil Bluetooth » pour ouvrir le sélecteur. Ce test filtre les appareils dont le nom commence par hito ou Hito et demande l’UUID du service Hito. Sélectionnez votre propre portefeuille de test compatible ; le test se connecte à son serveur GATT et affiche les événements de connexion. Les autres sites doivent demander leurs propres filtres et services. Un appairage seul n’autorise pas l’accès d’un site.
-
-Touchez « Scanner NFC » et approchez un tag NDEF compatible du haut de l’iPhone. La console affiche les types et le contenu des enregistrements. Arrêtez le scan avant de changer de tâche. Pour écrire, utilisez votre propre tag de test réinscriptible : saisissez du texte ou essayez un enregistrement binaire. L’écriture remplace le contenu. Ce test ne lit pas les cartes de paiement et n’émule pas de cartes NFC.
-
-En cas d’échec, lisez l’erreur dans la console, vérifiez les autorisations Bluetooth ou NFC d’iOS et les réglages du site, puis réessayez au premier plan. Après une navigation ou un passage en arrière-plan, autorisez à nouveau l’accès. Le simulateur ne vérifie pas les opérations radio ou les tags. Testez sur du matériel réel, annulez la sélection d’un appareil et vérifiez qu’un refus reste effectif.

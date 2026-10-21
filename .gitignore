@@ -22,3 +22,9 @@ tests/.certificates/
 /scripts/prepare-fixtures.sh
 /scripts/serve-fixtures.mjs
 /tests/.srl
+
+# Local TestFlight release preparation
+/release/testflight/
+/scripts/archive-testflight.sh
+/scripts/verify-testflight.py
+/ios/ExportOptions-TestFlight.plist

@@ -7,7 +7,7 @@ and preserve message placeholders. Native application UI remains English.
 Run `sh scripts/prepare-pages.sh` to generate a validated temporary Pages directory.
 Run `python3 -m unittest discover -s tests -p site_test.py` to check discovery,
 translations, utility-page indexing, fixture IDs and metadata limits. Deployment
-runs the same checks. See `release/testflight/README.md` for manual metadata use.
+runs the same checks.
 
 English URLs stay at `/` and `/fixtures/bridge.html`; translated routes use
 lowercase locale prefixes. Four substantive pages per locale provide 100 indexable

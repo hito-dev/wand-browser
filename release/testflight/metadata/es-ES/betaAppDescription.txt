@@ -1,3 +1,0 @@
-Wand Browser permite a los sitios HTTPS usar Bluetooth Low Energy y NFC en iPhone. Explora el navegador de código abierto, prueba el hardware y crea sitios que se conecten con dispositivos cercanos y etiquetas NDEF.
-
-Requiere iOS 18 o posterior y un iPhone físico para acceder al hardware. La interfaz de la app está en inglés. Los sitios necesitan HTTPS, una página de nivel superior y una sesión en primer plano. Cada sitio necesita tu permiso; caduca al navegar, recargar, pasar a segundo plano o revocarlo.
