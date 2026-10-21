@@ -2,20 +2,32 @@ import XCTest
 
 @MainActor
 final class HitoWandUITests: XCTestCase {
-    private func openFixtures(_ app: XCUIApplication) {
+    private var fixtureBase: String {
+        get throws {
+            let value = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? "https://hito-dev.github.io/wand-browser/fixtures/"
+            guard let url = URL(string: value), url.scheme == "https", let host = url.host, !host.isEmpty,
+                  url.user == nil, url.password == nil, url.query == nil, url.fragment == nil else {
+                throw NSError(domain: "WandFixtureTests", code: 1, userInfo: [NSLocalizedDescriptionKey:
+                    "WAND_FIXTURE_URL must be an HTTPS directory URL without credentials, query, or fragment."])
+            }
+            return value.hasSuffix("/") ? value : value + "/"
+        }
+    }
+    private func openFixtures(_ app: XCUIApplication) throws {
+        let base = try fixtureBase
         XCUIDevice.shared.orientation = .portrait
         app.launch()
-        let base = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? "https://localhost:18443/"
         let field = app.textFields["address-field"]
         XCTAssertTrue(field.waitForExistence(timeout: 10))
         field.tap()
         field.typeText(base + "bridge.html\n")
-        XCTAssertTrue(pageText(app, "Wand hardware fixtures").waitForExistence(timeout: 30))
+        XCTAssertTrue(pageText(app, "Wand hardware fixtures").waitForExistence(timeout: 30),
+                      "Could not open \(base)bridge.html. Check your internet connection and Pages deployment, or override WAND_FIXTURE_URL.")
     }
 
-    func testNativeHardwarePromptsAndRevocation() {
+    func testNativeHardwarePromptsAndRevocation() throws {
         let app = XCUIApplication()
-        openFixtures(app)
+        try openFixtures(app)
         app.webViews.buttons["Choose Bluetooth device"].tap()
         XCTAssertTrue(app.navigationBars["Choose a device"].waitForExistence(timeout: 10))
         app.buttons["Cancel"].tap()
@@ -36,9 +48,9 @@ final class HitoWandUITests: XCTestCase {
         app.buttons["Done"].tap()
     }
 
-    func testHTTPSNavigationAndSameTabLinks() {
+    func testHTTPSNavigationAndSameTabLinks() throws {
         let app = XCUIApplication()
-        openFixtures(app)
+        try openFixtures(app)
         app.swipeUp()
         app.webViews.links["Open second page"].tap()
         XCTAssertTrue(app.webViews.staticTexts["Second page"].waitForExistence(timeout: 10))
@@ -58,10 +70,10 @@ final class HitoWandUITests: XCTestCase {
         app.webViews.descendants(matching: .any).matching(NSPredicate(format: "label == %@", title)).firstMatch
     }
 
-    func testReleaseBrowserSmoke() {
+    func testReleaseBrowserSmoke() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
-        let base = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? "https://wand.hito.ai/fixtures/"
+        let base = try fixtureBase
         app.launch()
         let field = app.textFields["address-field"]
         XCTAssertTrue(field.waitForExistence(timeout: 10))
@@ -98,10 +110,10 @@ final class HitoWandUITests: XCTestCase {
         XCTAssertFalse(app.staticTexts["Recent pages"].exists)
     }
 
-    func testBrowserFullscreenControls() {
+    func testBrowserFullscreenControls() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
-        openFixtures(app)
+        try openFixtures(app)
         app.buttons["site-controls"].tap()
         app.buttons["enter-fullscreen"].tap()
         let exit = app.buttons["exit-fullscreen"]
@@ -116,10 +128,10 @@ final class HitoWandUITests: XCTestCase {
         XCTAssertTrue(pageText(app, "Wand hardware fixtures").exists)
     }
 
-    func testFullscreenPreservesPageAndRestoresAfterWebsiteFullscreen() {
+    func testFullscreenPreservesPageAndRestoresAfterWebsiteFullscreen() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
-        openFixtures(app)
+        try openFixtures(app)
         let field = app.webViews.textFields.firstMatch
         field.tap()
         field.typeText(" retained")
@@ -160,10 +172,10 @@ final class HitoWandUITests: XCTestCase {
         XCTAssertEqual(field.value as? String, retainedValue)
     }
 
-    func testRememberedBrowserFullscreen() {
+    func testRememberedBrowserFullscreen() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
-        openFixtures(app)
+        try openFixtures(app)
         // Make the test repeatable if a previous run saved this origin.
         if app.buttons["exit-fullscreen"].exists { app.buttons["exit-fullscreen"].tap() }
         app.buttons["site-controls"].tap()
@@ -176,7 +188,7 @@ final class HitoWandUITests: XCTestCase {
         XCTAssertTrue(pageText(app, "Wand hardware fixtures").waitForExistence(timeout: 15))
         XCTAssertTrue(app.textFields["address-field"].exists)
         app.terminate()
-        openFixtures(app)
+        try openFixtures(app)
         XCTAssertTrue(app.buttons["exit-fullscreen"].waitForExistence(timeout: 5))
         app.buttons["exit-fullscreen"].tap()
         app.buttons["site-controls"].tap()
@@ -184,10 +196,10 @@ final class HitoWandUITests: XCTestCase {
         app.buttons["Done"].tap()
     }
 
-    func testFullscreenFixture() {
+    func testFullscreenFixture() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
-        openFixtures(app)
+        try openFixtures(app)
         app.webViews.buttons["Enter fullscreen"].tap()
         XCTAssertTrue(app.webViews.buttons["Exit fullscreen"].waitForExistence(timeout: 10))
         let entered = app.webViews.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Entered fullscreen")).firstMatch

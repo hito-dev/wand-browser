@@ -372,7 +372,7 @@
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = HitoWand;
 				VALIDATE_PRODUCT = YES;
-				WAND_FIXTURE_URL = "https://localhost:18443/";
+				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
 			name = Release;
 		};
@@ -514,7 +514,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
-				WAND_FIXTURE_URL = "https://localhost:18443/";
+				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
 			name = Release;
 		};
@@ -539,7 +539,7 @@
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HitoWand.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HitoWand";
 				VALIDATE_PRODUCT = YES;
-				WAND_FIXTURE_URL = "https://localhost:18443/";
+				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
 			name = Release;
 		};
@@ -562,7 +562,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = HitoWand;
-				WAND_FIXTURE_URL = "https://localhost:18443/";
+				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
 			name = Debug;
 		};
@@ -586,7 +586,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HitoWand.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HitoWand";
-				WAND_FIXTURE_URL = "https://localhost:18443/";
+				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
 			name = Debug;
 		};
@@ -612,7 +612,7 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				WAND_FIXTURE_URL = "https://localhost:18443/";
+				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
 			name = Debug;
 		};

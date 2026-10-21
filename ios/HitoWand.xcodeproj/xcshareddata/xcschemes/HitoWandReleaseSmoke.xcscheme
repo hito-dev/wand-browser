@@ -51,7 +51,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "WAND_FIXTURE_URL"
-            value = "https://wand.hito.ai/fixtures/"
+            value = "$(WAND_FIXTURE_URL)"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
