@@ -1,13 +1,12 @@
 # Wand Browser
 
-An open-source iPhone browser for developers. Test web apps that connect to
-Bluetooth devices and NFC tags.
+An open-source iOS browser for developers. Test JavaScript web apps on iPhone
+with WebBluetooth (BLE/GATT) and WebNFC (NDEF tags).
 
 ## Test your web app
 
-Open your HTTPS site in Wand and use its Web Bluetooth or Web NFC code to talk
-to nearby hardware. Test prototypes and device setup pages on an iPhone without
-building a separate native app for each project.
+Open your HTTPS site in Wand to test its Web Bluetooth or Web NFC code against
+nearby hardware.
 
 - **Bluetooth Low Energy:** select a device, connect to GATT services, read and
   write characteristics, and receive notifications through `navigator.bluetooth`.
@@ -45,7 +44,14 @@ install packages.
 
 ## Test
 
-With Node.js installed, run the bridge and SDK tests from the repository root:
+In Xcode, choose **Product → Test**. The native and UI tests load
+[hosted HTTPS fixtures](https://hito-dev.github.io/wand-browser/fixtures/bridge.html).
+They need internet access. No local server or certificate setup is required.
+
+Set the `WAND_FIXTURE_URL` build setting to use another HTTPS fixture host.
+
+Node.js is optional. To run the standalone bridge and SDK tests from the
+repository root:
 
 ```sh
 node --experimental-vm-modules --test tests/bridge.test.mjs

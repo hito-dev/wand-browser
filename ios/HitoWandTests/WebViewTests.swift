@@ -4,14 +4,20 @@ import WebKit
 import UIKit
 @testable import HitoWand
 
-/// Uses an actual WKWebView, trusted local TLS, and the production message handler.
-/// Only the radio adapters are replaced. Start scripts/serve-fixtures.mjs first.
+/// Uses an actual WKWebView, hosted HTTPS fixtures, and the production message handler.
+/// Only the radio adapters are replaced. No local server or certificates are needed.
 @MainActor
 @Suite(.serialized)
 struct WebViewTests {
     var fixtureBase: URL {
-        let value = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? ""
-        return URL(string: value.hasPrefix("https://") ? value : "https://localhost:18443/")!
+        get throws {
+            let value = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? "https://hito-dev.github.io/wand-browser/fixtures/"
+            guard let url = URL(string: value), url.scheme == "https", let host = url.host, !host.isEmpty,
+                  url.user == nil, url.password == nil, url.query == nil, url.fragment == nil else {
+                throw WebError("TypeError", "WAND_FIXTURE_URL must be an HTTPS directory URL without credentials, query, or fragment.")
+            }
+            return URL(string: value.hasSuffix("/") ? value : value + "/")!
+        }
     }
     func host(_ browser: BrowserModel) throws -> UIWindow {
         let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
@@ -33,14 +39,17 @@ struct WebViewTests {
         }
     }
     func open(_ browser: BrowserModel, path: String = "bridge.html") async throws {
-        browser.load(URL(string: path, relativeTo: fixtureBase)!.absoluteURL)
+        let url = URL(string: path, relativeTo: try fixtureBase)!.absoluteURL
+        browser.load(url)
         // Cold simulator WebKit processes can take >10 seconds to launch.
         for _ in 0..<600 {
-            if let error = browser.error { throw WebError("NetworkError", "HTTPS fixture: \(error). Run prepare-fixtures.sh and serve-fixtures.mjs.") }
+            if let error = browser.error {
+                throw WebError("NetworkError", "Could not load HTTPS fixture \(url): \(error). Check your internet connection and Pages deployment, or set WAND_FIXTURE_URL to another HTTPS fixture host.")
+            }
             if browser.hardware.document.active, !browser.webView.isLoading { return }
             try await Task.sleep(for: .milliseconds(50))
         }
-        throw WebError("TimeoutError", "HTTPS fixture did not load (URL: \(browser.webView.url?.absoluteString ?? "none"), loading: \(browser.webView.isLoading), active: \(browser.hardware.document.active)).")
+        throw WebError("TimeoutError", "HTTPS fixture \(url) did not load. Check your internet connection and Pages deployment, or set WAND_FIXTURE_URL to another HTTPS fixture host.")
     }
 
     @Test func realFrameOriginChecksAndNavigationTokens() async throws {
@@ -91,7 +100,7 @@ struct WebViewTests {
             if coordinator.picker != nil { break }
             try await Task.sleep(for: .milliseconds(20))
         }
-        #expect(coordinator.picker?.origin == SiteOrigin(url: fixtureBase)?.display)
+        #expect(coordinator.picker?.origin == SiteOrigin(url: try fixtureBase)?.display)
         coordinator.selectDevice("test-device")
         #expect(try await request.value.contains("Hito test wallet"))
         let scan = Task { try await evaluate(browser.webView, """

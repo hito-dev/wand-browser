@@ -43,7 +43,7 @@ signing = project.main_group.new_file('Signing.xcconfig')
     settings['SWIFT_EMIT_LOC_STRINGS'] = 'YES'
     settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'YES'
     settings['SUPPORTED_PLATFORMS'] = 'iphoneos iphonesimulator'
-    settings['WAND_FIXTURE_URL'] = 'https://localhost:18443/'
+    settings['WAND_FIXTURE_URL'] = 'https://hito-dev.github.io/wand-browser/fixtures/'
     config.base_configuration_reference = signing
     if target == app
       settings['ASSETCATALOG_COMPILER_APPICON_NAME'] = 'AppIcon'
@@ -79,7 +79,7 @@ smoke.add_test_target(ui)
 smoke.test_action.build_configuration = 'Release'
 smoke.test_action.should_use_launch_scheme_args_env = false
 smoke.test_action.environment_variables = Xcodeproj::XCScheme::EnvironmentVariables.new([
-  { :key => 'WAND_FIXTURE_URL', :value => 'https://wand.hito.ai/fixtures/' }
+  { :key => 'WAND_FIXTURE_URL', :value => '$(WAND_FIXTURE_URL)' }
 ])
 smoke.set_launch_target(app)
 smoke.launch_action.build_configuration = 'Release'
