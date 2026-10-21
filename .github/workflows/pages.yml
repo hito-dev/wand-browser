@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - tests/fixtures/**
+      - ios/HitoWand/Resources/Assets.xcassets/AppIcon.appiconset/icon-default.png
       - scripts/prepare-pages.sh
       - .github/workflows/pages.yml
       - LICENSE
