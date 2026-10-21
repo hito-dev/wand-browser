@@ -15,7 +15,7 @@
 		2A721DE8365313A632585C3D /* BluetoothPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3595AA3C8C16AB0E4C469A /* BluetoothPolicy.swift */; };
 		2AD03A781B5DDF900282CB48 /* CoreNFCTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DABFBC480369EED5669C5B /* CoreNFCTransport.swift */; };
 		50A9964476DE01D87045702E /* HardwareCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7593179A63450386C4EADEDE /* HardwareCoordinator.swift */; };
-		6299549A11160AC1689A69E8 /* HitoWandApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4DE84E78C5401573EB39A /* HitoWandApp.swift */; };
+		6299549A11160AC1689A69E8 /* WandBrowserApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4DE84E78C5401573EB39A /* WandBrowserApp.swift */; };
 		6495C8D854F8946A05A932A6 /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7097FBE522D4254B379BBDA0 /* CoordinatorTests.swift */; };
 		66EC9541B4D8D16E57F72156 /* TestTransports.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DCFD888C4730D4313AB12A /* TestTransports.swift */; };
 		6F60234D767B435280FAD35A /* Wire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B73FAC36312DD36324520DE /* Wire.swift */; };
@@ -25,7 +25,7 @@
 		A0C2A8BA2F2DE433E6655027 /* CoreBluetoothTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DAA5EEF1E75078EC317A17 /* CoreBluetoothTransport.swift */; };
 		AFB0279605E0DD37FD00FFB0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBF34615023C4364E4A5C6 /* Foundation.framework */; };
 		BCE4A26DED404C9C58C1EF00 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBF34615023C4364E4A5C6 /* Foundation.framework */; };
-		C26CB219C0F4E008C79A508E /* HitoWandUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C883B5FFE07564BADBA04D /* HitoWandUITests.swift */; };
+		C26CB219C0F4E008C79A508E /* WandBrowserUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C883B5FFE07564BADBA04D /* WandBrowserUITests.swift */; };
 		C3D1B810688B32FB955C4671 /* PrivacyPolicy.html in Resources */ = {isa = PBXBuildFile; fileRef = 1A698B288C16D2B72C1EFEA7 /* PrivacyPolicy.html */; };
 		DDBE370A7194C0F72E2A10DA /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DA0B77CA46B8C87F881E67D4 /* PrivacyInfo.xcprivacy */; };
 		F52AEB6C4E5331C11E65A5CB /* public_suffix_list.dat in Resources */ = {isa = PBXBuildFile; fileRef = 4F1E2AC0962A700F85333EBA /* public_suffix_list.dat */; };
@@ -37,20 +37,20 @@
 			containerPortal = 0ADF0CC2B9AA2978DF66DAEC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7AC13EF92781BADB210042C3;
-			remoteInfo = HitoWand;
+			remoteInfo = WandBrowser;
 		};
 		8FB3062F676589A9C427383C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0ADF0CC2B9AA2978DF66DAEC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7AC13EF92781BADB210042C3;
-			remoteInfo = HitoWand;
+			remoteInfo = WandBrowser;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0805CA91DC56781F4490A6AE /* HitoWandTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HitoWandTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0FB4DE84E78C5401573EB39A /* HitoWandApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HitoWandApp.swift; sourceTree = "<group>"; };
+		0805CA91DC56781F4490A6AE /* WandBrowserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WandBrowserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FB4DE84E78C5401573EB39A /* WandBrowserApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WandBrowserApp.swift; sourceTree = "<group>"; };
 		1A698B288C16D2B72C1EFEA7 /* PrivacyPolicy.html */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyPolicy.html; path = Resources/PrivacyPolicy.html; sourceTree = "<group>"; };
 		4D3595AA3C8C16AB0E4C469A /* BluetoothPolicy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BluetoothPolicy.swift; path = Core/BluetoothPolicy.swift; sourceTree = "<group>"; };
 		4F1E2AC0962A700F85333EBA /* public_suffix_list.dat */ = {isa = PBXFileReference; includeInIndex = 1; name = public_suffix_list.dat; path = Resources/public_suffix_list.dat; sourceTree = "<group>"; };
@@ -62,10 +62,10 @@
 		80CBF34615023C4364E4A5C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		913D4AFC82A6202149B1E01B /* BrowserModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BrowserModel.swift; path = Browser/BrowserModel.swift; sourceTree = "<group>"; };
 		92DABFBC480369EED5669C5B /* CoreNFCTransport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CoreNFCTransport.swift; path = Hardware/CoreNFCTransport.swift; sourceTree = "<group>"; };
-		A9D6E3FABA88DF4236B9ECCF /* HitoWandUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HitoWandUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D6E3FABA88DF4236B9ECCF /* WandBrowserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WandBrowserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B12CDA981D71EAB677C09BA5 /* CoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreTests.swift; sourceTree = "<group>"; };
-		BE968EDAEFC6DB7AC0C43860 /* HitoWand.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HitoWand.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C2C883B5FFE07564BADBA04D /* HitoWandUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HitoWandUITests.swift; sourceTree = "<group>"; };
+		BE968EDAEFC6DB7AC0C43860 /* WandBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WandBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2C883B5FFE07564BADBA04D /* WandBrowserUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WandBrowserUITests.swift; sourceTree = "<group>"; };
 		C8FBA608A28EDB497D4BD49A /* BrowserView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BrowserView.swift; path = Browser/BrowserView.swift; sourceTree = "<group>"; };
 		D4DAA5EEF1E75078EC317A17 /* CoreBluetoothTransport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CoreBluetoothTransport.swift; path = Hardware/CoreBluetoothTransport.swift; sourceTree = "<group>"; };
 		DA0B77CA46B8C87F881E67D4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 		EA6DD94762739031588BFEE6 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFF8B5F002A2236B0DCC1661 /* NDEFCodec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NDEFCodec.swift; path = Core/NDEFCodec.swift; sourceTree = "<group>"; };
 		F8E4C223B4DD47DAE740B61B /* WebViewTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebViewTests.swift; sourceTree = "<group>"; };
-		FAF31D74E1A7948158BCC7D4 /* HitoWand.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = HitoWand.entitlements; sourceTree = "<group>"; };
+		FAF31D74E1A7948158BCC7D4 /* WandBrowser.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = WandBrowser.entitlements; sourceTree = "<group>"; };
 		FE150C06678B0F9B25B19267 /* HardwareBridge.js */ = {isa = PBXFileReference; includeInIndex = 1; name = HardwareBridge.js; path = Resources/HardwareBridge.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,7 +105,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		24418F76D240A1F497C01839 /* HitoWand */ = {
+		24418F76D240A1F497C01839 /* WandBrowser */ = {
 			isa = PBXGroup;
 			children = (
 				913D4AFC82A6202149B1E01B /* BrowserModel.swift */,
@@ -116,8 +116,8 @@
 				5B73FAC36312DD36324520DE /* Wire.swift */,
 				D4DAA5EEF1E75078EC317A17 /* CoreBluetoothTransport.swift */,
 				92DABFBC480369EED5669C5B /* CoreNFCTransport.swift */,
-				FAF31D74E1A7948158BCC7D4 /* HitoWand.entitlements */,
-				0FB4DE84E78C5401573EB39A /* HitoWandApp.swift */,
+				FAF31D74E1A7948158BCC7D4 /* WandBrowser.entitlements */,
+				0FB4DE84E78C5401573EB39A /* WandBrowserApp.swift */,
 				EA6DD94762739031588BFEE6 /* Info.plist */,
 				FE150C06678B0F9B25B19267 /* HardwareBridge.js */,
 				57A21FED742D133341D6E7CD /* Assets.xcassets */,
@@ -125,11 +125,11 @@
 				1A698B288C16D2B72C1EFEA7 /* PrivacyPolicy.html */,
 				4F1E2AC0962A700F85333EBA /* public_suffix_list.dat */,
 			);
-			name = HitoWand;
-			path = HitoWand;
+			name = WandBrowser;
+			path = WandBrowser;
 			sourceTree = "<group>";
 		};
-		41C25170ADACC1EA2B280190 /* HitoWandTests */ = {
+		41C25170ADACC1EA2B280190 /* WandBrowserTests */ = {
 			isa = PBXGroup;
 			children = (
 				7097FBE522D4254B379BBDA0 /* CoordinatorTests.swift */,
@@ -137,8 +137,8 @@
 				E6DCFD888C4730D4313AB12A /* TestTransports.swift */,
 				F8E4C223B4DD47DAE740B61B /* WebViewTests.swift */,
 			);
-			name = HitoWandTests;
-			path = HitoWandTests;
+			name = WandBrowserTests;
+			path = WandBrowserTests;
 			sourceTree = "<group>";
 		};
 		42E14339789E549DAAF803FD /* Frameworks */ = {
@@ -149,13 +149,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		CC6A8E878D8E1FE655EF2812 /* HitoWandUITests */ = {
+		CC6A8E878D8E1FE655EF2812 /* WandBrowserUITests */ = {
 			isa = PBXGroup;
 			children = (
-				C2C883B5FFE07564BADBA04D /* HitoWandUITests.swift */,
+				C2C883B5FFE07564BADBA04D /* WandBrowserUITests.swift */,
 			);
-			name = HitoWandUITests;
-			path = HitoWandUITests;
+			name = WandBrowserUITests;
+			path = WandBrowserUITests;
 			sourceTree = "<group>";
 		};
 		DEE5C6EF04D6F3343153B1E0 /* iOS */ = {
@@ -172,18 +172,18 @@
 				FFFC12AB38760148DD53CC46 /* Products */,
 				42E14339789E549DAAF803FD /* Frameworks */,
 				7FB9044C63A060994264FA35 /* Signing.xcconfig */,
-				24418F76D240A1F497C01839 /* HitoWand */,
-				41C25170ADACC1EA2B280190 /* HitoWandTests */,
-				CC6A8E878D8E1FE655EF2812 /* HitoWandUITests */,
+				24418F76D240A1F497C01839 /* WandBrowser */,
+				41C25170ADACC1EA2B280190 /* WandBrowserTests */,
+				CC6A8E878D8E1FE655EF2812 /* WandBrowserUITests */,
 			);
 			sourceTree = "<group>";
 		};
 		FFFC12AB38760148DD53CC46 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BE968EDAEFC6DB7AC0C43860 /* HitoWand.app */,
-				0805CA91DC56781F4490A6AE /* HitoWandTests.xctest */,
-				A9D6E3FABA88DF4236B9ECCF /* HitoWandUITests.xctest */,
+				BE968EDAEFC6DB7AC0C43860 /* WandBrowser.app */,
+				0805CA91DC56781F4490A6AE /* WandBrowserTests.xctest */,
+				A9D6E3FABA88DF4236B9ECCF /* WandBrowserUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -191,9 +191,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4CDB111ADB0B370D961B0CCC /* HitoWandTests */ = {
+		4CDB111ADB0B370D961B0CCC /* WandBrowserTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6752A1CB4A86E654B8EE385E /* Build configuration list for PBXNativeTarget "HitoWandTests" */;
+			buildConfigurationList = 6752A1CB4A86E654B8EE385E /* Build configuration list for PBXNativeTarget "WandBrowserTests" */;
 			buildPhases = (
 				4BBCD73002B1BDEA2DCF8BC2 /* Sources */,
 				F6DC4BC80ABD1FAE59EF2D42 /* Frameworks */,
@@ -204,14 +204,14 @@
 			dependencies = (
 				69EF986AA04788CF2D679898 /* PBXTargetDependency */,
 			);
-			name = HitoWandTests;
-			productName = HitoWandTests;
-			productReference = 0805CA91DC56781F4490A6AE /* HitoWandTests.xctest */;
+			name = WandBrowserTests;
+			productName = WandBrowserTests;
+			productReference = 0805CA91DC56781F4490A6AE /* WandBrowserTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7AC13EF92781BADB210042C3 /* HitoWand */ = {
+		7AC13EF92781BADB210042C3 /* WandBrowser */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7E69378F244BD173C02884E8 /* Build configuration list for PBXNativeTarget "HitoWand" */;
+			buildConfigurationList = 7E69378F244BD173C02884E8 /* Build configuration list for PBXNativeTarget "WandBrowser" */;
 			buildPhases = (
 				EF93298A16ED6433B80666C5 /* Sources */,
 				568A62754C8F18BEB24FB39D /* Frameworks */,
@@ -221,14 +221,14 @@
 			);
 			dependencies = (
 			);
-			name = HitoWand;
-			productName = HitoWand;
-			productReference = BE968EDAEFC6DB7AC0C43860 /* HitoWand.app */;
+			name = WandBrowser;
+			productName = WandBrowser;
+			productReference = BE968EDAEFC6DB7AC0C43860 /* WandBrowser.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A24F69BFF9EA2248BA3DDF25 /* HitoWandUITests */ = {
+		A24F69BFF9EA2248BA3DDF25 /* WandBrowserUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B7E93B091E7C1E63EABFEA5E /* Build configuration list for PBXNativeTarget "HitoWandUITests" */;
+			buildConfigurationList = B7E93B091E7C1E63EABFEA5E /* Build configuration list for PBXNativeTarget "WandBrowserUITests" */;
 			buildPhases = (
 				982E477D131DE42C8E3BE0F0 /* Sources */,
 				FFB2D107A6587FDEF63EE456 /* Frameworks */,
@@ -239,9 +239,9 @@
 			dependencies = (
 				9D7B6B4234E23538E432BA91 /* PBXTargetDependency */,
 			);
-			name = HitoWandUITests;
-			productName = HitoWandUITests;
-			productReference = A9D6E3FABA88DF4236B9ECCF /* HitoWandUITests.xctest */;
+			name = WandBrowserUITests;
+			productName = WandBrowserUITests;
+			productReference = A9D6E3FABA88DF4236B9ECCF /* WandBrowserUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -253,7 +253,7 @@
 				LastSwiftUpdateCheck = 1300;
 				LastUpgradeCheck = 2660;
 			};
-			buildConfigurationList = AC6DFDA6134CE5D22DD41022 /* Build configuration list for PBXProject "HitoWand" */;
+			buildConfigurationList = AC6DFDA6134CE5D22DD41022 /* Build configuration list for PBXProject "WandBrowser" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -266,9 +266,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7AC13EF92781BADB210042C3 /* HitoWand */,
-				4CDB111ADB0B370D961B0CCC /* HitoWandTests */,
-				A24F69BFF9EA2248BA3DDF25 /* HitoWandUITests */,
+				7AC13EF92781BADB210042C3 /* WandBrowser */,
+				4CDB111ADB0B370D961B0CCC /* WandBrowserTests */,
+				A24F69BFF9EA2248BA3DDF25 /* WandBrowserUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -318,7 +318,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C26CB219C0F4E008C79A508E /* HitoWandUITests.swift in Sources */,
+				C26CB219C0F4E008C79A508E /* WandBrowserUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,7 +334,7 @@
 				6F60234D767B435280FAD35A /* Wire.swift in Sources */,
 				A0C2A8BA2F2DE433E6655027 /* CoreBluetoothTransport.swift in Sources */,
 				2AD03A781B5DDF900282CB48 /* CoreNFCTransport.swift in Sources */,
-				6299549A11160AC1689A69E8 /* HitoWandApp.swift in Sources */,
+				6299549A11160AC1689A69E8 /* WandBrowserApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,14 +343,14 @@
 /* Begin PBXTargetDependency section */
 		69EF986AA04788CF2D679898 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = HitoWand;
-			target = 7AC13EF92781BADB210042C3 /* HitoWand */;
+			name = WandBrowser;
+			target = 7AC13EF92781BADB210042C3 /* WandBrowser */;
 			targetProxy = 6B1FC4139231B793A7EB7B7A /* PBXContainerItemProxy */;
 		};
 		9D7B6B4234E23538E432BA91 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = HitoWand;
-			target = 7AC13EF92781BADB210042C3 /* HitoWand */;
+			name = WandBrowser;
+			target = 7AC13EF92781BADB210042C3 /* WandBrowser */;
 			targetProxy = 8FB3062F676589A9C427383C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -367,14 +367,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev.HitoWandUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev.WandBrowserUITests;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = HitoWand;
+				TEST_TARGET_NAME = WandBrowser;
 				VALIDATE_PRODUCT = YES;
 				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
@@ -501,12 +501,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = HitoWand/HitoWand.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = WandBrowser/WandBrowser.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = HitoWand/Info.plist;
+				INFOPLIST_FILE = WandBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 0.1.0;
@@ -534,14 +534,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev.HitoWandTests;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev.WandBrowserTests;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HitoWand.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HitoWand";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WandBrowser.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WandBrowser";
 				VALIDATE_PRODUCT = YES;
 				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
@@ -558,14 +558,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev.HitoWandUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev.WandBrowserUITests;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = HitoWand;
+				TEST_TARGET_NAME = WandBrowser;
 				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
 			name = Debug;
@@ -582,14 +582,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev.HitoWandTests;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev.WandBrowserTests;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HitoWand.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HitoWand";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WandBrowser.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WandBrowser";
 				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
 			};
 			name = Debug;
@@ -600,12 +600,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = HitoWand/HitoWand.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = WandBrowser/WandBrowser.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = HitoWand/Info.plist;
+				INFOPLIST_FILE = WandBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 0.1.0;
@@ -623,7 +623,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6752A1CB4A86E654B8EE385E /* Build configuration list for PBXNativeTarget "HitoWandTests" */ = {
+		6752A1CB4A86E654B8EE385E /* Build configuration list for PBXNativeTarget "WandBrowserTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AEE2B3AADB95A2E8D470EFB7 /* Release */,
@@ -632,7 +632,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7E69378F244BD173C02884E8 /* Build configuration list for PBXNativeTarget "HitoWand" */ = {
+		7E69378F244BD173C02884E8 /* Build configuration list for PBXNativeTarget "WandBrowser" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7DB3F036F90CBC1D4A6FDCAE /* Release */,
@@ -641,7 +641,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AC6DFDA6134CE5D22DD41022 /* Build configuration list for PBXProject "HitoWand" */ = {
+		AC6DFDA6134CE5D22DD41022 /* Build configuration list for PBXProject "WandBrowser" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4DA2802CD2E4CE12D5929C0E /* Debug */,
@@ -650,7 +650,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B7E93B091E7C1E63EABFEA5E /* Build configuration list for PBXNativeTarget "HitoWandUITests" */ = {
+		B7E93B091E7C1E63EABFEA5E /* Build configuration list for PBXNativeTarget "WandBrowserUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				29F9A1979E8B57950DBFD3A5 /* Release */,

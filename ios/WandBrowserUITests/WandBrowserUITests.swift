@@ -1,7 +1,7 @@
 import XCTest
 
 @MainActor
-final class HitoWandUITests: XCTestCase {
+final class WandBrowserUITests: XCTestCase {
     private var fixtureBase: String {
         get throws {
             let value = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? "https://hito-dev.github.io/wand-browser/fixtures/"
@@ -25,6 +25,20 @@ final class HitoWandUITests: XCTestCase {
         field.typeText(base + "bridge.html\n")
         XCTAssertTrue(pageText(app, "Wand hardware fixtures").waitForExistence(timeout: 30),
                       "Could not open \(base)bridge.html. Check your internet connection and Pages deployment, or override WAND_FIXTURE_URL.")
+    }
+
+    func testHomeHardwareFixturesShortcut() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-browser.fullscreenOrigins.v1", "()"]
+        app.launch()
+        let shortcut = app.buttons["open-hardware-fixtures"]
+        XCTAssertTrue(shortcut.waitForExistence(timeout: 5))
+        shortcut.tap()
+        XCTAssertTrue(pageText(app, "Wand hardware fixtures").waitForExistence(timeout: 30))
+        XCTAssertEqual(app.textFields["address-field"].value as? String,
+                       "https://wand.hito.ai/fixtures/bridge.html")
+        app.buttons["Home"].tap()
+        XCTAssertTrue(shortcut.waitForExistence(timeout: 5))
     }
 
     func testNativeHardwarePromptsAndRevocation() throws {

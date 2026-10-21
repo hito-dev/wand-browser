@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { createHash, webcrypto } from "node:crypto";
 import vm from "node:vm";
 
-const source = await readFile(new URL("../ios/HitoWand/Resources/HardwareBridge.js", import.meta.url), "utf8");
+const source = await readFile(new URL("../ios/WandBrowser/Resources/HardwareBridge.js", import.meta.url), "utf8");
 const sdkSource = await readFile(new URL("./fixtures/hito_ble_transport.js", import.meta.url), "utf8");
 const serviceUUID = "5cc44b16-070a-11ed-b939-0242ac120002";
 const characteristicUUID = "5cc44b17-070a-11ed-b939-0242ac120002";

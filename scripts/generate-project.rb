@@ -5,16 +5,16 @@ require 'pathname'
 
 root = File.expand_path('..', __dir__)
 ios = File.join(root, 'ios')
-project = Xcodeproj::Project.new(File.join(ios, 'HitoWand.xcodeproj'))
+project = Xcodeproj::Project.new(File.join(ios, 'WandBrowser.xcodeproj'))
 project.root_object.attributes['LastUpgradeCheck'] = '2660'
-app = project.new_target(:application, 'HitoWand', :ios, '18.0')
-unit = project.new_target(:unit_test_bundle, 'HitoWandTests', :ios, '18.0')
-ui = project.new_target(:ui_test_bundle, 'HitoWandUITests', :ios, '18.0')
+app = project.new_target(:application, 'WandBrowser', :ios, '18.0')
+unit = project.new_target(:unit_test_bundle, 'WandBrowserTests', :ios, '18.0')
+ui = project.new_target(:ui_test_bundle, 'WandBrowserUITests', :ios, '18.0')
 unit.add_dependency(app)
 ui.add_dependency(app)
 signing = project.main_group.new_file('Signing.xcconfig')
 
-[[app, 'HitoWand'], [unit, 'HitoWandTests'], [ui, 'HitoWandUITests']].each do |target, directory|
+[[app, 'WandBrowser'], [unit, 'WandBrowserTests'], [ui, 'WandBrowserUITests']].each do |target, directory|
   group = project.main_group.new_group(directory, directory)
   Dir.glob(File.join(ios, directory, '**', '*')).sort.each do |path|
     # Asset catalogs are one compiled resource, not a collection of loose JSON/PNGs.
@@ -48,13 +48,13 @@ signing = project.main_group.new_file('Signing.xcconfig')
     if target == app
       settings['ASSETCATALOG_COMPILER_APPICON_NAME'] = 'AppIcon'
       settings.delete('ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME')
-      settings['INFOPLIST_FILE'] = 'HitoWand/Info.plist'
-      settings['CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]'] = 'HitoWand/HitoWand.entitlements'
+      settings['INFOPLIST_FILE'] = 'WandBrowser/Info.plist'
+      settings['CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]'] = 'WandBrowser/WandBrowser.entitlements'
     elsif target == unit
-      settings['TEST_HOST'] = '$(BUILT_PRODUCTS_DIR)/HitoWand.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HitoWand'
+      settings['TEST_HOST'] = '$(BUILT_PRODUCTS_DIR)/WandBrowser.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WandBrowser'
       settings['BUNDLE_LOADER'] = '$(TEST_HOST)'
     else
-      settings['TEST_TARGET_NAME'] = 'HitoWand'
+      settings['TEST_TARGET_NAME'] = 'WandBrowser'
     end
   end
 end
@@ -68,7 +68,7 @@ scheme.test_action.add_macro_expansion(Xcodeproj::XCScheme::BuildableReference.n
 scheme.test_action.environment_variables = Xcodeproj::XCScheme::EnvironmentVariables.new([
   { :key => 'WAND_FIXTURE_URL', :value => '$(WAND_FIXTURE_URL)' }
 ])
-scheme.save_as(project.path, 'HitoWand', true)
+scheme.save_as(project.path, 'WandBrowser', true)
 project.save
 puts project.path
 
@@ -83,4 +83,4 @@ smoke.test_action.environment_variables = Xcodeproj::XCScheme::EnvironmentVariab
 ])
 smoke.set_launch_target(app)
 smoke.launch_action.build_configuration = 'Release'
-smoke.save_as(project.path, 'HitoWandReleaseSmoke', true)
+smoke.save_as(project.path, 'WandBrowserReleaseSmoke', true)

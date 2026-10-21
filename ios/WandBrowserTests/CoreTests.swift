@@ -2,7 +2,7 @@ import Foundation
 import CoreNFC
 import Testing
 import WebKit
-@testable import HitoWand
+@testable import WandBrowser
 
 struct CoreTests {
     @Test @MainActor func fullscreenAddressFormattingAndIconCandidates() throws {

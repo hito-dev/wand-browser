@@ -179,8 +179,18 @@ struct BrowserView: View {
                 }
                 Text("Open a website to connect with nearby Bluetooth devices and NFC tags. You choose which sites get access.")
                     .font(.body).foregroundStyle(.secondary)
-                Button { addressFocused = true } label: { Label("Open a website", systemImage: "globe").frame(maxWidth: .infinity) }
-                    .buttonStyle(.borderedProminent).controlSize(.large)
+                VStack(spacing: 12) {
+                    Button { addressFocused = true } label: { Label("Open a website", systemImage: "globe").frame(maxWidth: .infinity) }
+                        .buttonStyle(.borderedProminent).controlSize(.large)
+                    Button {
+                        addressFocused = false
+                        browser.load(URL(string: "https://wand.hito.ai/fixtures/bridge.html")!)
+                    } label: {
+                        Label("Open hardware fixtures", systemImage: "wrench.and.screwdriver").frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered).controlSize(.large)
+                    .accessibilityIdentifier("open-hardware-fixtures")
+                }
                 if !browser.history.isEmpty {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {

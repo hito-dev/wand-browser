@@ -1,5 +1,5 @@
 import Foundation
-@testable import HitoWand
+@testable import WandBrowser
 
 @MainActor
 final class TestBluetooth: BluetoothTransport {

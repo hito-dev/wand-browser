@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7AC13EF92781BADB210042C3"
-               BuildableName = "HitoWand.app"
-               BlueprintName = "HitoWand"
-               ReferencedContainer = "container:HitoWand.xcodeproj">
+               BuildableName = "WandBrowser.app"
+               BlueprintName = "WandBrowser"
+               ReferencedContainer = "container:WandBrowser.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,17 +31,17 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AC13EF92781BADB210042C3"
-            BuildableName = "HitoWand.app"
-            BlueprintName = "HitoWand"
-            ReferencedContainer = "container:HitoWand.xcodeproj">
+            BuildableName = "WandBrowser.app"
+            BlueprintName = "WandBrowser"
+            ReferencedContainer = "container:WandBrowser.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <BuildableReference
          BuildableIdentifier = "primary"
          BlueprintIdentifier = "7AC13EF92781BADB210042C3"
-         BuildableName = "HitoWand.app"
-         BlueprintName = "HitoWand"
-         ReferencedContainer = "container:HitoWand.xcodeproj">
+         BuildableName = "WandBrowser.app"
+         BlueprintName = "WandBrowser"
+         ReferencedContainer = "container:WandBrowser.xcodeproj">
       </BuildableReference>
       <Testables>
          <TestableReference
@@ -49,9 +49,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4CDB111ADB0B370D961B0CCC"
-               BuildableName = "HitoWandTests.xctest"
-               BlueprintName = "HitoWandTests"
-               ReferencedContainer = "container:HitoWand.xcodeproj">
+               BuildableName = "WandBrowserTests.xctest"
+               BlueprintName = "WandBrowserTests"
+               ReferencedContainer = "container:WandBrowser.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -59,9 +59,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A24F69BFF9EA2248BA3DDF25"
-               BuildableName = "HitoWandUITests.xctest"
-               BlueprintName = "HitoWandUITests"
-               ReferencedContainer = "container:HitoWand.xcodeproj">
+               BuildableName = "WandBrowserUITests.xctest"
+               BlueprintName = "WandBrowserUITests"
+               ReferencedContainer = "container:WandBrowser.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -88,9 +88,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AC13EF92781BADB210042C3"
-            BuildableName = "HitoWand.app"
-            BlueprintName = "HitoWand"
-            ReferencedContainer = "container:HitoWand.xcodeproj">
+            BuildableName = "WandBrowser.app"
+            BlueprintName = "WandBrowser"
+            ReferencedContainer = "container:WandBrowser.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -105,9 +105,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AC13EF92781BADB210042C3"
-            BuildableName = "HitoWand.app"
-            BlueprintName = "HitoWand"
-            ReferencedContainer = "container:HitoWand.xcodeproj">
+            BuildableName = "WandBrowser.app"
+            BlueprintName = "WandBrowser"
+            ReferencedContainer = "container:WandBrowser.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

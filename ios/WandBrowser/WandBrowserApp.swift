@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct HitoWandApp: App {
+struct WandBrowserApp: App {
     @StateObject private var browser = BrowserModel()
     @Environment(\.scenePhase) private var phase
     var body: some Scene {

@@ -2,7 +2,7 @@ import Foundation
 import Testing
 import WebKit
 import UIKit
-@testable import HitoWand
+@testable import WandBrowser
 
 /// Uses an actual WKWebView, hosted HTTPS fixtures, and the production message handler.
 /// Only the radio adapters are replaced. No local server or certificates are needed.

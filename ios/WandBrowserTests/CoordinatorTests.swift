@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import HitoWand
+@testable import WandBrowser
 
 @MainActor
 struct CoordinatorTests {

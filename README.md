@@ -22,7 +22,7 @@ or revoke access in Site controls.
 
 This early version supports a subset of Web Bluetooth and Web NFC.
 Check the API calls your site uses against the
-[bridge implementation](ios/HitoWand/Resources/HardwareBridge.js).
+[bridge implementation](ios/WandBrowser/Resources/HardwareBridge.js).
 Hardware access requires a top-level HTTPS page with Wand in the foreground.
 NFC support is limited to NDEF tags.
 
@@ -33,8 +33,8 @@ can test browser flows and bridge logic but cannot validate either radio.
 
 Requires iOS 18 or later. We tested builds with Xcode 26.6.
 
-1. Open [ios/HitoWand.xcodeproj](ios/HitoWand.xcodeproj).
-2. Select the **HitoWand** scheme and an iPhone simulator or physical iPhone.
+1. Open [ios/WandBrowser.xcodeproj](ios/WandBrowser.xcodeproj).
+2. Select the **WandBrowser** scheme and an iPhone simulator or physical iPhone.
 3. For your own device build, choose your signing team and a unique bundle ID in
    Signing & Capabilities. Enable **NFC Tag Reading** for that App ID.
 4. Run the app.

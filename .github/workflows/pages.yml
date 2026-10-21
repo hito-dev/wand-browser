@@ -6,7 +6,7 @@ on:
     paths:
       - site/**
       - tests/fixtures/**
-      - ios/HitoWand/Resources/Assets.xcassets/AppIcon.appiconset/icon-default.png
+      - ios/WandBrowser/Resources/Assets.xcassets/AppIcon.appiconset/icon-default.png
       - scripts/prepare-pages.sh
       - .github/workflows/pages.yml
       - LICENSE
