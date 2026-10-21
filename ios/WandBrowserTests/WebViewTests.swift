@@ -88,8 +88,8 @@ struct WebViewTests {
         defer { window.isHidden = true; browser.webView.removeFromSuperview() }
         try await open(browser)
         #expect(try await evaluate(browser.webView, "return String(window.wand.fullscreen.active)") == "false")
-        // Exercise the production native adapter directly; gesture validation is tested
-        // with real taps in UI tests and separately in the JavaScript suite.
+        // Exercise the production adapter directly; public gesture validation is
+        // covered in JavaScript tests and native controls are covered in UI tests.
         let token = browser.hardware.document.token
         let entered = try await evaluate(browser.webView, """
             window.fullscreenChanges = [];
@@ -117,6 +117,58 @@ struct WebViewTests {
         try await open(browser)
         #expect(try await evaluate(browser.webView, "return String(wand.fullscreen.active)") == "true")
         browser.exitFullscreen()
+        browser.hardware.invalidate()
+    }
+
+    @Test func fixtureConsoleLayoutKeyboardBoundsAndLogging() async throws {
+        let browser = BrowserModel(hardware: HardwareCoordinator(bluetooth: TestBluetooth(), nfc: TestNFC()), dataStore: .nonPersistent())
+        let window = try host(browser)
+        defer { window.isHidden = true; browser.webView.removeFromSuperview() }
+        try await open(browser)
+        let result = try await evaluate(browser.webView, """
+            const pane = document.querySelector('#console');
+            const divider = document.querySelector('#console-divider');
+            const height = () => document.body.getBoundingClientRect().height;
+            const consoleHeight = () => pane.getBoundingClientRect().height;
+            const close = (actual, expected, label) => {
+              if (Math.abs(actual - expected) > 2) throw new Error(`${label}: ${actual} != ${expected}`);
+            };
+            const key = key => divider.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+            if (document.querySelector('#wand-fullscreen, #sdk, #command, #packet')) throw new Error('Removed controls remain');
+            if (!document.documentElement.requestFullscreen) throw new Error('Standard fullscreen missing');
+            close(consoleHeight(), height() * .2, 'default console size');
+            key('ArrowUp');
+            close(consoleHeight(), height() * .25, 'arrow up');
+            key('ArrowDown');
+            close(consoleHeight(), height() * .2, 'arrow down');
+            key('Home');
+            close(consoleHeight(), 80, 'minimum console');
+            key('End');
+            close(height() - consoleHeight(), 80, 'minimum controls');
+            close(Number(divider.getAttribute('aria-valuenow')), consoleHeight() / height() * 100, 'accessible size');
+            const ratio = consoleHeight() / height();
+            document.documentElement.style.setProperty('--viewport-height', '120px');
+            resizeConsole();
+            close(consoleHeight(), 60, 'tiny viewport');
+            window.dispatchEvent(new Event('resize'));
+            close(consoleHeight() / height() * 100, ratio * 100, 'restored viewport ratio');
+            key('Home'); key('ArrowUp');
+            for (let i = 0; i < 80; i++) log(`Console line ${i}`);
+            const output = document.querySelector('#log');
+            close(output.scrollHeight - output.clientHeight - output.scrollTop, 0, 'follow new logs');
+            output.scrollTop = 0;
+            log('Keep reading earlier logs');
+            close(output.scrollTop, 0, 'preserve scroll position');
+            key('ArrowUp');
+            close(output.scrollTop, 0, 'preserve scroll while resizing');
+            output.scrollTop = output.scrollHeight;
+            key('ArrowDown');
+            close(output.scrollHeight - output.clientHeight - output.scrollTop, 0, 'follow while resizing');
+            return 'ok';
+            """)
+        #expect(result == "ok")
+        try await open(browser)
+        #expect(try await evaluate(browser.webView, "return document.querySelector('#console-divider').getAttribute('aria-valuenow')") == "20")
         browser.hardware.invalidate()
     }
 

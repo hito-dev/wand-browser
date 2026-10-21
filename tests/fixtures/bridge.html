@@ -23,7 +23,7 @@
     height: 100vh;
     height: var(--viewport-height, 100dvh);
     display: grid;
-    grid-template-rows: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-rows: minmax(0, 1fr) var(--console-height, 20%);
     overflow: hidden;
   }
   #controls, #log { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
@@ -37,12 +37,35 @@
   button { display: block; min-height: 44px; max-width: 100%; }
   input { width: 100%; }
   #console {
+    position: relative;
     min-height: 0;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
     border-top: 1px solid GrayText;
     padding-bottom: env(safe-area-inset-bottom);
   }
+  #console-divider {
+    position: absolute;
+    z-index: 1;
+    top: -12px;
+    left: 0;
+    right: 0;
+    height: 24px;
+    cursor: row-resize;
+    touch-action: none;
+    user-select: none;
+  }
+  #console-divider::after {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: calc(50% - 24px);
+    width: 48px;
+    height: 5px;
+    border-radius: 3px;
+    background: GrayText;
+  }
+  #console-divider:focus-visible { outline: 2px solid Highlight; outline-offset: -2px; }
   #console h2 {
     margin: 0;
     padding: 12px max(24px, env(safe-area-inset-right)) 8px max(24px, env(safe-area-inset-left));
@@ -61,11 +84,8 @@
 <main id="controls" aria-labelledby="fixture-title" tabindex="0">
 <h1 id="fixture-title">Wand hardware fixtures</h1>
 <p>These actions use the browser’s hardware APIs. Select only your own test wallet and writable test tags.</p>
-<button id="fullscreen">Enter fullscreen</button>
+<button id="fullscreen">Enter WebKit fullscreen</button>
 <button id="ble">Choose Bluetooth device</button>
-<button id="sdk">Run Hito SDK echo test</button>
-<label>Hito test command <input id="command" value="help"></label>
-<label>SDK packet size <input id="packet" type="number" min="1" max="505" value="19"></label>
 <button id="scan">Scan NFC</button>
 <button id="abort">Stop NFC scan</button>
 <label>NFC text <input id="text" value="Hello from Hito Wand"></label>
@@ -75,6 +95,8 @@
 <p><a href="./second.html" target="_blank">Open new-window link</a></p>
 </main>
 <section id="console" aria-labelledby="console-title">
+<div id="console-divider" role="separator" tabindex="0" aria-label="Resize console"
+  aria-orientation="horizontal" aria-controls="console" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20"></div>
 <h2 id="console-title">Console</h2>
 <pre id="log" role="log" aria-live="polite" aria-labelledby="console-title" tabindex="0">Ready.</pre>
 </section>
@@ -88,6 +110,56 @@ function log(text) {
   if (follow) output.scrollTop = output.scrollHeight;
 }
 
+const divider = document.querySelector("#console-divider");
+let consoleRatio = 0.2;
+function resizeConsole(ratio = consoleRatio) {
+  const height = document.body.getBoundingClientRect().height;
+  if (!height) return;
+  const minimum = Math.min(80, height / 2);
+  const consoleHeight = Math.min(height - minimum, Math.max(minimum, height * ratio));
+  document.body.style.setProperty("--console-height", `${consoleHeight}px`);
+  divider.setAttribute("aria-valuemin", String(Math.round(minimum / height * 100)));
+  divider.setAttribute("aria-valuemax", String(Math.round((height - minimum) / height * 100)));
+  divider.setAttribute("aria-valuenow", String(Math.round(consoleHeight / height * 100)));
+  divider.setAttribute("aria-valuetext", `${Math.round(consoleHeight / height * 100)}% console height`);
+  return consoleHeight / height;
+}
+let drag = null;
+divider.addEventListener("pointerdown", event => {
+  if (drag || !event.isPrimary || event.button !== 0) return;
+  event.preventDefault();
+  const bounds = document.body.getBoundingClientRect();
+  drag = { id: event.pointerId, offset: bounds.bottom - event.clientY - document.querySelector("#console").getBoundingClientRect().height };
+  divider.setPointerCapture(event.pointerId);
+});
+divider.addEventListener("pointermove", event => {
+  if (!drag || event.pointerId !== drag.id) return;
+  const bounds = document.body.getBoundingClientRect();
+  const follow = followingOutput();
+  consoleRatio = resizeConsole((bounds.bottom - event.clientY - drag.offset) / bounds.height);
+  if (follow) output.scrollTop = output.scrollHeight;
+});
+function endDrag(event) {
+  if (!drag || event.pointerId !== drag.id) return;
+  drag = null;
+  if (divider.hasPointerCapture(event.pointerId)) divider.releasePointerCapture(event.pointerId);
+}
+divider.addEventListener("pointerup", endDrag);
+divider.addEventListener("pointercancel", endDrag);
+divider.addEventListener("lostpointercapture", endDrag);
+divider.addEventListener("keydown", event => {
+  let ratio;
+  if (event.key === "ArrowUp") ratio = consoleRatio + 0.05;
+  else if (event.key === "ArrowDown") ratio = consoleRatio - 0.05;
+  else if (event.key === "Home") ratio = 0;
+  else if (event.key === "End") ratio = 1;
+  else return;
+  event.preventDefault();
+  const follow = followingOutput();
+  consoleRatio = resizeConsole(ratio);
+  if (follow) output.scrollTop = output.scrollHeight;
+});
+
 function updateViewport() {
   const viewport = window.visualViewport;
   // Leave pinch zoom to the browser; only fit unzoomed viewport/keyboard changes.
@@ -95,6 +167,7 @@ function updateViewport() {
   const follow = followingOutput();
   document.documentElement.style.setProperty("--viewport-height", `${viewport?.height ?? window.innerHeight}px`);
   document.documentElement.style.setProperty("--viewport-top", `${viewport?.offsetTop ?? 0}px`);
+  resizeConsole();
   requestAnimationFrame(() => {
     if (follow) output.scrollTop = output.scrollHeight;
     const focused = document.activeElement;
@@ -125,14 +198,13 @@ fullscreenButton.onclick = async () => {
 };
 document.addEventListener("fullscreenchange", () => {
   const active = Boolean(document.fullscreenElement);
-  fullscreenButton.textContent = active ? "Exit fullscreen" : "Enter fullscreen";
-  log(active ? "Entered fullscreen" : "Exited fullscreen");
+  fullscreenButton.textContent = active ? "Exit WebKit fullscreen" : "Enter WebKit fullscreen";
+  log(active ? "Entered WebKit fullscreen" : "Exited WebKit fullscreen");
 });
 document.addEventListener("fullscreenerror", () => log("Fullscreen request failed."));
 })();
 </script>
 <script type="module">
-import { BluetoothTransport } from "./hito_ble_transport.js";
 const run = action => async () => { try { await action(); } catch (e) { log(`${e.name}: ${e.message}`); } };
 let reader, abort;
 document.querySelector("#ble").onclick = run(async () => {
@@ -144,10 +216,6 @@ document.querySelector("#ble").onclick = run(async () => {
   await device.gatt.connect();
   log("Connected");
   device.ongattserverdisconnected = () => log("Disconnected");
-});
-document.querySelector("#sdk").onclick = run(async () => {
-  const sdk = new BluetoothTransport({ packetSize: Number(document.querySelector("#packet").value) });
-  log(await sdk.sendCommand(document.querySelector("#command").value));
 });
 document.querySelector("#scan").onclick = run(async () => {
   reader ??= new NDEFReader();

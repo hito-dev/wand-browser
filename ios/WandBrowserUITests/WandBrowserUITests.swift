@@ -2,6 +2,12 @@ import XCTest
 
 @MainActor
 final class WandBrowserUITests: XCTestCase {
+    private func scrollControls(_ web: XCUIElement, up: Bool) {
+        // Stay inside the fixture's upper scroll panel rather than its console.
+        let high = web.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))
+        let low = web.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
+        (up ? low : high).press(forDuration: 0.05, thenDragTo: up ? high : low)
+    }
     private var fixtureBase: String {
         get throws {
             let value = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? "https://hito-dev.github.io/wand-browser/fixtures/"
@@ -164,9 +170,12 @@ final class WandBrowserUITests: XCTestCase {
         let exit = app.buttons["exit-fullscreen"]
         XCTAssertTrue(exit.waitForExistence(timeout: 5))
         XCTAssertFalse(app.textFields["address-field"].exists)
+        scrollControls(app.webViews.firstMatch, up: true)
+        scrollControls(app.webViews.firstMatch, up: false)
+        XCTAssertFalse(app.textFields["address-field"].exists)
         let hidden = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: exit)
         XCTAssertEqual(XCTWaiter.wait(for: [hidden], timeout: 8), .completed)
-        app.webViews.textFields.firstMatch.twoFingerTap()
+        app.webViews.staticTexts["Wand hardware fixtures"].firstMatch.twoFingerTap()
         XCTAssertTrue(exit.waitForExistence(timeout: 3))
         exit.tap()
         XCTAssertTrue(app.textFields["address-field"].waitForExistence(timeout: 3))
@@ -177,7 +186,8 @@ final class WandBrowserUITests: XCTestCase {
         continueAfterFailure = false
         let app = XCUIApplication()
         try openFixtures(app)
-        let field = app.webViews.textFields.firstMatch
+        scrollControls(app.webViews.firstMatch, up: true)
+        let field = app.webViews.textFields["NFC text"]
         field.tap()
         field.typeText(" retained")
         let retainedValue = field.value as? String
@@ -194,10 +204,11 @@ final class WandBrowserUITests: XCTestCase {
         landscape.lifetime = .keepAlways
         add(landscape)
         XCUIDevice.shared.orientation = .portrait
-        app.webViews.firstMatch.swipeDown()
-        app.webViews.buttons["Enter fullscreen"].tap()
-        XCTAssertTrue(app.webViews.buttons["Exit fullscreen"].waitForExistence(timeout: 10))
-        app.webViews.buttons["Exit fullscreen"].tap()
+        scrollControls(app.webViews.firstMatch, up: false)
+        scrollControls(app.webViews.firstMatch, up: false)
+        app.webViews.buttons["Enter WebKit fullscreen"].tap()
+        XCTAssertTrue(app.webViews.buttons["Exit WebKit fullscreen"].waitForExistence(timeout: 10))
+        app.webViews.buttons["Exit WebKit fullscreen"].tap()
         XCTAssertTrue(app.buttons["exit-fullscreen"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.textFields["address-field"].exists)
         XCTAssertEqual(field.value as? String, retainedValue)
@@ -215,6 +226,29 @@ final class WandBrowserUITests: XCTestCase {
         app.buttons["exit-fullscreen"].tap()
         XCTAssertTrue(app.textFields["address-field"].waitForExistence(timeout: 5))
         XCTAssertEqual(field.value as? String, retainedValue)
+    }
+
+    func testFixtureConsoleCanBeDraggedAndResetsOnReload() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        try openFixtures(app)
+        let web = app.webViews.firstMatch
+        let divider = web.descendants(matching: .any).matching(NSPredicate(format: "label == %@", "Resize console")).firstMatch
+        XCTAssertTrue(divider.waitForExistence(timeout: 5))
+        let initial = divider.frame.midY
+        let grip = divider.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        grip.press(forDuration: 0.1, thenDragTo: web.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45)))
+        XCTAssertLessThan(divider.frame.midY, initial - 60)
+        let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        screenshot.name = "Fixture console expanded by dragging"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        divider.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).press(
+            forDuration: 0.1, thenDragTo: web.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)))
+        XCTAssertGreaterThan(divider.frame.midY, initial)
+        app.buttons["Reload"].tap()
+        let reset = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in abs(divider.frame.midY - initial) < 3 }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [reset], timeout: 10), .completed)
     }
 
     func testRememberedBrowserFullscreen() throws {
@@ -248,12 +282,12 @@ final class WandBrowserUITests: XCTestCase {
         continueAfterFailure = false
         let app = XCUIApplication()
         try openFixtures(app)
-        app.webViews.buttons["Enter fullscreen"].tap()
-        XCTAssertTrue(app.webViews.buttons["Exit fullscreen"].waitForExistence(timeout: 10))
-        let entered = app.webViews.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Entered fullscreen")).firstMatch
+        app.webViews.buttons["Enter WebKit fullscreen"].tap()
+        XCTAssertTrue(app.webViews.buttons["Exit WebKit fullscreen"].waitForExistence(timeout: 10))
+        let entered = app.webViews.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Entered WebKit fullscreen")).firstMatch
         XCTAssertTrue(entered.waitForExistence(timeout: 10))
-        app.webViews.buttons["Exit fullscreen"].tap()
-        XCTAssertTrue(app.webViews.buttons["Enter fullscreen"].waitForExistence(timeout: 10))
+        app.webViews.buttons["Exit WebKit fullscreen"].tap()
+        XCTAssertTrue(app.webViews.buttons["Enter WebKit fullscreen"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.buttons["address-field"].exists || app.textFields["address-field"].exists)
     }
 
