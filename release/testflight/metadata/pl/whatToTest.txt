@@ -1,7 +1,7 @@
 Co przetestować
 
-Naciśnij Wybierz urządzenie Bluetooth, aby otworzyć listę. Test filtruje urządzenia o nazwach zaczynających się od hito lub Hito i żąda UUID usługi Hito. Wybierz własny zgodny portfel testowy; test połączy się z serwerem GATT i wyświetli zdarzenia połączenia. Inne witryny muszą żądać własnych filtrów i usług. Samo sparowanie nie daje witrynie dostępu.
+Naciśnij „Wybierz urządzenie Bluetooth”, aby otworzyć listę. Test filtruje urządzenia o nazwach zaczynających się od hito lub Hito i żąda UUID usługi Hito. Wybierz własny zgodny portfel testowy; test połączy się z serwerem GATT i wyświetli zdarzenia połączenia. Inne witryny muszą żądać własnych filtrów i usług. Samo sparowanie nie daje witrynie dostępu.
 
-Naciśnij Skanuj NFC i zbliż zgodny tag NDEF do górnej części iPhone’a. Konsola pokazuje typy i dane rekordów. Zatrzymaj skanowanie przed zmianą zadania. Do zapisu używaj własnego zapisywalnego taga testowego: wprowadź tekst lub przetestuj rekord binarny. Zapis zastępuje zawartość. Test nie odczytuje kart płatniczych ani nie emuluje kart NFC.
+Naciśnij „Skanuj NFC” i zbliż zgodny tag NDEF do górnej części iPhone’a. Konsola pokazuje typy i dane rekordów. Zatrzymaj skanowanie przed zmianą zadania. Do zapisu używaj własnego zapisywalnego taga testowego: wprowadź tekst lub przetestuj rekord binarny. Zapis zastępuje zawartość. Test nie odczytuje kart płatniczych ani nie emuluje kart NFC.
 
-W razie błędu przeczytaj konsolę, sprawdź uprawnienia Bluetooth lub NFC w iOS oraz ustawienia witryny i spróbuj ponownie na pierwszym planie. Po nawigacji lub przejściu w tło ponownie udziel zgody. Symulator nie weryfikuje operacji radiowych ani tagów. Użyj prawdziwego sprzętu, anuluj wybór i sprawdź, czy odmowa dostępu nadal działa.
+W razie błędu przeczytaj komunikat o błędzie w konsoli, sprawdź uprawnienia Bluetooth lub NFC w iOS oraz ustawienia witryny i spróbuj ponownie na pierwszym planie. Po nawigacji lub przejściu do tła ponownie udziel zgody. Symulator nie weryfikuje operacji radiowych ani tagów. Użyj prawdziwego sprzętu, anuluj wybór i sprawdź, czy odmowa dostępu nadal działa.

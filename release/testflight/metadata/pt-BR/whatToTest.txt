@@ -1,7 +1,7 @@
 O que testar
 
-Toque em Escolher dispositivo Bluetooth para abrir o seletor. Este teste filtra dispositivos chamados hito ou Hito e solicita o UUID do serviço Hito. Selecione sua própria carteira de teste compatível; o teste se conecta ao servidor GATT e mostra eventos de conexão. Outros sites devem solicitar seus próprios filtros e serviços. O pareamento por si só não autoriza um site.
+Toque em “Escolher dispositivo Bluetooth” para abrir o seletor. Este teste filtra dispositivos cujos nomes começam com hito ou Hito e solicita o UUID do serviço Hito. Selecione sua própria carteira de teste compatível; o teste se conecta ao servidor GATT e mostra eventos de conexão. Outros sites devem solicitar seus próprios filtros e serviços. O pareamento por si só não autoriza um site.
 
-Toque em Escanear NFC e aproxime uma etiqueta NDEF compatível da parte superior do iPhone. O console mostra os tipos de registro e seus dados. Pare o escaneamento antes de mudar de tarefa. Para gravar, use sua própria etiqueta de teste regravável: digite texto ou teste um registro binário. A gravação substitui o conteúdo. Este teste não lê cartões de pagamento nem emula cartões NFC.
+Toque em “Escanear NFC” e aproxime uma etiqueta NDEF compatível da parte superior do iPhone. O console mostra os tipos de registro e seus dados. Pare o escaneamento antes de mudar de tarefa. Para gravar, use sua própria etiqueta de teste regravável: digite texto ou teste um registro binário. A gravação substitui o conteúdo. Este teste não lê cartões de pagamento nem emula cartões NFC.
 
 Se uma ação falhar, leia o erro no console, confira as permissões de Bluetooth ou NFC do iOS e os controles do site e tente novamente em primeiro plano. Após navegar ou ir para segundo plano, autorize novamente. O simulador não verifica operações de rádio nem etiquetas. Use hardware real, cancele seletores e confirme que o acesso negado continua bloqueado.

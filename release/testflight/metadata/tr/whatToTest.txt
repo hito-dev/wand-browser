@@ -1,7 +1,7 @@
 Test edilecekler
 
-Cihaz seçiciyi açmak için Bluetooth cihazı seç düğmesine dokunun. Bu test adı hito veya Hito ile başlayan cihazları filtreler ve Hito hizmet UUID’sini ister. Kendi uyumlu test cüzdanınızı seçin; test GATT sunucusuna bağlanır ve bağlantı olaylarını gösterir. Diğer siteler kendi filtrelerini ve hizmetlerini istemelidir. Eşleştirme tek başına siteye erişim vermez.
+Cihaz seçiciyi açmak için “Bluetooth cihazı seç” düğmesine dokunun. Bu test adı hito veya Hito ile başlayan cihazları filtreler ve Hito hizmet UUID’sini ister. Kendi uyumlu test cüzdanınızı seçin; test GATT sunucusuna bağlanır ve bağlantı olaylarını gösterir. Diğer siteler kendi filtrelerini ve hizmetlerini istemelidir. Eşleştirme tek başına siteye erişim vermez.
 
-NFC tara düğmesine dokunun ve uyumlu bir NDEF etiketini iPhone’un üstüne yaklaştırın. Konsol kayıt türlerini ve verileri gösterir. Görev değiştirmeden taramayı durdurun. Yazmak için kendi yazılabilir test etiketinizi kullanın: metin girin veya ikili kayıt deneyin. Yazma içeriği değiştirir. Bu test ödeme kartlarını okumaz ve NFC kartlarını taklit etmez.
+“NFC tara” düğmesine dokunun ve uyumlu bir NDEF etiketini iPhone’un üstüne yaklaştırın. Konsol kayıt türlerini ve verileri gösterir. Görev değiştirmeden taramayı durdurun. Yazmak için kendi yazılabilir test etiketinizi kullanın: metin girin veya ikili kayıt deneyin. Yazma içeriği değiştirir. Bu test ödeme kartlarını okumaz ve NFC kartlarını taklit etmez.
 
-İşlem başarısızsa konsol hatasını, iOS Bluetooth veya NFC izinlerini ve site kontrollerini inceleyip ön planda tekrar deneyin. Gezinme veya arka plana geçiş sonrasında yeniden izin verin. Simülatör radyo veya etiket işlemlerini doğrulayamaz. Gerçek donanımla deneyin, seçicileri iptal edin ve reddedilen erişimin engelli kaldığını kontrol edin.
+İşlem başarısızsa konsol hatasını, iOS Bluetooth veya NFC izinlerini ve site kontrollerini inceleyip ön planda tekrar deneyin. Gezinme veya arka plana geçiş sonrasında yeniden izin verin. Simülatör radyo veya etiket işlemlerini doğrulayamaz. Gerçek donanımla deneyin, cihaz seçimini iptal edin ve reddedilen erişimin engelli kaldığını kontrol edin.
