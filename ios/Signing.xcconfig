@@ -1,0 +1,2 @@
+// Override locally with DEVELOPMENT_TEAM = your-team-id.
+#include? "Signing.local.xcconfig"
