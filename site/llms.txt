@@ -17,7 +17,7 @@ Use a physical iPhone running iOS 18 or later and compatible hardware for BLE an
 ## Development and testing
 
 - [Hardware fixtures](https://wand.hito.ai/fixtures/bridge.html): Interactive BLE, NFC, and fullscreen checks in Wand on iPhone.
-- [JavaScript bridge](https://raw.githubusercontent.com/hito-dev/wand-browser/main/ios/HitoWand/Resources/HardwareBridge.js): Implemented API subset and unsupported options; consult before generating integration code.
+- [JavaScript bridge](https://raw.githubusercontent.com/hito-dev/wand-browser/main/ios/WandBrowser/Resources/HardwareBridge.js): Implemented API subset and unsupported options; consult before generating integration code.
 
 ## Optional
 
