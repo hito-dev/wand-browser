@@ -18,15 +18,6 @@ You choose which Bluetooth device a site can access and approve NFC requests.
 Hardware permissions end when you load a new document, reload, background Wand,
 or revoke access in Site controls.
 
-For browser fullscreen with Wand's address controls, use **Site controls → Enter
-fullscreen**, or call `window.wand.fullscreen.request()` from a tap handler on a
-top-level HTTPS page. Feature-detect `window.wand?.fullscreen` first. Read
-`active`, listen for its `change` event, and call `exit()` to restore browser bars.
-The compact top bar hides after five seconds; a two-finger tap reveals it.
-Standard `requestFullscreen()` continues to use WebKit's system UI and swipe exit.
-Both Wand methods return `Promise<void>`. They reject while WebKit fullscreen is
-active, and do not change saved site preferences or hardware permissions.
-
 ## Limits
 
 This early version supports a subset of Web Bluetooth and Web NFC.
