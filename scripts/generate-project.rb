@@ -37,7 +37,7 @@ signing = project.main_group.new_file('Signing.xcconfig')
     settings['CODE_SIGN_STYLE'] = 'Automatic'
     # Both configurations are beta builds; Release archives are intended for TestFlight.
     settings['PRODUCT_BUNDLE_IDENTIFIER'] = target == app ? 'ai.hito.wand.dev' : "ai.hito.wand.dev.#{target.name}"
-    settings['MARKETING_VERSION'] = target == app ? '0.2.3' : '0.1.0'
+    settings['MARKETING_VERSION'] = target == app ? '0.3.0' : '0.1.0'
     settings['CURRENT_PROJECT_VERSION'] = target == app ? '5' : '4'
     settings['GENERATE_INFOPLIST_FILE'] = target == app ? 'NO' : 'YES'
     settings['SWIFT_EMIT_LOC_STRINGS'] = 'YES'
