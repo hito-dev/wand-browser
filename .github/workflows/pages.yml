@@ -1,0 +1,49 @@
+name: Publish hardware fixtures
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - tests/fixtures/**
+      - scripts/prepare-pages.sh
+      - .github/workflows/pages.yml
+      - LICENSE
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Prepare static fixtures
+        id: fixtures
+        run: |
+          site_dir=$(sh scripts/prepare-pages.sh)
+          echo "path=$site_dir" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ steps.fixtures.outputs.path }}
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy fixtures
+        id: deployment
+        uses: actions/deploy-pages@v4
