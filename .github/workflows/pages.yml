@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - site/**
       - tests/fixtures/**
       - ios/HitoWand/Resources/Assets.xcassets/AppIcon.appiconset/icon-default.png
       - scripts/prepare-pages.sh

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wand.hito.ai/sitemap.xml

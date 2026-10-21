@@ -1,0 +1,24 @@
+# Wand Browser
+
+> An open-source iOS browser for developers testing JavaScript web apps on iPhone with WebBluetooth (BLE/GATT) and WebNFC (NDEF tags).
+
+Wand supports a subset of Web Bluetooth through `navigator.bluetooth`: choose a Bluetooth Low Energy device, connect to GATT services, read and write characteristics, and receive notifications. Web NFC support uses `NDEFReader` to read and write NDEF tags.
+
+Hardware access requires a top-level HTTPS page with Wand in the foreground. Users choose which Bluetooth device a site can access and approve NFC requests. Permissions end when a new document loads, the page reloads, Wand moves to the background, or access is revoked in Site controls. Request fresh permission before continuing after these events.
+
+Use a physical iPhone running iOS 18 or later and compatible hardware for BLE and NFC tests. Simulator tests cover browser flows and bridge logic, not either radio. The fixtures include hardware actions; reading this site does not grant device access. This version has no remote-control API for agents.
+
+## Project
+
+- [Homepage](https://wand.hito.ai/): Public entry point and links.
+- [README](https://raw.githubusercontent.com/hito-dev/wand-browser/main/README.md): Build instructions, test commands, requirements, and limitations.
+- [Source code](https://github.com/hito-dev/wand-browser): Public repository.
+
+## Development and testing
+
+- [Hardware fixtures](https://wand.hito.ai/fixtures/bridge.html): Interactive BLE, NFC, and fullscreen checks in Wand on iPhone.
+- [JavaScript bridge](https://raw.githubusercontent.com/hito-dev/wand-browser/main/ios/HitoWand/Resources/HardwareBridge.js): Implemented API subset and unsupported options; consult before generating integration code.
+
+## Optional
+
+- [License](https://wand.hito.ai/LICENSE.txt): MIT license for the project. Bundled third-party data retains its own notices.
