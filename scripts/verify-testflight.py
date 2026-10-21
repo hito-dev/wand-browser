@@ -45,7 +45,7 @@ def verify(app, build, distribution):
     entitlements = plistlib.loads(run('codesign', '-d', '--entitlements', '-', '--xml', str(app)))
     require(entitlements.get('application-identifier') == 'KUV9LF7VX6.ai.hito.wand.dev', 'Wrong signed application ID')
     require(entitlements.get('com.apple.developer.team-identifier') == 'KUV9LF7VX6', 'Wrong signing team')
-    require(entitlements.get('com.apple.developer.nfc.readersession.formats') == ['NDEF'], 'Missing NDEF entitlement')
+    require(entitlements.get('com.apple.developer.nfc.readersession.formats') == ['TAG'], 'NFC formats must contain only TAG; deprecated NDEF is rejected by App Store Connect')
     profile = plistlib.loads(run('security', 'cms', '-D', '-i', str(app / 'embedded.mobileprovision')))
     require(profile['ExpirationDate'] > datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None), 'Expired profile')
     require(profile['Entitlements'].get('application-identifier') == 'KUV9LF7VX6.ai.hito.wand.dev', 'Wrong profile application ID')
