@@ -35,6 +35,16 @@ final class HardwareCoordinator: NSObject, ObservableObject, WKScriptMessageHand
     private(set) var document = DocumentSession()
     private(set) var foreground = true
     weak var webView: WKWebView?
+    var fullscreenState: () -> Bool = { false }
+    var setFullscreen: ((Bool) throws -> Void)?
+    private var fullscreenRevision = 0
+    private var fullscreenSnapshot: JSONObject {
+        ["active": .bool(fullscreenState()), "revision": .number(Double(fullscreenRevision))]
+    }
+    func fullscreenChanged() {
+        fullscreenRevision += 1
+        send("fullscreen.change", .object(fullscreenSnapshot))
+    }
     let bluetooth: any BluetoothTransport
     let nfc: any NFCTransport
     private let replies = PendingReplies()
@@ -79,7 +89,8 @@ final class HardwareCoordinator: NSObject, ObservableObject, WKScriptMessageHand
         }
         document.activate(origin: origin)
         originLabel = origin.display
-        webView?.callAsyncJavaScript("window.__hitoWand?.initialize(token)", arguments: ["token": document.token],
+        webView?.callAsyncJavaScript("window.__hitoWand?.initialize(token, fullscreen)",
+                                    arguments: ["token": document.token, "fullscreen": fullscreenSnapshot.mapValues(\.foundation)],
                                     in: nil, in: .page, completionHandler: nil)
     }
     func setForeground(_ active: Bool) {
@@ -139,6 +150,11 @@ final class HardwareCoordinator: NSObject, ObservableObject, WKScriptMessageHand
     }
     private func execute(_ request: BridgeRequest) async throws -> JSONValue {
         switch request.op {
+        case "fullscreen.request", "fullscreen.exit":
+            try request.args.rejectUnknown([])
+            guard let setFullscreen else { throw WebError("NotSupportedError", "Wand fullscreen is unavailable.") }
+            try setFullscreen(request.op == "fullscreen.request")
+            return .object(fullscreenSnapshot)
         case "ble.requestDevice":
             guard selection == nil, approval == nil else { throw WebError("InvalidStateError", "A hardware prompt is already open.") }
             let options = try BluetoothRequestOptions(request.args)

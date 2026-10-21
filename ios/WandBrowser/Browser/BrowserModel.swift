@@ -106,7 +106,9 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
     }
     @Published var javaScriptDialog: JavaScriptDialog?
     @Published private(set) var history: [HistoryEntry]
-    @Published private(set) var isFullscreen = false
+    @Published private(set) var isFullscreen = false {
+        didSet { if oldValue != isFullscreen { hardware.fullscreenChanged() } }
+    }
     @Published private(set) var websiteFullscreen = false
     @Published private var fullscreenOrigins: Set<String> = []
     // Preserve a manual exit through reloads and same-origin navigation.
@@ -159,6 +161,16 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
         }
         webView = WKWebView(frame: .zero, configuration: configuration)
         super.init()
+        hardware.fullscreenState = { [weak self] in self?.isFullscreen ?? false }
+        hardware.setFullscreen = { [weak self] active in
+            guard let self, !self.websiteFullscreen else {
+                throw WebError("InvalidStateError", "Exit WebKit fullscreen before changing Wand fullscreen.")
+            }
+            if active {
+                guard self.canEnterFullscreen else { throw WebError("InvalidStateError", "No page is available for fullscreen.") }
+                self.enterFullscreen()
+            } else { self.exitFullscreen() }
+        }
         faviconCache.totalCostLimit = 2 * 1024 * 1024
         hardware.webView = webView
         webView.navigationDelegate = self; webView.uiDelegate = self
@@ -264,9 +276,9 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
         error = nil
     }
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        hardware.committed(webView.url)
         currentURL = webView.url
         updatePresentation(for: webView.url)
+        hardware.committed(webView.url)
     }
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         if (error as NSError).code == NSURLErrorCancelled {

@@ -10,6 +10,52 @@ struct CoordinatorTests {
     }
     func ticks() async { for _ in 0..<20 { await Task.yield() } }
 
+    @Test func fullscreenUsesNativePresentationWithoutHardwareGrants() async throws {
+        let ble = TestBluetooth()
+        let coordinator = HardwareCoordinator(bluetooth: ble, nfc: TestNFC())
+        let browser = BrowserModel(hardware: coordinator, dataStore: .nonPersistent())
+        let url = try #require(URL(string: "https://wallet.example/page"))
+        browser.showingHome = false
+        browser.currentURL = url
+        browser.updatePresentation(for: url)
+        coordinator.committed(url)
+        let token = coordinator.document.token
+        var snapshots: [[String: Any]] = []
+        for op in ["fullscreen.request", "fullscreen.request", "fullscreen.exit", "fullscreen.exit"] {
+            coordinator.receive(body(coordinator, op: op), origin: origin, mainFrame: true) { value, _ in
+                if let snapshot = (value as? [String: Any])?["ok"] as? [String: Any] { snapshots.append(snapshot) }
+            }
+            await ticks()
+        }
+        #expect(snapshots.compactMap { $0["active"] as? Bool } == [true, true, false, false])
+        #expect(snapshots.compactMap { $0["revision"] as? Double } == [1, 1, 2, 2])
+        #expect(coordinator.document.token == token)
+        #expect(coordinator.allowedDevices.isEmpty)
+        #expect(!coordinator.hasNFCGrant)
+        #expect(!browser.alwaysFullscreen)
+        #expect(ble.scanCount == 0)
+    }
+
+    @Test func fullscreenRejectsStaleOrUntrustedMessages() async {
+        let coordinator = HardwareCoordinator(bluetooth: TestBluetooth(), nfc: TestNFC())
+        var changed = false, denied = 0
+        coordinator.setFullscreen = { _ in changed = true }
+        coordinator.committed(URL(string: "https://wallet.example"))
+        let request = body(coordinator, op: "fullscreen.request")
+        let reply: PendingReplies.Reply = { value, _ in
+            if ((value as? [String: Any])?["error"] as? [String: Any])?["name"] as? String == "SecurityError" { denied += 1 }
+        }
+        coordinator.receive(request, origin: origin, mainFrame: false, reply: reply)
+        coordinator.receive(request, origin: .init(scheme: "https", host: "other.example", port: 443), mainFrame: true, reply: reply)
+        coordinator.setForeground(false)
+        coordinator.receive(request, origin: origin, mainFrame: true, reply: reply)
+        coordinator.setForeground(true)
+        coordinator.receive(request, origin: origin, mainFrame: true, reply: reply)
+        await ticks()
+        #expect(denied == 4)
+        #expect(!changed)
+    }
+
     @Test func directMessagesCannotBypassOriginAndFrameChecks() async {
         let ble = TestBluetooth(), nfc = TestNFC()
         let coordinator = HardwareCoordinator(bluetooth: ble, nfc: nfc)

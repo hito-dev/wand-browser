@@ -299,6 +299,26 @@
   handler(NDEFReader.prototype, "reading");
   handler(NDEFReader.prototype, "readingerror");
 
+  let fullscreenActive = false, fullscreenRevision = -1;
+  class WandFullscreen extends EventTarget {
+    get active() { return fullscreenActive; }
+    async request() {
+      gesture();
+      updateFullscreen(await request("fullscreen.request"));
+    }
+    async exit() { updateFullscreen(await request("fullscreen.exit")); }
+  }
+  const fullscreen = new WandFullscreen();
+  function updateFullscreen(state) {
+    if (!state || typeof state.active !== "boolean" || !Number.isSafeInteger(state.revision) || state.revision < fullscreenRevision) return;
+    fullscreenRevision = state.revision;
+    const changed = fullscreenActive !== state.active;
+    fullscreenActive = state.active;
+    if (changed) fullscreen.dispatchEvent(new Event("change"));
+  }
+  // Keep native Fullscreen API methods and document state untouched.
+  if (!("wand" in window)) Object.defineProperty(window, "wand", { value: Object.freeze({ fullscreen }) });
+
   function reset() {
     rejectReady(fail("AbortError", "The document visit ended."));
     token = null;
@@ -313,6 +333,7 @@
   function receive(eventToken, type, value) {
     if (!token || eventToken !== token) return;
     if (type === "reset") { reset(); return; }
+    if (type === "fullscreen.change") { updateFullscreen(value); return; }
     if (type === "ble.disconnected") {
       const device = devices.get(value.device);
       if (device) markDisconnected(device);
@@ -334,9 +355,9 @@
     }
   }
   Object.defineProperty(window, "__hitoWand", { value: Object.freeze({
-    initialize(next) {
+    initialize(next, fullscreenState) {
       if (token) reset();
-      token = next; resolveReady();
+      token = next; updateFullscreen(fullscreenState); resolveReady();
     },
     receive
   }) });

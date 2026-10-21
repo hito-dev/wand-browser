@@ -82,6 +82,44 @@ struct WebViewTests {
         coordinator.invalidate()
     }
 
+    @Test func wandFullscreenRoundTripAndNativeStateSync() async throws {
+        let browser = BrowserModel(hardware: HardwareCoordinator(bluetooth: TestBluetooth(), nfc: TestNFC()), dataStore: .nonPersistent())
+        let window = try host(browser)
+        defer { window.isHidden = true; browser.webView.removeFromSuperview() }
+        try await open(browser)
+        #expect(try await evaluate(browser.webView, "return String(window.wand.fullscreen.active)") == "false")
+        // Exercise the production native adapter directly; gesture validation is tested
+        // with real taps in UI tests and separately in the JavaScript suite.
+        let token = browser.hardware.document.token
+        let entered = try await evaluate(browser.webView, """
+            window.fullscreenChanges = [];
+            wand.fullscreen.addEventListener('change', () => fullscreenChanges.push(wand.fullscreen.active));
+            const result = await webkit.messageHandlers.wand.postMessage({
+              id: crypto.randomUUID(), token, op: 'fullscreen.request', args: {}
+            });
+            return String(result.ok.active);
+            """, arguments: ["token": token])
+        #expect(entered == "true")
+        #expect(browser.isFullscreen)
+        #expect(!browser.alwaysFullscreen)
+        #expect(try await evaluate(browser.webView, "return String(wand.fullscreen.active) + ',' + String(document.fullscreenElement === null)") == "true,true")
+        browser.exitFullscreen()
+        #expect(try await evaluate(browser.webView, "return String(wand.fullscreen.active)") == "false")
+        browser.enterFullscreen()
+        browser.hardware.setForeground(false)
+        browser.hardware.setForeground(true)
+        #expect(try await evaluate(browser.webView, "return String(wand.fullscreen.active)") == "true")
+        #expect(try await evaluate(browser.webView, "await wand.fullscreen.exit(); return JSON.stringify(fullscreenChanges)") == "[true,false,true,false]")
+        #expect(!browser.isFullscreen)
+        try await open(browser, path: "second.html")
+        #expect(try await evaluate(browser.webView, "return String(wand.fullscreen.active)") == "false")
+        browser.enterFullscreen()
+        try await open(browser)
+        #expect(try await evaluate(browser.webView, "return String(wand.fullscreen.active)") == "true")
+        browser.exitFullscreen()
+        browser.hardware.invalidate()
+    }
+
     @Test func actualMessageReplyAndNFCPermissionRoundTrip() async throws {
         let ble = TestBluetooth(), nfc = TestNFC()
         let coordinator = HardwareCoordinator(bluetooth: ble, nfc: nfc)

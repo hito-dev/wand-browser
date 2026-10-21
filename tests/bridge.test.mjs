@@ -10,7 +10,8 @@ const serviceUUID = "5cc44b16-070a-11ed-b939-0242ac120002";
 const characteristicUUID = "5cc44b17-070a-11ed-b939-0242ac120002";
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-function browser({ protocol = "https:", frame = false, initialized = true, respond } = {}) {
+function browser({ protocol = "https:", frame = false, initialized = true, respond, prepare,
+  fullscreenState = { active: false, revision: 0 } } = {}) {
   const calls = [];
   const context = vm.createContext({
     Event, EventTarget, DOMException, TextEncoder, TextDecoder, ArrayBuffer, Uint8Array, DataView,
@@ -26,16 +27,97 @@ function browser({ protocol = "https:", frame = false, initialized = true, respo
     calls.push(request);
     return respond ? await respond(request, context) : { ok: null };
   } } } };
+  prepare?.(context);
   vm.runInContext(source, context);
   let token = webcrypto.randomUUID();
-  if (initialized) context.__hitoWand?.initialize(token);
+  if (initialized) context.__hitoWand?.initialize(token, fullscreenState);
   return {
     context, calls,
     emit(type, value, eventToken = token) { context.__hitoWand.receive(eventToken, type, value); },
     reset() { context.__hitoWand.receive(token, "reset", null); },
-    initialize() { token = webcrypto.randomUUID(); context.__hitoWand.initialize(token); }
+    initialize(state = fullscreenState) { token = webcrypto.randomUUID(); context.__hitoWand.initialize(token, state); }
   };
 }
+
+test("Wand fullscreen reflects native changes and leaves WebKit APIs untouched", async () => {
+  const nativeExit = () => {}, nativeRequest = () => {};
+  let active = false, revision = 0;
+  const app = browser({
+    prepare(context) {
+      context.document.exitFullscreen = nativeExit;
+      context.document.documentElement.requestFullscreen = nativeRequest;
+      context.document.fullscreenElement = null;
+    },
+    respond({ op }) {
+      assert.ok(["fullscreen.request", "fullscreen.exit"].includes(op));
+      const next = op === "fullscreen.request";
+      if (next !== active) revision++;
+      active = next;
+      return { ok: { active, revision } };
+    }
+  });
+  const api = app.context.wand.fullscreen;
+  const changes = [];
+  api.addEventListener("change", () => changes.push(api.active));
+  assert.equal(await api.request(), undefined);
+  assert.equal(api.active, true);
+  await api.request();
+  assert.deepEqual(changes, [true]);
+  app.emit("fullscreen.change", { active: false, revision: 2 });
+  assert.equal(api.active, false);
+  app.emit("fullscreen.change", { active: true, revision: 1 });
+  assert.equal(api.active, false);
+  await api.exit();
+  assert.deepEqual(changes, [true, false]);
+  assert.throws(() => { api.active = true; }, TypeError);
+  assert.equal(app.context.document.exitFullscreen, nativeExit);
+  assert.equal(app.context.document.documentElement.requestFullscreen, nativeRequest);
+  assert.equal(app.context.document.fullscreenElement, null);
+});
+
+test("Wand fullscreen enforces gesture, visibility, frame and visit boundaries", async () => {
+  assert.equal(browser({ frame: true }).context.wand, undefined);
+  assert.equal(browser({ protocol: "http:" }).context.wand, undefined);
+  const app = browser();
+  app.context.navigator.userActivation.isActive = false;
+  await assert.rejects(app.context.wand.fullscreen.request(), { name: "SecurityError" });
+  app.context.navigator.userActivation.isActive = true;
+  app.context.document.visibilityState = "hidden";
+  await assert.rejects(app.context.wand.fullscreen.request(), { name: "SecurityError" });
+  assert.equal(app.calls.length, 0);
+
+  let finish;
+  const pending = browser({ respond: () => new Promise(resolve => { finish = resolve; }) });
+  const request = pending.context.wand.fullscreen.request();
+  await delay(0);
+  pending.reset();
+  pending.initialize({ active: false, revision: 2 });
+  finish({ ok: { active: true, revision: 1 } });
+  await assert.rejects(request, { name: "AbortError" });
+  assert.equal(pending.context.wand.fullscreen.active, false);
+});
+
+test("Wand fullscreen rehydrates native state and ignores stale events and replies", async () => {
+  let app;
+  app = browser({ fullscreenState: { active: true, revision: 4 }, respond() {
+    app.emit("fullscreen.change", { active: false, revision: 6 });
+    return { ok: { active: true, revision: 5 } };
+  } });
+  const api = app.context.wand.fullscreen;
+  assert.equal(api.active, true);
+  await api.request();
+  assert.equal(api.active, false);
+  app.emit("fullscreen.change", { active: true, revision: 7 }, "expired-token");
+  assert.equal(api.active, false);
+  app.reset();
+  app.initialize({ active: true, revision: 7 });
+  assert.equal(api.active, true);
+  const failed = browser({ respond: () => ({ error: { name: "InvalidStateError", message: "Exit WebKit fullscreen first." } }) });
+  await assert.rejects(failed.context.wand.fullscreen.request(), { name: "InvalidStateError" });
+  assert.equal(failed.context.wand.fullscreen.active, false);
+  const existing = {};
+  assert.equal(browser({ prepare: context => { context.wand = existing; } }).context.wand, existing);
+});
 
 function peripheral({ limit = 512, response = "Hito simulated response", handshake = false } = {}) {
   let app;
