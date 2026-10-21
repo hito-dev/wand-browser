@@ -169,6 +169,12 @@ struct WebViewTests {
         #expect(result == "ok")
         try await open(browser)
         #expect(try await evaluate(browser.webView, "return document.querySelector('#console-divider').getAttribute('aria-valuenow')") == "20")
+        #expect(try await evaluate(browser.webView, """
+            document.documentElement.style.setProperty('--viewport-height', '300px');
+            resizeConsole();
+            document.querySelector('#console-divider').dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true }));
+            return String(document.querySelector('#console').getBoundingClientRect().height);
+            """) == "95")
         browser.hardware.invalidate()
     }
 

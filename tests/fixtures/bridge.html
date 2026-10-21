@@ -148,9 +148,10 @@ divider.addEventListener("pointerup", endDrag);
 divider.addEventListener("pointercancel", endDrag);
 divider.addEventListener("lostpointercapture", endDrag);
 divider.addEventListener("keydown", event => {
+  const currentRatio = document.querySelector("#console").getBoundingClientRect().height / document.body.getBoundingClientRect().height;
   let ratio;
-  if (event.key === "ArrowUp") ratio = consoleRatio + 0.05;
-  else if (event.key === "ArrowDown") ratio = consoleRatio - 0.05;
+  if (event.key === "ArrowUp") ratio = currentRatio + 0.05;
+  else if (event.key === "ArrowDown") ratio = currentRatio - 0.05;
   else if (event.key === "Home") ratio = 0;
   else if (event.key === "End") ratio = 1;
   else return;
