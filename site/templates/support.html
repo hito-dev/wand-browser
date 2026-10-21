@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wand Browser Support</title>
+  <meta name="description" content="Get help with Wand Browser, Bluetooth devices, NFC tags, website permissions, and website data on iPhone.">
+  <link rel="canonical" href="https://wand.hito.ai/support/">
+  <link rel="icon" href="/favicon.png">
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<main>
+  <h1>Wand Browser Support</h1>
+  <p>Need help, found a bug, or have a feature request? Email <a href="mailto:support-wand@hito.ai">support-wand@hito.ai</a> or <a href="https://github.com/hito-dev/wand-browser/issues">open a GitHub issue</a>.</p>
+  <p>Include your iPhone model, iOS version, Wand version, and the steps to reproduce the problem. If relevant, include the website address and device or tag model. Remove private information from screenshots and logs. Do not send passwords, recovery phrases, private keys, or sensitive tag contents. GitHub issues are public.</p>
+
+  <h2>Getting started</h2>
+  <p>Wand requires iOS 18 or later. Bluetooth and NFC operations require a physical iPhone and compatible hardware. Open the <a href="/fixtures/bridge.html">hardware fixtures</a> in Wand to try the supported APIs, or visit <a href="https://hito.ai/wand/">Wand's product page</a> for an overview.</p>
+
+  <h2>Bluetooth device not appearing or connecting</h2>
+  <p>Turn on Bluetooth in iPhone Settings and allow Wand to use Bluetooth. Keep your device nearby, awake, and advertising. The website must request filters and services that match your device. The hardware fixture filters for names beginning with hito or Hito; it will not list every Bluetooth device.</p>
+  <p>Choose the device in Wand's native picker. Pairing in iPhone Settings alone does not grant a website access. If a connection fails, check whether the device is connected elsewhere, then try again. Wand supports a subset of Web Bluetooth, using Bluetooth Low Energy GATT services and characteristics.</p>
+
+  <h2>NFC tag not reading or writing</h2>
+  <p>Tap the website's scan action and hold a compatible NDEF tag near the top of your iPhone while the system NFC interface is open. Keep Wand in the foreground. NFC sessions have a time limit; start another scan if the session ends.</p>
+  <p>Writing requires a writable NDEF tag with enough capacity. Writing replaces existing tag contents, so use your own test tags. Wand does not provide payment-card reading or NFC card emulation through its Web NFC interface.</p>
+
+  <h2>Website permissions</h2>
+  <p>Hardware APIs require a top-level HTTPS page and Wand in the foreground. Embedded frames cannot use the hardware bridge. Approve the website's request and choose the Bluetooth device you want to share.</p>
+  <p>Permissions end when you navigate to a new document, reload, background Wand, or revoke access in Site controls. After any of these actions, request access again from the website. Check Site controls if access was denied.</p>
+
+  <h2>Clear website data or browsing history</h2>
+  <p>Use Site controls → Clear website data to remove website storage, including cookies and caches. This can sign you out of websites and removes saved per-site fullscreen preferences.</p>
+  <p>Use Clear beside Recent pages on the home screen to remove browsing history. Clearing history and clearing website data are separate actions.</p>
+
+  <footer>
+    <a href="/">Wand documentation</a> · <a href="/privacy/">Privacy policy</a> · <a href="https://github.com/hito-dev/wand-browser">Source code</a> · <a href="/LICENSE.txt">MIT license</a>
+  </footer>
+</main>
+</body>
+</html>

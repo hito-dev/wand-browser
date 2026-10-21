@@ -70,6 +70,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
     shutil.copyfile(ROOT / 'LICENSE', output / 'LICENSE.txt')
     shutil.copyfile(source / 'robots.txt', output / 'robots.txt')
     write(output, '/privacy/', (ROOT / 'ios/WandBrowser/Resources/PrivacyPolicy.html').read_text())
+    write(output, '/support/', (source / 'templates/support.html').read_text())
     write(output, '/.nojekyll', '')
     for name in ('child.html', 'hito_ble_transport.js', 'sdk-provenance.json'):
         dest = output / 'fixtures' / name
@@ -95,7 +96,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
             head += ''.join('<link rel="alternate" hreflang="{}" href="{}">'.format(r['lang'],ORIGIN+route(r,page)) for r in registry)
             head += '<link rel="alternate" hreflang="x-default" href="{}"><link rel="alternate" type="text/markdown" href="{}"><link rel="describedby" type="text/plain" href="{}llms.txt"><link rel="icon" type="image/png" sizes="64x64" href="/favicon.png"><link rel="stylesheet" href="/assets/site.css">'.format(ORIGIN+route(registry[0],page),mirror,prefix)
             head += '<script defer src="https://stat.hito.ai/script.js" data-website-id="8453ddb7-edef-41fa-8684-79e94f6940cf"></script>'
-            footer = '<footer><a href="{0}">{1}</a> · <a href="/privacy/">{2}</a> · <a href="/LICENSE.txt">MIT</a></footer>'.format(SOURCE,esc(d['source']),esc(d['privacy']))
+            footer = '<footer><a href="{0}">{1}</a> · <a href="/support/" lang="en">Support (English)</a> · <a href="/privacy/">{2}</a> · <a href="/LICENSE.txt">MIT</a></footer>'.format(SOURCE,esc(d['source']),esc(d['privacy']))
             if page == 'fixture':
                 head += '<link rel="stylesheet" href="/assets/fixture.css"></head><body>'
                 # Keep the trusted scripts separate from translated data. Escape < even inside JSON.
@@ -118,6 +119,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
             write(output,mirror,md)
             llms += '- [{}]({}) — [Markdown]({})\n'.format(d[page], ORIGIN+url, ORIGIN+mirror)
         llms += '\n[{}]({})\n[{}]({}/privacy/)\n[MIT]({}/LICENSE.txt)\n'.format(d['source'],SOURCE,d['privacy'],ORIGIN,ORIGIN)
+        llms += '\n[Support (English)]({}/support/)\n'.format(ORIGIN)
         if locale['code']=='en':
             llms += '\n## Languages\n'+''.join('- [{}]({}{}llms.txt)\n'.format(content[r['code']]['name'],ORIGIN,'/'+r['code']+'/') for r in registry[1:])
         write(output,prefix+'llms.txt',llms)
@@ -133,7 +135,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
             for key in ('betaAppDescription','whatToTest'):
                 (directory / (key+'.txt')).write_text(fields[key]+'\n')
     sitemap = ET.Element('urlset',xmlns='http://www.sitemaps.org/schemas/sitemap/0.9')
-    for url in urls+['/privacy/']:
+    for url in urls+['/privacy/', '/support/']:
         ET.SubElement(ET.SubElement(sitemap,'url'),'loc').text=ORIGIN+url
     (output / 'sitemap.xml').write_bytes(ET.tostring(sitemap,encoding='utf-8',xml_declaration=True))
     validate(output,urls)

@@ -30,8 +30,8 @@ class SiteTests(unittest.TestCase):
     @classmethod
     def tearDownClass(cls): cls.tmp.cleanup()
     def test_all_indexable_routes_and_discovery(self):
-        expected={site.ORIGIN+u for u in self.urls}|{site.ORIGIN+'/privacy/'}
-        self.assertEqual(len(expected),101)
+        expected={site.ORIGIN+u for u in self.urls}|{site.ORIGIN+'/privacy/',site.ORIGIN+'/support/'}
+        self.assertEqual(len(expected),102)
         xml=ET.parse(self.output/'sitemap.xml')
         self.assertEqual({e.text for e in xml.findall('.//{*}loc')},expected)
         for r in self.registry:
@@ -57,6 +57,22 @@ class SiteTests(unittest.TestCase):
                 self.assertIn(site.ORIGIN+url,md)
                 llms=self.output/('' if r['code']=='en' else r['code'])/'llms.txt'
                 self.assertIn(site.ORIGIN+mirror,llms.read_text())
+    def test_support_page_and_discovery(self):
+        text=(self.output/'support/index.html').read_text()
+        doc=Document(text)
+        self.assertEqual(doc.matching('html')[0]['lang'],'en')
+        self.assertEqual(len(doc.matching('h1')),1)
+        self.assertTrue(doc.matching('link',rel='canonical',href=site.ORIGIN+'/support/'))
+        self.assertFalse(doc.matching('meta',name='robots',content='noindex'))
+        for href in ('mailto:support-wand@hito.ai','https://github.com/hito-dev/wand-browser/issues',
+                     'https://hito.ai/wand/','/privacy/','/fixtures/bridge.html'):
+            self.assertTrue(doc.matching('a',href=href),href)
+        for locale in self.registry:
+            for page in site.PAGES:
+                page_doc=Document(site.file_for(self.output,site.route(locale,page)).read_text())
+                self.assertTrue(page_doc.matching('a',href='/support/',lang='en'))
+            prefix='' if locale['code']=='en' else locale['code']
+            self.assertIn(site.ORIGIN+'/support/',(self.output/prefix/'llms.txt').read_text())
     def test_fixture_contract_and_utilities(self):
         for r in self.registry:
             doc=Document(site.file_for(self.output,site.route(r,'fixture')).read_text())
