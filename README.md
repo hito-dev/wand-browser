@@ -64,7 +64,7 @@ node --experimental-vm-modules --test tests/bridge.test.mjs
 ## Prepare a TestFlight build
 
 Commit the release source and choose a build number higher than any already
-uploaded for version 0.1.0. With the Hito signing account configured in Xcode:
+uploaded for version 0.2.3. With the Hito signing account configured in Xcode:
 
 ```sh
 BUILD_NUMBER=5 sh scripts/archive-testflight.sh
@@ -73,6 +73,6 @@ BUILD_NUMBER=5 sh scripts/archive-testflight.sh
 The script archives Release, exports an App Store distribution IPA, and verifies
 the packaged signing, NFC entitlement, privacy manifest, policy, and build number.
 It saves the source commit, archive, symbols, export, and reports under
-`artifacts/testflight/0.1.0-5/`. Existing candidates are preserved. Add
+`artifacts/testflight/0.2.3-5/`. Existing candidates are preserved. Add
 `--archive-only` to stop before distribution export. This command does not upload
 or submit the build; TestFlight upload and external beta review are separate steps.

@@ -12,7 +12,7 @@ if [ -n "$(git status --porcelain)" ]; then
   echo 'Commit pending source changes before preparing a release candidate.' >&2
   exit 2
 fi
-release_dir="artifacts/testflight/0.1.0-$BUILD_NUMBER"
+release_dir="artifacts/testflight/0.2.3-$BUILD_NUMBER"
 if [ -e "$release_dir" ]; then
   echo "Already exists: $release_dir. Preserve this candidate and choose a new build number or move it aside." >&2
   exit 2

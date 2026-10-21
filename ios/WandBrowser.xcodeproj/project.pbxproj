@@ -51,9 +51,9 @@
 /* Begin PBXFileReference section */
 		0805CA91DC56781F4490A6AE /* WandBrowserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WandBrowserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FB4DE84E78C5401573EB39A /* WandBrowserApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WandBrowserApp.swift; sourceTree = "<group>"; };
-		1A698B288C16D2B72C1EFEA7 /* PrivacyPolicy.html */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyPolicy.html; path = Resources/PrivacyPolicy.html; sourceTree = "<group>"; };
+		1A698B288C16D2B72C1EFEA7 /* PrivacyPolicy.html */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.html; name = PrivacyPolicy.html; path = Resources/PrivacyPolicy.html; sourceTree = "<group>"; };
 		4D3595AA3C8C16AB0E4C469A /* BluetoothPolicy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BluetoothPolicy.swift; path = Core/BluetoothPolicy.swift; sourceTree = "<group>"; };
-		4F1E2AC0962A700F85333EBA /* public_suffix_list.dat */ = {isa = PBXFileReference; includeInIndex = 1; name = public_suffix_list.dat; path = Resources/public_suffix_list.dat; sourceTree = "<group>"; };
+		4F1E2AC0962A700F85333EBA /* public_suffix_list.dat */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = public_suffix_list.dat; path = Resources/public_suffix_list.dat; sourceTree = "<group>"; };
 		57A21FED742D133341D6E7CD /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
 		5B73FAC36312DD36324520DE /* Wire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Wire.swift; path = Core/Wire.swift; sourceTree = "<group>"; };
 		7097FBE522D4254B379BBDA0 /* CoordinatorTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
@@ -68,13 +68,13 @@
 		C2C883B5FFE07564BADBA04D /* WandBrowserUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WandBrowserUITests.swift; sourceTree = "<group>"; };
 		C8FBA608A28EDB497D4BD49A /* BrowserView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BrowserView.swift; path = Browser/BrowserView.swift; sourceTree = "<group>"; };
 		D4DAA5EEF1E75078EC317A17 /* CoreBluetoothTransport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CoreBluetoothTransport.swift; path = Hardware/CoreBluetoothTransport.swift; sourceTree = "<group>"; };
-		DA0B77CA46B8C87F881E67D4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		DA0B77CA46B8C87F881E67D4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		E6DCFD888C4730D4313AB12A /* TestTransports.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TestTransports.swift; sourceTree = "<group>"; };
 		EA6DD94762739031588BFEE6 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFF8B5F002A2236B0DCC1661 /* NDEFCodec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NDEFCodec.swift; path = Core/NDEFCodec.swift; sourceTree = "<group>"; };
 		F8E4C223B4DD47DAE740B61B /* WebViewTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebViewTests.swift; sourceTree = "<group>"; };
 		FAF31D74E1A7948158BCC7D4 /* WandBrowser.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = WandBrowser.entitlements; sourceTree = "<group>"; };
-		FE150C06678B0F9B25B19267 /* HardwareBridge.js */ = {isa = PBXFileReference; includeInIndex = 1; name = HardwareBridge.js; path = Resources/HardwareBridge.js; sourceTree = "<group>"; };
+		FE150C06678B0F9B25B19267 /* HardwareBridge.js */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.javascript; name = HardwareBridge.js; path = Resources/HardwareBridge.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +125,6 @@
 				1A698B288C16D2B72C1EFEA7 /* PrivacyPolicy.html */,
 				4F1E2AC0962A700F85333EBA /* public_suffix_list.dat */,
 			);
-			name = WandBrowser;
 			path = WandBrowser;
 			sourceTree = "<group>";
 		};
@@ -137,7 +136,6 @@
 				E6DCFD888C4730D4313AB12A /* TestTransports.swift */,
 				F8E4C223B4DD47DAE740B61B /* WebViewTests.swift */,
 			);
-			name = WandBrowserTests;
 			path = WandBrowserTests;
 			sourceTree = "<group>";
 		};
@@ -154,7 +152,6 @@
 			children = (
 				C2C883B5FFE07564BADBA04D /* WandBrowserUITests.swift */,
 			);
-			name = WandBrowserUITests;
 			path = WandBrowserUITests;
 			sourceTree = "<group>";
 		};
@@ -252,6 +249,18 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1300;
 				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					4CDB111ADB0B370D961B0CCC = {
+						ProvisioningStyle = Automatic;
+					};
+					7AC13EF92781BADB210042C3 = {
+						DevelopmentTeam = KUV9LF7VX6;
+						ProvisioningStyle = Automatic;
+					};
+					A24F69BFF9EA2248BA3DDF25 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = AC6DFDA6134CE5D22DD41022 /* Build configuration list for PBXProject "WandBrowser" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -428,8 +437,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -503,13 +511,16 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = WandBrowser/WandBrowser.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = KUV9LF7VX6;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = WandBrowser/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Wand Browser";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -602,13 +613,16 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = WandBrowser/WandBrowser.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = KUV9LF7VX6;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = WandBrowser/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Wand Browser";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

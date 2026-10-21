@@ -23,7 +23,7 @@ def run(*args):
 def verify(app, build, distribution):
     info = plistlib.loads((app / 'Info.plist').read_bytes())
     require(info['CFBundleIdentifier'] == 'ai.hito.wand.dev', 'Wrong bundle ID')
-    require(info['CFBundleShortVersionString'] == '0.1.0', 'Wrong marketing version')
+    require(info['CFBundleShortVersionString'] == '0.2.3', 'Wrong marketing version')
     require(info['CFBundleVersion'] == build, 'Wrong build number')
     require(info.get('ITSAppUsesNonExemptEncryption') is False, 'Missing encryption declaration')
     require(info.get('MinimumOSVersion') == '18.0', 'Unexpected deployment target')
