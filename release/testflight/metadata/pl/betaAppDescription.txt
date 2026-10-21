@@ -1,0 +1,3 @@
+Wand Browser pozwala witrynom HTTPS korzystać z Bluetooth Low Energy i NFC na iPhonie. Poznaj przeglądarkę z otwartym kodem, wypróbuj testy sprzętu i twórz witryny łączące się z pobliskimi urządzeniami oraz tagami NDEF.
+
+Dostęp do sprzętu wymaga iOS 18 lub nowszego i fizycznego iPhone’a. Interfejs aplikacji jest obecnie po angielsku. Witryny wymagają HTTPS, strony najwyższego poziomu i sesji na pierwszym planie. Każda witryna potrzebuje zgody; wygasa ona po nawigacji, przeładowaniu, przejściu w tło lub cofnięciu.

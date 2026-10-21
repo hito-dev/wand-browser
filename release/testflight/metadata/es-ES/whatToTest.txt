@@ -1,0 +1,7 @@
+Qué probar
+
+Pulsa Elegir dispositivo Bluetooth para abrir el selector. Esta prueba filtra dispositivos llamados hito o Hito y solicita el UUID del servicio Hito. Selecciona tu propia cartera de prueba compatible; se conectará a su servidor GATT y mostrará los eventos de conexión. Otros sitios deben solicitar sus propios filtros y servicios. Emparejar no concede acceso a un sitio.
+
+Pulsa Escanear NFC y acerca una etiqueta NDEF compatible a la parte superior del iPhone. La consola muestra los tipos de registro y sus datos. Detén el escaneo antes de cambiar de tarea. Para escribir, usa tu propia etiqueta de prueba regrabable: introduce texto o prueba un registro binario. La escritura reemplaza el contenido. Esta prueba no lee tarjetas de pago ni emula tarjetas NFC.
+
+Si falla una acción, lee el error de la consola, revisa los permisos Bluetooth o NFC de iOS y los controles del sitio y vuelve a intentarlo en primer plano. Tras navegar o pasar a segundo plano debes autorizar de nuevo. El simulador no verifica operaciones de radio ni etiquetas. Usa hardware real, cancela selectores y comprueba que el acceso denegado siga bloqueado.

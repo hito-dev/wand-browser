@@ -33,6 +33,32 @@ final class WandBrowserUITests: XCTestCase {
                       "Could not open \(base)bridge.html. Check your internet connection and Pages deployment, or override WAND_FIXTURE_URL.")
     }
 
+    // Run separately on iPhone 17 Pro; export attachments for the release handoff.
+    func testCaptureReleaseScreenshots() throws {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
+        let app = XCUIApplication()
+        app.launchArguments = ["-browser.fullscreenOrigins.v1", "()", "-browser.history.v1", ""]
+        app.launch()
+        XCTAssertTrue(app.buttons["open-hardware-fixtures"].waitForExistence(timeout: 10))
+        func capture(_ name: String) {
+            let image = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+            image.name = name
+            image.lifetime = .keepAlways
+            add(image)
+        }
+        capture("wand-home")
+        let field = app.textFields["address-field"]
+        field.tap()
+        field.typeText(try fixtureBase + "bridge.html\n")
+        XCTAssertTrue(pageText(app, "Wand hardware fixtures").waitForExistence(timeout: 30))
+        XCTAssertTrue(app.webViews.staticTexts["Ready."].waitForExistence(timeout: 10))
+        capture("wand-fixture")
+        app.buttons["site-controls"].tap()
+        XCTAssertTrue(app.buttons["Revoke hardware access"].waitForExistence(timeout: 5))
+        capture("wand-site-controls")
+    }
+
     func testHomeHardwareFixturesShortcut() {
         let app = XCUIApplication()
         app.launchArguments = ["-browser.fullscreenOrigins.v1", "()"]

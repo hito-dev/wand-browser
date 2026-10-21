@@ -2,6 +2,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules --test bridge.test.mjs"
+    "test": "node --experimental-vm-modules --test *.test.mjs"
   }
 }

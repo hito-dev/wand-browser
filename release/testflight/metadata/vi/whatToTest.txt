@@ -1,0 +1,7 @@
+Nội dung cần kiểm thử
+
+Nhấn Chọn thiết bị Bluetooth để mở bộ chọn. Bài thử lọc thiết bị có tên bắt đầu bằng hito hoặc Hito và yêu cầu UUID dịch vụ Hito. Chọn ví thử nghiệm tương thích của bạn; bài thử kết nối máy chủ GATT và hiển thị sự kiện kết nối. Trang khác phải yêu cầu bộ lọc và dịch vụ riêng. Chỉ ghép đôi không cấp quyền cho trang web.
+
+Nhấn Quét NFC và đưa thẻ NDEF tương thích gần đầu iPhone. Bảng điều khiển hiển thị loại bản ghi và dữ liệu. Dừng quét trước khi đổi tác vụ. Để ghi, dùng thẻ thử nghiệm có thể ghi của bạn: nhập văn bản hoặc thử bản ghi nhị phân. Việc ghi thay thế nội dung thẻ. Bài thử không đọc thẻ thanh toán hay giả lập thẻ NFC.
+
+Nếu thao tác thất bại, đọc lỗi trong bảng điều khiển, kiểm tra quyền Bluetooth hoặc NFC của iOS cùng cài đặt trang rồi thử lại ở tiền cảnh. Cần cấp quyền lại sau khi điều hướng hoặc chuyển nền. Trình mô phỏng không xác minh được thao tác vô tuyến hay thẻ. Hãy dùng phần cứng thật, hủy bộ chọn và kiểm tra quyền bị từ chối vẫn bị chặn.

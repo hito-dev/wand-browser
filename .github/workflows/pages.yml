@@ -9,6 +9,8 @@ on:
       - ios/WandBrowser/Resources/Assets.xcassets/AppIcon.appiconset/icon-default.png
       - ios/WandBrowser/Resources/PrivacyPolicy.html
       - scripts/prepare-pages.sh
+      - scripts/build-site.py
+      - tests/site_test.py
       - .github/workflows/pages.yml
       - LICENSE
   workflow_dispatch:
@@ -30,6 +32,7 @@ jobs:
       - name: Prepare static fixtures
         id: fixtures
         run: |
+          python3 -m unittest discover -s tests -p site_test.py
           site_dir=$(sh scripts/prepare-pages.sh)
           echo "path=$site_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-pages-artifact@v4

@@ -1,0 +1,3 @@
+Wand Browser, HTTPS sitelerinin iPhone’da Bluetooth Low Energy ve NFC kullanmasını sağlar. Açık kaynaklı tarayıcıyı keşfedin, donanım testlerini deneyin ve yakındaki cihazlara ve NDEF etiketlerine bağlanan siteler geliştirin.
+
+Donanım erişimi için iOS 18 veya üstü ve fiziksel bir iPhone gerekir. Uygulama arayüzü şu anda İngilizcedir. Siteler HTTPS, üst düzey bir sayfa ve ön planda oturum gerektirir. Her site izninizi ister; gezinme, yeniden yükleme, arka plana geçme veya iptal durumunda izin sona erer.

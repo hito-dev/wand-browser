@@ -1,0 +1,7 @@
+Was getestet werden soll
+
+Wähle ein Bluetooth-Gerät aus, um die Geräteauswahl zu öffnen. Dieser Test filtert nach Geräten mit den Namen hito oder Hito und fordert die Hito-Dienst-UUID an. Wähle deine eigene kompatible Test-Wallet; der Test verbindet sich mit ihrem GATT-Server und protokolliert Verbindungsereignisse. Andere Websites müssen eigene Filter und Dienste anfordern. Eine Kopplung allein erlaubt keinen Websitezugriff.
+
+Tippe auf NFC scannen und halte einen kompatiblen NDEF-Tag an die Oberseite des iPhones. Die Konsole zeigt Datensatztypen und Inhalte. Beende den Scan vor einem Aufgabenwechsel. Verwende zum Schreiben einen eigenen beschreibbaren Test-Tag: Gib Text ein oder teste einen Binärdatensatz. Schreiben ersetzt den Tag-Inhalt. Dieser Test liest keine Zahlungskarten und emuliert keine NFC-Karten.
+
+Bei Fehlern lies die Konsolenmeldung, prüfe iOS-Bluetooth- oder NFC-Berechtigungen und die Website-Einstellungen und versuche es im Vordergrund erneut. Nach Navigation oder Hintergrundwechsel ist eine neue Erlaubnis nötig. Der Simulator kann Funk- und Tag-Funktionen nicht prüfen. Teste mit echter Hardware, brich die Geräteauswahl ab und prüfe, dass verweigerter Zugriff verweigert bleibt.

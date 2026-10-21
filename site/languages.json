@@ -1,0 +1,152 @@
+[
+  {
+    "code": "en",
+    "lang": "en",
+    "apple": "en-US",
+    "dir": "ltr"
+  },
+  {
+    "code": "de",
+    "lang": "de",
+    "apple": "de-DE",
+    "dir": "ltr"
+  },
+  {
+    "code": "es",
+    "lang": "es",
+    "apple": "es-ES",
+    "dir": "ltr"
+  },
+  {
+    "code": "zh-hans",
+    "lang": "zh-Hans",
+    "apple": "zh-Hans",
+    "dir": "ltr"
+  },
+  {
+    "code": "ja",
+    "lang": "ja",
+    "apple": "ja",
+    "dir": "ltr"
+  },
+  {
+    "code": "pt-br",
+    "lang": "pt-BR",
+    "apple": "pt-BR",
+    "dir": "ltr"
+  },
+  {
+    "code": "pt-pt",
+    "lang": "pt-PT",
+    "apple": "pt-PT",
+    "dir": "ltr"
+  },
+  {
+    "code": "fr",
+    "lang": "fr",
+    "apple": "fr-FR",
+    "dir": "ltr"
+  },
+  {
+    "code": "ru",
+    "lang": "ru",
+    "apple": "ru",
+    "dir": "ltr"
+  },
+  {
+    "code": "it",
+    "lang": "it",
+    "apple": "it",
+    "dir": "ltr"
+  },
+  {
+    "code": "nl",
+    "lang": "nl",
+    "apple": "nl-NL",
+    "dir": "ltr"
+  },
+  {
+    "code": "pl",
+    "lang": "pl",
+    "apple": "pl",
+    "dir": "ltr"
+  },
+  {
+    "code": "tr",
+    "lang": "tr",
+    "apple": "tr",
+    "dir": "ltr"
+  },
+  {
+    "code": "ko",
+    "lang": "ko",
+    "apple": "ko",
+    "dir": "ltr"
+  },
+  {
+    "code": "vi",
+    "lang": "vi",
+    "apple": "vi",
+    "dir": "ltr"
+  },
+  {
+    "code": "hi",
+    "lang": "hi",
+    "apple": "hi",
+    "dir": "ltr"
+  },
+  {
+    "code": "id",
+    "lang": "id",
+    "apple": "id",
+    "dir": "ltr"
+  },
+  {
+    "code": "ms",
+    "lang": "ms",
+    "apple": "ms",
+    "dir": "ltr"
+  },
+  {
+    "code": "uk",
+    "lang": "uk",
+    "apple": "uk",
+    "dir": "ltr"
+  },
+  {
+    "code": "ar",
+    "lang": "ar",
+    "apple": "ar-SA",
+    "dir": "rtl"
+  },
+  {
+    "code": "af",
+    "lang": "af",
+    "apple": null,
+    "dir": "ltr"
+  },
+  {
+    "code": "sw",
+    "lang": "sw",
+    "apple": null,
+    "dir": "ltr"
+  },
+  {
+    "code": "ha",
+    "lang": "ha",
+    "apple": null,
+    "dir": "ltr"
+  },
+  {
+    "code": "yo",
+    "lang": "yo",
+    "apple": null,
+    "dir": "ltr"
+  },
+  {
+    "code": "am",
+    "lang": "am",
+    "apple": null,
+    "dir": "ltr"
+  }
+]
