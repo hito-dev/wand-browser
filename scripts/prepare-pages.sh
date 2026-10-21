@@ -4,6 +4,8 @@ cd "$(dirname "$0")/.."
 
 site_dir=$(mktemp -d "${TMPDIR:-/tmp}/wand-pages.XXXXXX")
 mkdir "$site_dir/fixtures"
+mkdir "$site_dir/privacy"
+cp ios/WandBrowser/Resources/PrivacyPolicy.html "$site_dir/privacy/index.html"
 for name in bridge.html child.html second.html hito_ble_transport.js sdk-provenance.json; do
   cp "tests/fixtures/$name" "$site_dir/fixtures/$name"
 done
@@ -28,6 +30,7 @@ cat > "$site_dir/index.html" <<'HTML'
 <p><a href="fixtures/bridge.html">Open hardware fixtures</a></p>
 <p><a href="https://github.com/hito-dev/wand-browser">Source code on GitHub</a></p>
 <p><a href="LICENSE.txt">MIT license</a></p>
+<p><a href="privacy/">Privacy policy</a></p>
 </html>
 HTML
 printf '%s\n' "$site_dir"

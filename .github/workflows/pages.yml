@@ -7,6 +7,7 @@ on:
       - site/**
       - tests/fixtures/**
       - ios/WandBrowser/Resources/Assets.xcassets/AppIcon.appiconset/icon-default.png
+      - ios/WandBrowser/Resources/PrivacyPolicy.html
       - scripts/prepare-pages.sh
       - .github/workflows/pages.yml
       - LICENSE
