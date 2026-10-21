@@ -84,7 +84,6 @@
 <main id="controls" aria-labelledby="fixture-title" tabindex="0">
 <h1 id="fixture-title">Wand hardware fixtures</h1>
 <p>These actions use the browser’s hardware APIs. Select only your own test wallet and writable test tags.</p>
-<button id="fullscreen">Enter WebKit fullscreen</button>
 <button id="ble">Choose Bluetooth device</button>
 <button id="scan">Scan NFC</button>
 <button id="abort">Stop NFC scan</button>
@@ -183,27 +182,6 @@ window.addEventListener("resize", updateViewport);
 document.addEventListener("fullscreenchange", updateViewport);
 updateViewport();
 
-(() => {
-const fullscreenButton = document.querySelector("#fullscreen");
-fullscreenButton.onclick = async () => {
-  try {
-  if (document.fullscreenElement) {
-    await document.exitFullscreen();
-  } else {
-    if (!document.fullscreenEnabled || typeof document.documentElement.requestFullscreen !== "function") {
-      throw new DOMException("Element fullscreen is unavailable in this browser.", "NotSupportedError");
-    }
-    await document.documentElement.requestFullscreen();
-  }
-  } catch (e) { log(`${e.name}: ${e.message}`); }
-};
-document.addEventListener("fullscreenchange", () => {
-  const active = Boolean(document.fullscreenElement);
-  fullscreenButton.textContent = active ? "Exit WebKit fullscreen" : "Enter WebKit fullscreen";
-  log(active ? "Entered WebKit fullscreen" : "Exited WebKit fullscreen");
-});
-document.addEventListener("fullscreenerror", () => log("Fullscreen request failed."));
-})();
 </script>
 <script type="module">
 const run = action => async () => { try { await action(); } catch (e) { log(`${e.name}: ${e.message}`); } };

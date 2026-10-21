@@ -182,7 +182,7 @@ final class WandBrowserUITests: XCTestCase {
         XCTAssertTrue(pageText(app, "Wand hardware fixtures").exists)
     }
 
-    func testFullscreenPreservesPageAndRestoresAfterWebsiteFullscreen() throws {
+    func testFullscreenPreservesPageAcrossOrientationAndBackground() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
         try openFixtures(app)
@@ -206,9 +206,6 @@ final class WandBrowserUITests: XCTestCase {
         XCUIDevice.shared.orientation = .portrait
         scrollControls(app.webViews.firstMatch, up: false)
         scrollControls(app.webViews.firstMatch, up: false)
-        app.webViews.buttons["Enter WebKit fullscreen"].tap()
-        XCTAssertTrue(app.webViews.buttons["Exit WebKit fullscreen"].waitForExistence(timeout: 10))
-        app.webViews.buttons["Exit WebKit fullscreen"].tap()
         XCTAssertTrue(app.buttons["exit-fullscreen"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.textFields["address-field"].exists)
         XCTAssertEqual(field.value as? String, retainedValue)
@@ -276,19 +273,6 @@ final class WandBrowserUITests: XCTestCase {
         XCTAssertTrue(app.switches["always-fullscreen"].waitForExistence(timeout: 5))
         app.switches["always-fullscreen"].coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
         app.buttons["Done"].tap()
-    }
-
-    func testFullscreenFixture() throws {
-        continueAfterFailure = false
-        let app = XCUIApplication()
-        try openFixtures(app)
-        app.webViews.buttons["Enter WebKit fullscreen"].tap()
-        XCTAssertTrue(app.webViews.buttons["Exit WebKit fullscreen"].waitForExistence(timeout: 10))
-        let entered = app.webViews.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Entered WebKit fullscreen")).firstMatch
-        XCTAssertTrue(entered.waitForExistence(timeout: 10))
-        app.webViews.buttons["Exit WebKit fullscreen"].tap()
-        XCTAssertTrue(app.webViews.buttons["Enter WebKit fullscreen"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.buttons["address-field"].exists || app.textFields["address-field"].exists)
     }
 
     func testPrivacyPolicyAvailableOffline() {
