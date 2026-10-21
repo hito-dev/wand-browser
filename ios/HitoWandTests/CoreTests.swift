@@ -5,6 +5,66 @@ import WebKit
 @testable import HitoWand
 
 struct CoreTests {
+    @Test @MainActor func fullscreenAddressFormattingAndIconCandidates() throws {
+        let url = try #require(URL(string: "https://EXAMPLE.com:8443/path%20name?q=secret#fragment"))
+        let display = BrowserModel.displayAddress(url)
+        #expect(display.host == "example.com:8443")
+        #expect(display.path == "/path%20name")
+        #expect(BrowserModel.displayAddress(URL(string: "https://example.com/")).path.isEmpty)
+        let links = BrowserModel.faviconCandidates(["../icon.png", "https://cdn.example/icon.png", "data:image/png;base64,AAAA", "file:///icon.png", "../icon.png"], pageURL: url)
+        #expect(links.map(\.absoluteString) == ["https://EXAMPLE.com:8443/icon.png", "https://cdn.example/icon.png", "https://EXAMPLE.com:8443/favicon.ico"])
+    }
+
+    @Test @MainActor func parentDomainFaviconFallbackHonorsPublicSuffixes() throws {
+        let cases = [
+            ("https://app.example.com/page?token=private", "https://example.com/favicon.ico"),
+            ("https://app.example.co.uk:8443/page", "https://example.co.uk/favicon.ico"),
+            ("https://app.user.github.io/", "https://user.github.io/favicon.ico"),
+            ("https://app.www.ck/", "https://www.ck/favicon.ico"),
+            ("https://a.b.foo.ck/", "https://b.foo.ck/favicon.ico"),
+            ("https://app.xn--e1afmkfd.xn--p1ai/", "https://xn--e1afmkfd.xn--p1ai/favicon.ico")
+        ]
+        for (source, expected) in cases {
+            let url = try #require(URL(string: source))
+            #expect(BrowserModel.parentFaviconURL(for: url)?.absoluteString == expected)
+            #expect(BrowserModel.faviconCandidates([], pageURL: url).last?.absoluteString == expected)
+        }
+        for source in ["https://example.com/", "https://example.co.uk/", "https://co.uk/", "https://user.github.io/", "https://127.0.0.1/", "https://[::1]/", "https://localhost/"] {
+            #expect(BrowserModel.parentFaviconURL(for: try #require(URL(string: source))) == nil)
+        }
+    }
+
+    @Test @MainActor func faviconDiscoveryResolvesDocumentBaseURL() async throws {
+        let view = WKWebView()
+        view.loadHTMLString("""
+        <base href="https://icons.test/assets/">
+        <link rel="stylesheet" href="ignore.css">
+        <link rel="shortcut icon" href="small.png">
+        <link rel="apple-touch-icon" href="/touch.png">
+        """, baseURL: URL(string: "https://page.test/"))
+        var links: [String] = []
+        for _ in 0..<100 {
+            links = await BrowserModel.faviconLinks(in: view)
+            if !links.isEmpty { break }
+            try await Task.sleep(for: .milliseconds(50))
+        }
+        #expect(links == ["https://icons.test/assets/small.png", "https://icons.test/touch.png"])
+        view.stopLoading()
+    }
+
+    @Test @MainActor func faviconImageResponsesAreBoundedAndDecoded() async throws {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [FaviconTestProtocol.self]
+        let session = URLSession(configuration: configuration)
+        defer { session.invalidateAndCancel() }
+        let valid = try await BrowserModel.fetchFavicon(try #require(URL(string: "https://icons.test/valid")), session: session)
+        #expect(valid != nil)
+        for path in ["missing", "unsupported", "oversized", "streamed-oversized"] {
+            let icon = try await BrowserModel.fetchFavicon(try #require(URL(string: "https://icons.test/\(path)")), session: session)
+            #expect(icon == nil)
+        }
+    }
+
     @Test @MainActor func fullscreenPreferencesAndVisitOverrides() async throws {
         let suite = "wand.fullscreen.tests.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suite))
@@ -178,4 +238,23 @@ struct CoreTests {
         #expect(BrowserModel.navigationURL("javascript://alert(1)") == nil)
         #expect(BrowserModel.navigationURL("https://USER:PASSWORD@example.com") == nil)
     }
+}
+
+private final class FaviconTestProtocol: URLProtocol, @unchecked Sendable {
+    override class func canInit(with request: URLRequest) -> Bool { request.url?.host == "icons.test" }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override func startLoading() {
+        guard let url = request.url else { return }
+        let path = url.lastPathComponent
+        let data: Data
+        if path.contains("oversized") { data = Data(repeating: 0, count: 1_048_577) }
+        else if path == "unsupported" { data = Data("<svg></svg>".utf8) }
+        else { data = Data(base64Encoded: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgaPj/HwAEggJ/59habAAAAABJRU5ErkJggg==")! }
+        let headers = path == "streamed-oversized" ? [:] : ["Content-Length": String(data.count)]
+        let response = HTTPURLResponse(url: url, statusCode: path == "missing" ? 404 : 200, httpVersion: "HTTP/1.1", headerFields: headers)!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: data)
+        client?.urlProtocolDidFinishLoading(self)
+    }
+    override func stopLoading() {}
 }

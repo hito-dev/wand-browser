@@ -28,6 +28,7 @@
 		C26CB219C0F4E008C79A508E /* HitoWandUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C883B5FFE07564BADBA04D /* HitoWandUITests.swift */; };
 		C3D1B810688B32FB955C4671 /* PrivacyPolicy.html in Resources */ = {isa = PBXBuildFile; fileRef = 1A698B288C16D2B72C1EFEA7 /* PrivacyPolicy.html */; };
 		DDBE370A7194C0F72E2A10DA /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DA0B77CA46B8C87F881E67D4 /* PrivacyInfo.xcprivacy */; };
+		F52AEB6C4E5331C11E65A5CB /* public_suffix_list.dat in Resources */ = {isa = PBXBuildFile; fileRef = 4F1E2AC0962A700F85333EBA /* public_suffix_list.dat */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		0FB4DE84E78C5401573EB39A /* HitoWandApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HitoWandApp.swift; sourceTree = "<group>"; };
 		1A698B288C16D2B72C1EFEA7 /* PrivacyPolicy.html */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyPolicy.html; path = Resources/PrivacyPolicy.html; sourceTree = "<group>"; };
 		4D3595AA3C8C16AB0E4C469A /* BluetoothPolicy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BluetoothPolicy.swift; path = Core/BluetoothPolicy.swift; sourceTree = "<group>"; };
+		4F1E2AC0962A700F85333EBA /* public_suffix_list.dat */ = {isa = PBXFileReference; includeInIndex = 1; name = public_suffix_list.dat; path = Resources/public_suffix_list.dat; sourceTree = "<group>"; };
 		57A21FED742D133341D6E7CD /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
 		5B73FAC36312DD36324520DE /* Wire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Wire.swift; path = Core/Wire.swift; sourceTree = "<group>"; };
 		7097FBE522D4254B379BBDA0 /* CoordinatorTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				57A21FED742D133341D6E7CD /* Assets.xcassets */,
 				DA0B77CA46B8C87F881E67D4 /* PrivacyInfo.xcprivacy */,
 				1A698B288C16D2B72C1EFEA7 /* PrivacyPolicy.html */,
+				4F1E2AC0962A700F85333EBA /* public_suffix_list.dat */,
 			);
 			name = HitoWand;
 			path = HitoWand;
@@ -286,6 +289,7 @@
 				9CFD23EBDD5938CF236DD236 /* Assets.xcassets in Resources */,
 				DDBE370A7194C0F72E2A10DA /* PrivacyInfo.xcprivacy in Resources */,
 				C3D1B810688B32FB955C4671 /* PrivacyPolicy.html in Resources */,
+				F52AEB6C4E5331C11E65A5CB /* public_suffix_list.dat in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

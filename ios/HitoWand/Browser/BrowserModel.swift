@@ -1,6 +1,7 @@
 import Combine
 import SwiftUI
 import WebKit
+import ImageIO
 
 @MainActor
 final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUIDelegate {
@@ -13,6 +14,96 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
     @Published var showingHome = true
     @Published var error: String? { didSet { if error != nil { exitFullscreen() } } }
     @Published var currentURL: URL?
+    @Published private(set) var favicon: UIImage?
+    private var faviconTask: Task<Void, Never>?
+    private var faviconGeneration = UUID()
+    private let faviconCache = NSCache<NSURL, UIImage>()
+    static func displayAddress(_ url: URL?) -> (host: String, path: String) {
+        guard let url, let origin = SiteOrigin(url: url),
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return ("", "") }
+        let host = String(origin.display.dropFirst(origin.scheme.count + 3))
+        return (host, components.percentEncodedPath == "/" ? "" : components.percentEncodedPath)
+    }
+    static func faviconCandidates(_ links: [String], pageURL: URL) -> [URL] {
+        var seen = Set<URL>()
+        let fallback = URL(string: "/favicon.ico", relativeTo: pageURL)?.absoluteURL
+        return (links.compactMap { URL(string: $0, relativeTo: pageURL)?.absoluteURL.standardized } + [fallback, parentFaviconURL(for: pageURL)].compactMap { $0 }).filter {
+            ["http", "https"].contains($0.scheme?.lowercased() ?? "") && $0.user == nil && $0.password == nil && seen.insert($0).inserted
+        }
+    }
+    static func parentFaviconURL(for url: URL) -> URL? {
+        guard let host = url.host?.lowercased(),
+              let parent = PublicSuffixRules.shared.registrableDomain(host), parent != host,
+              var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return nil }
+        components.host = parent
+        components.port = nil
+        components.user = nil; components.password = nil
+        components.path = "/favicon.ico"
+        components.query = nil; components.fragment = nil
+        return components.url
+    }
+    nonisolated static func fetchFavicon(_ url: URL, session: URLSession) async throws -> UIImage? {
+        let (bytes, response) = try await session.bytes(from: url)
+        guard let response = response as? HTTPURLResponse, (200..<300).contains(response.statusCode),
+              response.expectedContentLength <= 1_048_576 else { return nil }
+        var data = Data()
+        for try await byte in bytes {
+            try Task.checkCancellation()
+            guard data.count < 1_048_576 else { return nil }
+            data.append(byte)
+        }
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, [
+                kCGImageSourceCreateThumbnailFromImageAlways: true,
+                kCGImageSourceThumbnailMaxPixelSize: 60,
+                kCGImageSourceCreateThumbnailWithTransform: true
+              ] as CFDictionary) else { return nil }
+        return UIImage(cgImage: thumbnail)
+    }
+    static func faviconLinks(in webView: WKWebView) async -> [String] {
+        let script = """
+        Array.from(document.querySelectorAll('link[rel]'))
+          .filter(link => link.rel.toLowerCase().split(/\\s+/).some(rel => ['icon', 'apple-touch-icon', 'apple-touch-icon-precomposed'].includes(rel)))
+          .slice(0, 8).map(link => link.href)
+        """
+        return await withCheckedContinuation { continuation in
+            webView.evaluateJavaScript(script, in: nil, in: .defaultClient) { result in
+                continuation.resume(returning: (try? result.get()) as? [String] ?? [])
+            }
+        }
+    }
+    private func resetFavicon() {
+        faviconTask?.cancel(); faviconTask = nil
+        faviconGeneration = UUID(); favicon = nil
+    }
+    private func discoverFavicon(for pageURL: URL) {
+        let generation = faviconGeneration
+        faviconTask?.cancel()
+        faviconTask = Task { [weak self] in
+            guard let self else { return }
+            let links = await Self.faviconLinks(in: webView)
+            guard !Task.isCancelled, generation == faviconGeneration else { return }
+            let configuration = URLSessionConfiguration.ephemeral
+            configuration.timeoutIntervalForRequest = 5
+            configuration.timeoutIntervalForResource = 5
+            configuration.httpShouldSetCookies = false
+            configuration.httpCookieStorage = nil
+            configuration.urlCredentialStorage = nil
+            let session = URLSession(configuration: configuration)
+            defer { session.invalidateAndCancel() }
+            for url in Self.faviconCandidates(links, pageURL: pageURL) {
+                guard !Task.isCancelled, generation == faviconGeneration else { return }
+                if let cached = faviconCache.object(forKey: url as NSURL) { favicon = cached; return }
+                do {
+                    guard let thumbnail = try await Self.fetchFavicon(url, session: session) else { continue }
+                    guard !Task.isCancelled, generation == faviconGeneration else { return }
+                    faviconCache.setObject(thumbnail, forKey: url as NSURL, cost: 60 * 60 * 4)
+                    favicon = thumbnail
+                    return
+                } catch { if Task.isCancelled { return } }
+            }
+        }
+    }
     @Published var javaScriptDialog: JavaScriptDialog?
     @Published private(set) var history: [HistoryEntry]
     @Published private(set) var isFullscreen = false
@@ -68,6 +159,7 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
         }
         webView = WKWebView(frame: .zero, configuration: configuration)
         super.init()
+        faviconCache.totalCostLimit = 2 * 1024 * 1024
         hardware.webView = webView
         webView.navigationDelegate = self; webView.uiDelegate = self
         webView.allowsBackForwardNavigationGestures = true
@@ -118,6 +210,7 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
         webView.load(URLRequest(url: url))
     }
     func home() {
+        resetFavicon()
         exitFullscreen(); presentationOrigin = nil
         webView.stopLoading()
         hardware.navigationStarted()
@@ -139,9 +232,11 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         guard !showingHome, let url = webView.url else { return }
         recordVisit(url: url, title: webView.title)
+        discoverFavicon(for: url)
     }
     func reload() { error = nil; webView.reload() }
     func clearWebsiteData() async {
+        faviconCache.removeAllObjects()
         fullscreenOrigins.removeAll()
         historyDefaults.removeObject(forKey: Self.fullscreenKey)
         home()
@@ -163,6 +258,7 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
         decisionHandler(.allow)
     }
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        resetFavicon()
         dismissJavaScriptDialog()
         hardware.navigationStarted()
         error = nil
@@ -234,4 +330,41 @@ struct HistoryEntry: Codable, Identifiable {
     let url: URL
     let title: String
     let visitedAt: Date
+}
+
+// Bundled PSL includes private suffixes, so hosted sites never borrow another tenant's icon.
+private struct PublicSuffixRules: Sendable {
+    let exact: Set<String>
+    let wildcard: Set<String>
+    let exceptions: Set<String>
+    static let shared: PublicSuffixRules = {
+        let text = Bundle.main.url(forResource: "public_suffix_list", withExtension: "dat")
+            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+        var exact = Set<String>(), wildcard = Set<String>(), exceptions = Set<String>()
+        for line in text.split(whereSeparator: \.isNewline) {
+            let rule = String(line).trimmingCharacters(in: .whitespaces)
+            guard !rule.isEmpty, !rule.hasPrefix("//") else { continue }
+            let prefix = rule.hasPrefix("!") ? "!" : rule.hasPrefix("*.") ? "*." : ""
+            guard let canonical = URL(string: "https://" + rule.dropFirst(prefix.count))?.host?.lowercased() else { continue }
+            if prefix == "!" { exceptions.insert(canonical) }
+            else if prefix == "*." { wildcard.insert(canonical) }
+            else { exact.insert(canonical) }
+        }
+        return PublicSuffixRules(exact: exact, wildcard: wildcard, exceptions: exceptions)
+    }()
+    func registrableDomain(_ host: String) -> String? {
+        let host = host.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: "."))
+        let labels = host.split(separator: ".").map(String.init)
+        guard !exact.isEmpty, !host.contains(":"), labels.count > 1,
+              !labels.allSatisfy({ $0.allSatisfy(\.isNumber) }) else { return nil }
+        var suffixCount = 1
+        for index in labels.indices {
+            let suffix = labels[index...].joined(separator: ".")
+            if exceptions.contains(suffix) { suffixCount = labels.count - index - 1; break }
+            if exact.contains(suffix) { suffixCount = max(suffixCount, labels.count - index) }
+            if index > 0, wildcard.contains(suffix) { suffixCount = max(suffixCount, labels.count - index + 1) }
+        }
+        guard labels.count > suffixCount else { return nil }
+        return labels.suffix(suffixCount + 1).joined(separator: ".")
+    }
 }
