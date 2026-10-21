@@ -24,7 +24,7 @@ signing = project.main_group.new_file('Signing.xcconfig')
     file = group.new_file(relative)
     if path.end_with?('.swift')
       target.source_build_phase.add_file_reference(file)
-    elsif path.end_with?('.js', '.html', '.json', '.xcassets', '.xcprivacy')
+    elsif path.end_with?('.js', '.html', '.json', '.xcassets', '.xcprivacy', '.dat')
       target.resources_build_phase.add_file_reference(file)
     end
   end

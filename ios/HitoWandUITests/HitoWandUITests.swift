@@ -13,9 +13,11 @@ final class HitoWandUITests: XCTestCase {
             return value.hasSuffix("/") ? value : value + "/"
         }
     }
-    private func openFixtures(_ app: XCUIApplication) throws {
+    private func openFixtures(_ app: XCUIApplication, preserveFullscreenPreference: Bool = false) throws {
         let base = try fixtureBase
         XCUIDevice.shared.orientation = .portrait
+        // Keep unrelated tests independent of a preference left by an interrupted run.
+        app.launchArguments = preserveFullscreenPreference ? [] : ["-browser.fullscreenOrigins.v1", "()"]
         app.launch()
         let field = app.textFields["address-field"]
         XCTAssertTrue(field.waitForExistence(timeout: 10))
@@ -74,6 +76,7 @@ final class HitoWandUITests: XCTestCase {
         continueAfterFailure = false
         let app = XCUIApplication()
         let base = try fixtureBase
+        app.launchArguments = ["-browser.fullscreenOrigins.v1", "()"]
         app.launch()
         let field = app.textFields["address-field"]
         XCTAssertTrue(field.waitForExistence(timeout: 10))
@@ -108,6 +111,34 @@ final class HitoWandUITests: XCTestCase {
         app.buttons["Clear browsing history"].tap()
         app.buttons["Clear history"].tap()
         XCTAssertFalse(app.staticTexts["Recent pages"].exists)
+    }
+
+    func testFullscreenAddressEditing() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        try openFixtures(app)
+        if app.buttons["exit-fullscreen"].exists { app.buttons["exit-fullscreen"].tap() }
+        app.buttons["site-controls"].tap()
+        app.buttons["enter-fullscreen"].tap()
+        let address = app.buttons["fullscreen-address"]
+        XCTAssertTrue(address.waitForExistence(timeout: 5))
+        let capture = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        capture.name = "Fullscreen address bar"
+        capture.lifetime = .keepAlways
+        add(capture)
+        address.tap()
+        let field = app.textFields["address-field"]
+        XCTAssertTrue(field.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+        let base = try fixtureBase
+        field.typeText(base + "second.html\n")
+        XCTAssertTrue(pageText(app, "Second page").waitForExistence(timeout: 30))
+        XCTAssertEqual(field.value as? String, base + "second.html")
+        app.buttons["site-controls"].tap()
+        app.buttons["enter-fullscreen"].tap()
+        app.buttons["exit-fullscreen"].tap()
+        XCTAssertTrue(field.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.keyboards.firstMatch.exists)
     }
 
     func testBrowserFullscreenControls() throws {
@@ -180,6 +211,7 @@ final class HitoWandUITests: XCTestCase {
         if app.buttons["exit-fullscreen"].exists { app.buttons["exit-fullscreen"].tap() }
         app.buttons["site-controls"].tap()
         let preference = app.switches["always-fullscreen"]
+        XCTAssertTrue(preference.waitForExistence(timeout: 5))
         if preference.value as? String == "1" { preference.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap() }
         preference.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
         XCTAssertTrue(app.buttons["exit-fullscreen"].waitForExistence(timeout: 5))
@@ -188,10 +220,12 @@ final class HitoWandUITests: XCTestCase {
         XCTAssertTrue(pageText(app, "Wand hardware fixtures").waitForExistence(timeout: 15))
         XCTAssertTrue(app.textFields["address-field"].exists)
         app.terminate()
-        try openFixtures(app)
+        try openFixtures(app, preserveFullscreenPreference: true)
         XCTAssertTrue(app.buttons["exit-fullscreen"].waitForExistence(timeout: 5))
         app.buttons["exit-fullscreen"].tap()
+        XCTAssertTrue(app.textFields["address-field"].waitForExistence(timeout: 5))
         app.buttons["site-controls"].tap()
+        XCTAssertTrue(app.switches["always-fullscreen"].waitForExistence(timeout: 5))
         app.switches["always-fullscreen"].coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
         app.buttons["Done"].tap()
     }

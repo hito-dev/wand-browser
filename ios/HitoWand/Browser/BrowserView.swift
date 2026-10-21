@@ -12,6 +12,7 @@ struct BrowserView: View {
     @State private var share = false
     @State private var confirmClearHistory = false
     @State private var addressFocused = false
+    @State private var editAddressAfterFullscreen = false
 
     init(browser: BrowserModel) { self.browser = browser; self.hardware = browser.hardware }
     var body: some View {
@@ -76,14 +77,40 @@ struct BrowserView: View {
         .overlay(alignment: .topTrailing) {
             if browser.isFullscreen && !browser.websiteFullscreen && exitVisible {
                 VStack(alignment: .trailing, spacing: 8) {
-                    Button { browser.exitFullscreen() } label: {
-                        Label("Exit fullscreen", systemImage: "arrow.down.right.and.arrow.up.left")
-                            .padding(.horizontal, 12).frame(minHeight: 44)
+                    HStack(spacing: 0) {
+                        Button {
+                            editAddressAfterFullscreen = true
+                            browser.exitFullscreen()
+                        } label: {
+                            HStack(spacing: 10) {
+                                Group {
+                                    if let icon = browser.favicon {
+                                        Image(uiImage: icon).resizable().scaledToFit()
+                                    } else { Image(systemName: "globe").foregroundStyle(.secondary) }
+                                }.frame(width: 20, height: 20).accessibilityHidden(true)
+                                let address = BrowserModel.displayAddress(browser.currentURL)
+                                HStack(spacing: 0) {
+                                    Text(address.host).layoutPriority(1).truncationMode(.middle)
+                                    if !address.path.isEmpty { Text(address.path).foregroundStyle(.secondary).truncationMode(.tail) }
+                                }.lineLimit(1).font(.subheadline)
+                                Spacer(minLength: 0)
+                            }
+                            .padding(.leading, 12).frame(maxWidth: .infinity, minHeight: 44)
+                            .contentShape(Rectangle())
+                        }
+                        .accessibilityLabel("Edit address")
+                        .accessibilityValue(browser.currentURL?.absoluteString ?? "")
+                        .accessibilityIdentifier("fullscreen-address")
+                        Button { browser.exitFullscreen() } label: {
+                            Image(systemName: "arrow.down.right.and.arrow.up.left").frame(width: 44, height: 44)
+                        }
+                        .accessibilityLabel("Exit fullscreen")
+                        .accessibilityIdentifier("exit-fullscreen")
                     }
-                    .buttonStyle(.plain).background(.regularMaterial, in: Capsule())
-                    .accessibilityIdentifier("exit-fullscreen")
+                    .buttonStyle(.plain)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
                     Text("Tap with two fingers to show browser controls.")
-                        .font(.caption).padding(10).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+                        .font(.caption).fixedSize(horizontal: false, vertical: true).padding(10).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
                         .frame(maxWidth: 250)
                         .allowsHitTesting(false)
                 }.padding(12)
@@ -96,6 +123,13 @@ struct BrowserView: View {
             withAnimation(.easeOut(duration: 0.2)) { exitVisible = false }
         }
         .onChange(of: browser.isFullscreen) { _, _ in addressFocused = false; revealExit() }
+        .task(id: browser.isFullscreen) {
+            guard !browser.isFullscreen, editAddressAfterFullscreen else { return }
+            await Task.yield()
+            guard !Task.isCancelled else { return }
+            editAddressAfterFullscreen = false
+            addressFocused = true
+        }
         .onChange(of: browser.websiteFullscreen) { _, _ in revealExit() }
         .onChange(of: scenePhase) { _, phase in if phase == .active { revealExit() } }
         .onChange(of: siteControls) { _, visible in if !visible { revealExit() } }
