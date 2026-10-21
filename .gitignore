@@ -13,3 +13,15 @@ tests/.certificates/
 *.mobileprovision
 *.provisionprofile
 *.key
+
+# Local material preserved from ~/dev/wand (archived on local/wand-archive)
+/docs/
+/assets/
+/scripts/archive-testflight.sh
+/scripts/export-icons.py
+/scripts/package-fixtures.py
+/scripts/prepare-fixtures.sh
+/scripts/serve-fixtures.mjs
+/scripts/verify-testflight.py
+/ios/ExportOptions-TestFlight.plist
+/tests/.srl
