@@ -1,20 +1,65 @@
 <!doctype html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wand hardware fixtures</title>
 <link rel="canonical" href="https://wand.hito.ai/fixtures/bridge.html">
 <link rel="describedby" type="text/plain" href="../llms.txt">
 <link rel="icon" type="image/png" sizes="64x64" href="../favicon.png">
+<script defer src="https://stat.hito.ai/script.js" data-website-id="8453ddb7-edef-41fa-8684-79e94f6940cf"></script>
 <style>
   :root { color-scheme: light dark; font: 17px system-ui; }
-  body { margin: 24px; max-width: 42rem; }
+  * { box-sizing: border-box; }
+  html { height: 100%; overflow: hidden; }
+  body {
+    position: fixed;
+    top: var(--viewport-top, 0px);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 42rem;
+    height: 100vh;
+    height: var(--viewport-height, 100dvh);
+    display: grid;
+    grid-template-rows: minmax(0, 3fr) minmax(0, 2fr);
+    overflow: hidden;
+  }
+  #controls, #log { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+  #controls {
+    scroll-padding-block: 20px;
+    padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right))
+      20px max(24px, env(safe-area-inset-left));
+  }
+  h1 { margin-top: 0; font-size: 1.6rem; }
   button, input, a { font: inherit; padding: 12px; margin: 6px 0; }
-  button { display: block; min-height: 44px; }
-  pre { white-space: pre-wrap; overflow-wrap: anywhere; }
-  input { box-sizing: border-box; width: 100%; }
+  button { display: block; min-height: 44px; max-width: 100%; }
+  input { width: 100%; }
+  #console {
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    border-top: 1px solid GrayText;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  #console h2 {
+    margin: 0;
+    padding: 12px max(24px, env(safe-area-inset-right)) 8px max(24px, env(safe-area-inset-left));
+    font-size: .85rem;
+  }
+  #log {
+    margin: 0;
+    padding: 0 max(24px, env(safe-area-inset-right)) 16px max(24px, env(safe-area-inset-left));
+    font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
 </style>
-<h1>Wand hardware fixtures</h1>
+</head>
+<body>
+<main id="controls" aria-labelledby="fixture-title" tabindex="0">
+<h1 id="fixture-title">Wand hardware fixtures</h1>
 <p>These actions use the browser’s hardware APIs. Select only your own test wallet and writable test tags.</p>
 <button id="fullscreen">Enter fullscreen</button>
 <button id="ble">Choose Bluetooth device</button>
@@ -28,11 +73,43 @@
 <button id="binary">Write NFC binary record</button>
 <p><a href="./second.html">Open second page</a></p>
 <p><a href="./second.html" target="_blank">Open new-window link</a></p>
-<pre id="log" aria-live="polite">Ready.</pre>
-<iframe id="child" title="Same-origin security fixture" src="./child.html"></iframe>
+</main>
+<section id="console" aria-labelledby="console-title">
+<h2 id="console-title">Console</h2>
+<pre id="log" role="log" aria-live="polite" aria-labelledby="console-title" tabindex="0">Ready.</pre>
+</section>
+<iframe id="child" title="Same-origin security fixture" src="./child.html" hidden></iframe>
 <script>
+const output = document.querySelector("#log");
+const followingOutput = () => output.scrollHeight - output.clientHeight - output.scrollTop <= 24;
+function log(text) {
+  const follow = followingOutput();
+  output.append(document.createTextNode("\n" + text));
+  if (follow) output.scrollTop = output.scrollHeight;
+}
+
+function updateViewport() {
+  const viewport = window.visualViewport;
+  // Leave pinch zoom to the browser; only fit unzoomed viewport/keyboard changes.
+  if (viewport && viewport.scale !== 1) return;
+  const follow = followingOutput();
+  document.documentElement.style.setProperty("--viewport-height", `${viewport?.height ?? window.innerHeight}px`);
+  document.documentElement.style.setProperty("--viewport-top", `${viewport?.offsetTop ?? 0}px`);
+  requestAnimationFrame(() => {
+    if (follow) output.scrollTop = output.scrollHeight;
+    const focused = document.activeElement;
+    if (focused?.matches("input") && document.querySelector("#controls").contains(focused)) {
+      focused.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
+  });
+}
+window.visualViewport?.addEventListener("resize", updateViewport);
+window.visualViewport?.addEventListener("scroll", updateViewport);
+window.addEventListener("resize", updateViewport);
+document.addEventListener("fullscreenchange", updateViewport);
+updateViewport();
+
 (() => {
-  const log = text => { document.querySelector("#log").textContent += "\n" + text; };
 const fullscreenButton = document.querySelector("#fullscreen");
 fullscreenButton.onclick = async () => {
   try {
@@ -56,7 +133,6 @@ document.addEventListener("fullscreenerror", () => log("Fullscreen request faile
 </script>
 <script type="module">
 import { BluetoothTransport } from "./hito_ble_transport.js";
-const log = text => { document.querySelector("#log").textContent += "\n" + text; };
 const run = action => async () => { try { await action(); } catch (e) { log(`${e.name}: ${e.message}`); } };
 let reader, abort;
 document.querySelector("#ble").onclick = run(async () => {
@@ -98,4 +174,5 @@ document.querySelector("#binary").onclick = run(async () => {
   log("Binary record written");
 });
 </script>
+</body>
 </html>
