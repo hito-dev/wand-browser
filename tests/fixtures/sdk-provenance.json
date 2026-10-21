@@ -1,0 +1,9 @@
+{
+  "file": "hito_ble_transport.js",
+  "source": "hito-firmware/libs/js/hito-webbluetooth/hito_ble_transport.js",
+  "sourceRepositoryHEAD": "da57f0cfd2002192fea7434a39ba192e36fb0418",
+  "sha256": "c7a962459bbb3560df4530a574f6b8c55a9e04a4982394c6a8e98b3ecb6c61b2",
+  "copied": "2026-10-20",
+  "modifications": "None. Test fixture only; not bundled in the app.",
+  "license": "MIT; see the repository LICENSE. Hito SDK source is included as a test fixture."
+}

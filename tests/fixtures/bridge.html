@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wand hardware fixtures</title>
+<style>
+  :root { color-scheme: light dark; font: 17px system-ui; }
+  body { margin: 24px; max-width: 42rem; }
+  button, input, a { font: inherit; padding: 12px; margin: 6px 0; }
+  button { display: block; min-height: 44px; }
+  pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+  input { box-sizing: border-box; width: 100%; }
+</style>
+<h1>Wand hardware fixtures</h1>
+<p>These actions use the browser’s hardware APIs. Select only your own test wallet and writable test tags.</p>
+<button id="fullscreen">Enter fullscreen</button>
+<button id="ble">Choose Bluetooth device</button>
+<button id="sdk">Run Hito SDK echo test</button>
+<label>Hito test command <input id="command" value="help"></label>
+<label>SDK packet size <input id="packet" type="number" min="1" max="505" value="19"></label>
+<button id="scan">Scan NFC</button>
+<button id="abort">Stop NFC scan</button>
+<label>NFC text <input id="text" value="Hello from Hito Wand"></label>
+<button id="write">Write NFC text</button>
+<button id="binary">Write NFC binary record</button>
+<p><a href="./second.html">Open second page</a></p>
+<p><a href="./second.html" target="_blank">Open new-window link</a></p>
+<pre id="log" aria-live="polite">Ready.</pre>
+<iframe id="child" title="Same-origin security fixture" src="./child.html"></iframe>
+<script>
+(() => {
+  const log = text => { document.querySelector("#log").textContent += "\n" + text; };
+const fullscreenButton = document.querySelector("#fullscreen");
+fullscreenButton.onclick = async () => {
+  try {
+  if (document.fullscreenElement) {
+    await document.exitFullscreen();
+  } else {
+    if (!document.fullscreenEnabled || typeof document.documentElement.requestFullscreen !== "function") {
+      throw new DOMException("Element fullscreen is unavailable in this browser.", "NotSupportedError");
+    }
+    await document.documentElement.requestFullscreen();
+  }
+  } catch (e) { log(`${e.name}: ${e.message}`); }
+};
+document.addEventListener("fullscreenchange", () => {
+  const active = Boolean(document.fullscreenElement);
+  fullscreenButton.textContent = active ? "Exit fullscreen" : "Enter fullscreen";
+  log(active ? "Entered fullscreen" : "Exited fullscreen");
+});
+document.addEventListener("fullscreenerror", () => log("Fullscreen request failed."));
+})();
+</script>
+<script type="module">
+import { BluetoothTransport } from "./hito_ble_transport.js";
+const log = text => { document.querySelector("#log").textContent += "\n" + text; };
+const run = action => async () => { try { await action(); } catch (e) { log(`${e.name}: ${e.message}`); } };
+let reader, abort;
+document.querySelector("#ble").onclick = run(async () => {
+  const device = await navigator.bluetooth.requestDevice({
+    filters: [{ namePrefix: "hito" }, { namePrefix: "Hito" }],
+    optionalServices: ["5cc44b16-070a-11ed-b939-0242ac120002"]
+  });
+  log(`Selected ${device.name}`);
+  await device.gatt.connect();
+  log("Connected");
+  device.ongattserverdisconnected = () => log("Disconnected");
+});
+document.querySelector("#sdk").onclick = run(async () => {
+  const sdk = new BluetoothTransport({ packetSize: Number(document.querySelector("#packet").value) });
+  log(await sdk.sendCommand(document.querySelector("#command").value));
+});
+document.querySelector("#scan").onclick = run(async () => {
+  reader ??= new NDEFReader();
+  abort = new AbortController();
+  reader.onreading = ({ message, serialNumber }) => {
+    log(`Read ${message.records.length} records; serial: ${serialNumber || "(unavailable)"}`);
+    for (const record of message.records) {
+      log(`${record.recordType}: ${record.recordType === "text" || record.recordType === "url"
+        ? new TextDecoder(record.encoding ?? "utf-8").decode(record.data)
+        : Array.from(new Uint8Array(record.data.buffer)).join(",")}`);
+    }
+  };
+  reader.onreadingerror = () => log("NFC reading ended or failed. Check site controls for Scan again.");
+  await reader.scan({ signal: abort.signal });
+  log("NFC scan active");
+});
+document.querySelector("#abort").onclick = () => abort?.abort();
+document.querySelector("#write").onclick = run(async () => {
+  await (reader ?? new NDEFReader()).write(document.querySelector("#text").value);
+  log("Text written");
+});
+document.querySelector("#binary").onclick = run(async () => {
+  await (reader ?? new NDEFReader()).write(new Uint8Array([0, 1, 127, 128, 255]));
+  log("Binary record written");
+});
+</script>
+</html>

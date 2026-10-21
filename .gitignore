@@ -1,0 +1,15 @@
+.DS_Store
+build/
+artifacts/
+*.xcuserstate
+xcuserdata/
+ios/Signing.local.xcconfig
+tests/.certificates/
+
+# Signing credentials and provisioning profiles
+*.p8
+*.p12
+*.pfx
+*.mobileprovision
+*.provisionprofile
+*.key
