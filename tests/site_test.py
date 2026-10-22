@@ -30,8 +30,8 @@ class SiteTests(unittest.TestCase):
     @classmethod
     def tearDownClass(cls): cls.tmp.cleanup()
     def test_all_indexable_routes_and_discovery(self):
-        expected={site.ORIGIN+u for u in self.urls}|{site.ORIGIN+'/privacy/',site.ORIGIN+'/support/'}
-        self.assertEqual(len(expected),102)
+        expected={site.ORIGIN+u for u in self.urls}|{site.ORIGIN+'/privacy/'}
+        self.assertEqual(len(expected),126)
         xml=ET.parse(self.output/'sitemap.xml')
         self.assertEqual({e.text for e in xml.findall('.//{*}loc')},expected)
         for r in self.registry:
@@ -47,7 +47,7 @@ class SiteTests(unittest.TestCase):
                                  {**{x['lang']:site.ORIGIN+site.route(x,page) for x in self.registry},'x-default':site.ORIGIN+site.route(self.registry[0],page)})
                 self.assertEqual(len(doc.matching('h1')),1)
                 self.assertFalse(doc.matching('meta',name='robots',content='noindex'))
-                for key in ('requirements',):
+                for key in (() if page=='support' else ('requirements',)):
                     self.assertIn(site.esc(self.content[r['code']][key]) if page!='fixture' else site.esc(self.content[r['code']]['fixtureIntro']),text)
                 for x in self.registry:
                     self.assertTrue(doc.matching('a',href=site.route(x,page),hreflang=x['lang']))
@@ -58,21 +58,39 @@ class SiteTests(unittest.TestCase):
                 llms=self.output/('' if r['code']=='en' else r['code'])/'llms.txt'
                 self.assertIn(site.ORIGIN+mirror,llms.read_text())
     def test_support_page_and_discovery(self):
-        text=(self.output/'support/index.html').read_text()
-        doc=Document(text)
-        self.assertEqual(doc.matching('html')[0]['lang'],'en')
-        self.assertEqual(len(doc.matching('h1')),1)
-        self.assertTrue(doc.matching('link',rel='canonical',href=site.ORIGIN+'/support/'))
-        self.assertFalse(doc.matching('meta',name='robots',content='noindex'))
-        for href in ('mailto:support-wand@hito.ai','https://github.com/hito-dev/wand-browser/issues',
-                     'https://hito.ai/wand/','/privacy/','/fixtures/bridge.html'):
-            self.assertTrue(doc.matching('a',href=href),href)
         for locale in self.registry:
+            d=self.content[locale['code']]
+            url=site.route(locale,'support')
+            text=site.file_for(self.output,url).read_text()
+            doc=Document(text)
+            self.assertEqual(doc.matching('meta',name='description')[0]['content'],d['supportDescription'])
+            self.assertEqual(len(doc.matching('h2')),5)
+            for href in ('mailto:support-wand@hito.ai',site.SOURCE+'/issues',
+                         'https://hito.ai/wand/','/privacy/',site.route(locale,'fixture')):
+                self.assertTrue(doc.matching('a',href=href),href)
+            for label in ('Site controls','Clear website data','Recent pages','Clear'):
+                self.assertIn(label,text)
             for page in site.PAGES:
                 page_doc=Document(site.file_for(self.output,site.route(locale,page)).read_text())
-                self.assertTrue(page_doc.matching('a',href='/support/',lang='en'))
+                self.assertTrue(page_doc.matching('a',href=url))
+                self.assertEqual(len(page_doc.matching('details',**{'class':'language-switcher'})),1)
+                self.assertEqual(page_doc.matching('summary')[0]['aria-label'],d['languages'])
+                language_links=[a for a in page_doc.matching('a') if 'hreflang' in a]
+                self.assertEqual(len(language_links),25)
+                self.assertEqual([a['href'] for a in language_links if a.get('aria-current')=='page'],[site.route(locale,page)])
+            mirror=site.file_for(self.output,url+'index.md').read_text()
+            for section in site.SUPPORT_SECTIONS:
+                self.assertIn('## '+d['support'+section.title()+'Title'],mirror)
+            self.assertIn('mailto:support-wand@hito.ai',mirror)
             prefix='' if locale['code']=='en' else locale['code']
-            self.assertIn(site.ORIGIN+'/support/',(self.output/prefix/'llms.txt').read_text())
+            self.assertIn(site.ORIGIN+url,(self.output/prefix/'llms.txt').read_text())
+            if locale['code']!='en':
+                for key in self.content['en']:
+                    if key.startswith('support'):
+                        self.assertNotEqual(d[key],self.content['en'][key],(locale['code'],key))
+        self.assertEqual(set(site.FLAGS),{r['code'] for r in self.registry})
+        self.assertEqual(site.badge({'code':'pt-br'}),'<span aria-hidden="true">🇧🇷</span> <b>PT</b>')
+        self.assertEqual(site.badge({'code':'pt-pt'}),'<span aria-hidden="true">🇵🇹</span> <b>PT</b>')
     def test_fixture_contract_and_utilities(self):
         for r in self.registry:
             doc=Document(site.file_for(self.output,site.route(r,'fixture')).read_text())

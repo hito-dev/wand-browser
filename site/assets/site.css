@@ -16,3 +16,36 @@ figure { margin: 0; min-width: 0; } figure img { display: block; width: 100%; he
 figcaption { font-size: .85rem; padding-block: .5rem; }
 code,pre { direction: ltr; unicode-bidi: isolate; }
 @media(max-width: 440px) { .gallery { gap: .5rem; } figcaption { font-size: .7rem; } }
+
+/* Physical left is deliberate, including for RTL documents. */
+body { padding-top: calc(76px + env(safe-area-inset-top)); }
+.language-switcher {
+  position: fixed; z-index: 100; top: calc(8px + env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left)); margin: 0; direction: ltr;
+  font: 16px/1.4 system-ui, sans-serif; color: CanvasText;
+}
+.language-switcher summary {
+  display: flex; align-items: center; gap: .4rem; min-height: 44px; width: max-content;
+  padding: 8px 12px; border: 1px solid GrayText; border-radius: 10px;
+  background: Canvas; list-style: none; cursor: pointer;
+}
+.language-switcher summary::-webkit-details-marker { display: none; }
+.language-switcher summary::after { content: '▾'; margin-left: .25rem; }
+.language-switcher[open] summary::after { content: '▴'; }
+.language-switcher .languages {
+  display: flex; flex-direction: column; flex-wrap: nowrap; gap: 0; margin-top: 6px;
+  width: min(310px, calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+  max-height: calc(100dvh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  overflow-y: auto; overscroll-behavior: contain; padding: 6px;
+  background: Canvas; border: 1px solid GrayText; border-radius: 10px;
+  box-shadow: 0 8px 24px #0003;
+}
+.language-switcher .languages a {
+  display: flex; align-items: center; gap: .6rem; padding: 10px; margin: 0;
+  min-height: 44px; flex-shrink: 0; text-decoration: none; overflow-wrap: anywhere;
+}
+.language-switcher .languages a[dir=rtl] { flex-direction: row-reverse; }
+.language-switcher .languages a[aria-current=page] { background: Highlight; color: HighlightText; border-radius: 6px; }
+.language-switcher .languages b { min-width: 2ch; }
+:focus-visible { outline: 3px solid Highlight; outline-offset: 3px; }
+.language-switcher .languages a:hover { text-decoration: underline; }

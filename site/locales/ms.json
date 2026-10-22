@@ -36,5 +36,21 @@
   "written": "Teks ditulis",
   "binaryWritten": "Rekod perduaan ditulis",
   "height": "Ketinggian konsol {percent}%",
-  "siteControls": "Kawalan laman"
+  "siteControls": "Kawalan laman",
+  "support": "Sokongan Wand Browser",
+  "supportDescription": "Bantuan untuk Wand Browser, Bluetooth, NFC, kebenaran dan data laman pada iPhone.",
+  "supportIssues": "buka isu GitHub",
+  "supportProduct": "halaman produk Wand",
+  "supportContact": "Perlukan bantuan, menemui pepijat atau mahu mencadangkan ciri? E-mel {email} atau {issues}.",
+  "supportSafety": "Sertakan model iPhone, versi iOS dan Wand, langkah menghasilkan semula masalah serta jika berkaitan, alamat laman dan model peranti atau tag. Buang maklumat peribadi daripada tangkapan skrin dan log. Jangan hantar kata laluan, frasa pemulihan, kunci peribadi atau kandungan tag sensitif. Isu GitHub adalah awam.",
+  "supportStartTitle": "Bermula",
+  "supportStart": "Memerlukan iOS 18 atau lebih baharu. Bluetooth dan NFC memerlukan iPhone fizikal dan perkakasan serasi. Cuba {fixture} dalam Wand atau lawati {product}.",
+  "supportBleTitle": "Peranti Bluetooth tidak muncul atau bersambung",
+  "supportBle": "Hidupkan Bluetooth dalam Tetapan iPhone dan benarkan akses Wand. Pastikan peranti dekat, aktif dan mengiklankan diri. Penapis dan perkhidmatan laman mesti sepadan; ujian hanya menyenaraikan nama bermula dengan hito atau Hito. Pilih dalam pemilih asli Wand; berpasangan dalam Tetapan sahaja tidak memberi akses laman. Jika gagal, semak sambungan lain dan cuba lagi. Wand menyokong sebahagian Web Bluetooth melalui perkhidmatan dan ciri BLE GATT.",
+  "supportNfcTitle": "Tag NFC tidak boleh dibaca atau ditulis",
+  "supportNfc": "Mulakan imbasan laman dan dekatkan tag NDEF serasi ke bahagian atas iPhone semasa antara muka NFC sistem terbuka. Kekalkan Wand di latar depan; imbas semula jika sesi tamat masa. Menulis memerlukan tag NDEF boleh tulis dengan kapasiti cukup dan menggantikan kandungan lama: gunakan tag ujian sendiri. Web NFC tidak membaca kad pembayaran atau meniru kad NFC.",
+  "supportPermissionsTitle": "Kebenaran laman",
+  "supportPermissions": "API perkakasan memerlukan halaman HTTPS peringkat atas dan Wand di latar depan; bingkai terbenam tidak boleh menggunakan jambatan. Luluskan permintaan dan pilih peranti Bluetooth untuk dikongsi. Akses tamat apabila menavigasi ke dokumen baharu, memuat semula, masuk latar belakang atau dibatalkan dalam Site controls. Minta akses semula selepas itu. Semak Site controls jika ditolak.",
+  "supportDataTitle": "Padam data laman atau sejarah",
+  "supportData": "Site controls → Clear website data membuang storan, kuki dan cache. Ini boleh melog keluar anda dan membuang pilihan skrin penuh setiap laman. Clear di sebelah Recent pages pada skrin utama memadam sejarah. Ini tindakan berasingan."
 }

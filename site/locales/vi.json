@@ -36,5 +36,21 @@
   "written": "Đã ghi văn bản",
   "binaryWritten": "Đã ghi bản ghi nhị phân",
   "height": "Chiều cao bảng điều khiển: {percent}%",
-  "siteControls": "Cài đặt trang"
+  "siteControls": "Cài đặt trang",
+  "support": "Hỗ trợ Wand Browser",
+  "supportDescription": "Trợ giúp về Wand Browser, Bluetooth, NFC, quyền và dữ liệu trang web trên iPhone.",
+  "supportIssues": "mở vấn đề trên GitHub",
+  "supportProduct": "trang sản phẩm Wand",
+  "supportContact": "Cần trợ giúp, gặp lỗi hoặc muốn đề xuất tính năng? Gửi email đến {email} hoặc {issues}.",
+  "supportSafety": "Nêu mẫu iPhone, phiên bản iOS và Wand, các bước tái hiện và nếu liên quan, địa chỉ web và mẫu thiết bị hoặc thẻ. Xóa thông tin riêng tư khỏi ảnh và nhật ký. Không gửi mật khẩu, cụm từ khôi phục, khóa riêng hoặc nội dung thẻ nhạy cảm. Vấn đề trên GitHub là công khai.",
+  "supportStartTitle": "Bắt đầu",
+  "supportStart": "Cần iOS 18 trở lên. Bluetooth và NFC cần iPhone thật cùng phần cứng tương thích. Thử {fixture} trong Wand hoặc xem {product}.",
+  "supportBleTitle": "Thiết bị Bluetooth không xuất hiện hoặc kết nối",
+  "supportBle": "Bật Bluetooth trong Cài đặt iPhone và cho phép Wand truy cập. Để thiết bị ở gần, thức và đang quảng bá. Bộ lọc và dịch vụ của trang phải khớp; trang thử chỉ liệt kê tên bắt đầu bằng hito hoặc Hito. Chọn trong bộ chọn gốc của Wand; chỉ ghép đôi trong Cài đặt không cấp quyền cho trang web. Nếu lỗi, kiểm tra kết nối khác rồi thử lại. Wand hỗ trợ một phần Web Bluetooth qua dịch vụ và đặc tính BLE GATT.",
+  "supportNfcTitle": "Không đọc hoặc ghi được thẻ NFC",
+  "supportNfc": "Bắt đầu quét trên trang và giữ thẻ NDEF tương thích gần đỉnh iPhone khi giao diện NFC hệ thống đang mở. Giữ Wand ở tiền cảnh; quét lại nếu phiên hết thời gian. Ghi cần thẻ NDEF có thể ghi với đủ dung lượng và thay thế nội dung cũ: dùng thẻ thử của bạn. Web NFC không đọc thẻ thanh toán hay giả lập thẻ NFC.",
+  "supportPermissionsTitle": "Quyền trang web",
+  "supportPermissions": "API phần cứng cần trang HTTPS cấp cao nhất và Wand ở tiền cảnh; khung nhúng không dùng được cầu nối. Chấp thuận yêu cầu và chọn thiết bị Bluetooth để chia sẻ. Quyền kết thúc khi chuyển sang tài liệu mới, tải lại, vào nền hoặc thu hồi trong Site controls. Sau đó yêu cầu lại. Kiểm tra Site controls nếu bị từ chối.",
+  "supportDataTitle": "Xóa dữ liệu trang hoặc lịch sử",
+  "supportData": "Dùng Site controls → Clear website data để xóa bộ nhớ, cookie và bộ đệm. Thao tác có thể đăng xuất bạn và xóa tùy chọn toàn màn hình theo trang. Dùng Clear cạnh Recent pages ở màn hình chính để xóa lịch sử. Đây là hai thao tác riêng."
 }

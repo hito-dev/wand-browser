@@ -36,5 +36,21 @@
   "written": "ጽሑፉ ተጽፏል",
   "binaryWritten": "የሁለትዮሽ መዝገቡ ተጽፏል",
   "height": "የመልዕክት ሰሌዳ ቁመት {percent}%",
-  "siteControls": "የጣቢያ መቆጣጠሪያዎች"
+  "siteControls": "የጣቢያ መቆጣጠሪያዎች",
+  "support": "የWand Browser ድጋፍ",
+  "supportDescription": "በiPhone ላይ ስለ Wand Browser፣ Bluetooth፣ NFC፣ የድረ ገጽ ፈቃዶች እና ውሂብ እገዛ።",
+  "supportIssues": "በGitHub ላይ ጉዳይ ይክፈቱ",
+  "supportProduct": "የWand ምርት ገጽ",
+  "supportContact": "እገዛ ይፈልጋሉ፣ ስህተት አግኝተዋል ወይስ አዲስ ባህሪ መጠየቅ ይፈልጋሉ? ለ{email} ኢሜይል ይላኩ ወይም {issues}።",
+  "supportSafety": "የiPhone ሞዴል፣ የiOS እና Wand ስሪቶች፣ ችግሩን የመድገም ደረጃዎች እና ካስፈለገ የድረ ገጹን አድራሻና የመሣሪያውን ወይም የመለያውን ሞዴል ያካትቱ። ከምስሎችና መዝገቦች የግል መረጃ ያስወግዱ። የይለፍ ቃላት፣ የመመለሻ ሐረጎች፣ የግል ቁልፎች ወይም ሚስጥራዊ የመለያ ይዘት አይላኩ። የGitHub ጉዳዮች ለሁሉም ይታያሉ።",
+  "supportStartTitle": "መጀመር",
+  "supportStart": "iOS 18 ወይም ከዚያ በላይ ያስፈልጋል። Bluetooth እና NFC እውነተኛ iPhone እና ተስማሚ መሣሪያ ይፈልጋሉ። በWand ውስጥ {fixture} ይሞክሩ ወይም {product} ይጎብኙ።",
+  "supportBleTitle": "የBluetooth መሣሪያ አይታይም ወይም አይገናኝም",
+  "supportBle": "በiPhone ቅንብሮች Bluetooth ያብሩና Wand እንዲጠቀም ይፍቀዱ። መሣሪያውን ቅርብ፣ ንቁ እና መኖሩን እያስተዋወቀ ያቆዩ። የድረ ገጹ ማጣሪያዎችና አገልግሎቶች መዛመድ አለባቸው፤ ሙከራው hito ወይም Hito ብለው የሚጀምሩ ስሞችን ብቻ ያሳያል። በWand ተወላጅ መምረጫ ይምረጡ፤ በቅንብሮች ማጣመር ብቻ ለድረ ገጹ ፈቃድ አይሰጥም። ካልተገናኘ ሌሎች ግንኙነቶችን ያረጋግጡና እንደገና ይሞክሩ። Wand በBLE GATT አገልግሎቶችና ባህሪያት የWeb Bluetooth ክፍልን ይደግፋል።",
+  "supportNfcTitle": "የNFC መለያ አይነበብም ወይም አይጻፍም",
+  "supportNfc": "የድረ ገጹን ቅኝት ይጀምሩና የስርዓቱ NFC ገጽ ክፍት ሳለ ተስማሚ NDEF መለያን ወደ iPhone ላይኛው ክፍል ያስጠጉ። Wand ከፊት ይቆይ፤ የክፍለ ጊዜው ገደብ ካለቀ እንደገና ይቃኙ። መጻፍ በቂ ቦታ ያለው ሊጻፍበት የሚችል NDEF መለያ ይፈልጋል፣ ያለውንም ይዘት ይተካል፤ የራስዎን የሙከራ መለያዎች ይጠቀሙ። Web NFC የክፍያ ካርዶችን አያነብም ወይም NFC ካርዶችን አይመስልም።",
+  "supportPermissionsTitle": "የድረ ገጽ ፈቃዶች",
+  "supportPermissions": "የመሣሪያ APIዎች የላይኛው ደረጃ HTTPS ገጽና Wand ከፊት መሆንን ይፈልጋሉ፤ የተካተቱ ፍሬሞች ድልድዩን መጠቀም አይችሉም። ጥያቄውን ያጽድቁና የሚያጋሩትን Bluetooth መሣሪያ ይምረጡ። ወደ አዲስ ሰነድ ሲሄዱ፣ ዳግም ሲጫኑ፣ Wand ወደ ኋላ ሲሄድ ወይም በSite controls ሲሰርዙ ፈቃዱ ያበቃል። ከዚያ እንደገና ይጠይቁ። ፈቃድ ከተከለከለ Site controls ይመልከቱ።",
+  "supportDataTitle": "የድረ ገጽ ውሂብን ወይም ታሪክን ማጥፋት",
+  "supportData": "Site controls → Clear website data ማከማቻ፣ ኩኪዎችና መሸጎጫዎችን ያስወግዳል። ከመለያዎ ሊያስወጣዎት ይችላል፣ የእያንዳንዱንም ድረ ገጽ ሙሉ ማያ ምርጫዎች ያስወግዳል። በመነሻ ገጽ Recent pages አጠገብ ያለው Clear ታሪክን ያጠፋል። እነዚህ የተለያዩ እርምጃዎች ናቸው።"
 }

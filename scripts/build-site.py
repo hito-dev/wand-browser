@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[1]
 ORIGIN = 'https://wand.hito.ai'
 SOURCE = 'https://github.com/hito-dev/wand-browser'
-PAGES = {'home': '', 'fixture': 'fixtures/bridge.html', 'bluetooth': 'web-bluetooth-iphone/', 'nfc': 'web-nfc-iphone/'}
+PAGES = {'home': '', 'fixture': 'fixtures/bridge.html', 'bluetooth': 'web-bluetooth-iphone/', 'nfc': 'web-nfc-iphone/', 'support': 'support/'}
 LOG_KEYS = ('selected', 'connected', 'disconnected', 'read', 'unavailable', 'readingError', 'active', 'written', 'binaryWritten', 'height')
 
 def load_content(source=ROOT / 'site'):
@@ -53,10 +53,31 @@ def write(output, path, value):
 def esc(value):
     return html.escape(value, quote=True)
 
-def nav(locale, page, d, registry, content):
+FLAGS = dict(zip(('en','de','es','zh-hans','ja','pt-br','pt-pt','fr','ru','it','nl','pl','tr','ko','vi','hi','id','ms','uk','ar','af','sw','ha','yo','am'), ('🇺🇸','🇩🇪','🇪🇸','🇨🇳','🇯🇵','🇧🇷','🇵🇹','🇫🇷','🇷🇺','🇮🇹','🇳🇱','🇵🇱','🇹🇷','🇰🇷','🇻🇳','🇮🇳','🇮🇩','🇲🇾','🇺🇦','🇸🇦','🇿🇦','🇹🇿','🇳🇬','🇳🇬','🇪🇹')))
+
+def badge(locale):
+    return '<span aria-hidden="true">{}</span> <b>{}</b>'.format(FLAGS[locale['code']], locale['code'].split('-')[0][:2].upper())
+
+def switcher(locale, page, d, registry, content):
+    langs = ''.join('<a lang="{lang}" dir="{dir}" hreflang="{lang}" href="{url}"{current}>{badge} <span>{name}</span></a>'.format(**r, url=route(r,page), badge=badge(r), name=esc(content[r['code']]['name']), current=' aria-current="page"' if r==locale else '') for r in registry)
+    return '<details class="language-switcher"><summary aria-label="{}">{}</summary><div class="languages">{}</div></details>'.format(esc(d['languages']), badge(locale), langs)
+
+def nav(locale, page, d):
     links = ''.join('<a href="{}"{}>{}</a>'.format(route(locale, p), ' aria-current="page"' if p == page else '', esc(d[p])) for p in PAGES)
-    langs = ''.join('<a lang="{lang}" dir="{dir}" hreflang="{lang}" href="{url}"{current}>{name}</a>'.format(**r, url=route(r,page), name=esc(content[r['code']]['name']), current=' aria-current="page"' if r==locale else '') for r in registry)
-    return '<nav>{}</nav><details><summary>{}</summary><div class="languages">{}</div></details>'.format(links, esc(d['languages']), langs)
+    return '<nav>{}</nav>'.format(links)
+
+SUPPORT_SECTIONS = ('start', 'ble', 'nfc', 'permissions', 'data')
+
+def support_blocks(d, locale):
+    values = dict(email='[support-wand@hito.ai](mailto:support-wand@hito.ai)', issues='[{}]({}/issues)'.format(d['supportIssues'],SOURCE), fixture='[{}]({}{})'.format(d['fixture'],ORIGIN,route(locale,'fixture')), product='[{}](https://hito.ai/wand/)'.format(d['supportProduct']))
+    return [d['supportDescription'], d['supportContact'].format(**values), d['supportSafety']] + ['## '+d['support'+key.title()+'Title']+'\n\n'+d['support'+key.title()].format(**values) for key in SUPPORT_SECTIONS]
+
+def support_html(d, locale):
+    values = dict(email='<a href="mailto:support-wand@hito.ai">support-wand@hito.ai</a>', issues='<a href="'+SOURCE+'/issues">'+esc(d['supportIssues'])+'</a>', fixture='<a href="'+route(locale,'fixture')+'">'+esc(d['fixture'])+'</a>', product='<a href="https://hito.ai/wand/">'+esc(d['supportProduct'])+'</a>')
+    result = '<p>'+esc(d['supportContact']).format(**values)+'</p>'+paragraphs(d['supportSafety'])
+    for key in SUPPORT_SECTIONS:
+        result += '<h2>'+esc(d['support'+key.title()+'Title'])+'</h2><p>'+esc(d['support'+key.title()]).format(**values)+'</p>'
+    return result
 
 def paragraphs(*texts):
     return ''.join('<p>{}</p>'.format(esc(s)) for s in texts)
@@ -70,7 +91,6 @@ def build(output, metadata=None, source=ROOT / 'site'):
     shutil.copyfile(ROOT / 'LICENSE', output / 'LICENSE.txt')
     shutil.copyfile(source / 'robots.txt', output / 'robots.txt')
     write(output, '/privacy/', (ROOT / 'ios/WandBrowser/Resources/PrivacyPolicy.html').read_text())
-    write(output, '/support/', (source / 'templates/support.html').read_text())
     write(output, '/.nojekyll', '')
     for name in ('child.html', 'hito_ble_transport.js', 'sdk-provenance.json'):
         dest = output / 'fixtures' / name
@@ -88,25 +108,28 @@ def build(output, metadata=None, source=ROOT / 'site'):
             url = route(locale, page)
             assert url not in urls, 'Duplicate route: ' + url
             urls.append(url)
-            navigation = nav(locale, page, d, registry, content)
+            navigation = nav(locale, page, d)
             blocks = {'home': [d['intro'], d['requirements'], d['install']], 'fixture': [d['fixtureIntro'], d['bleGuide'], d['nfcGuide'], d['trouble']], 'bluetooth': [d['bleGuide'], d['requirements'], d['trouble']], 'nfc': [d['nfcGuide'], d['requirements'], d['trouble']]}
+            blocks['support'] = support_blocks(d, locale)
             description = blocks[page][0]
             mirror = url + ('index.md' if url.endswith('/') else '.md')
-            head = '<!doctype html>\n<html lang="{}" dir="{}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{}</title><meta name="description" content="{}"><link rel="canonical" href="{}">'.format(locale['lang'],locale['dir'],esc(d[page]),esc(description), ORIGIN+url)
+            head = '<!doctype html>\n<html lang="{}" dir="{}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>{}</title><meta name="description" content="{}"><link rel="canonical" href="{}">'.format(locale['lang'],locale['dir'],esc(d[page]),esc(description), ORIGIN+url)
             head += ''.join('<link rel="alternate" hreflang="{}" href="{}">'.format(r['lang'],ORIGIN+route(r,page)) for r in registry)
             head += '<link rel="alternate" hreflang="x-default" href="{}"><link rel="alternate" type="text/markdown" href="{}"><link rel="describedby" type="text/plain" href="{}llms.txt"><link rel="icon" type="image/png" sizes="64x64" href="/favicon.png"><link rel="stylesheet" href="/assets/site.css">'.format(ORIGIN+route(registry[0],page),mirror,prefix)
             head += '<script defer src="https://stat.hito.ai/script.js" data-website-id="8453ddb7-edef-41fa-8684-79e94f6940cf"></script>'
-            footer = '<footer><a href="{0}">{1}</a> · <a href="/support/" lang="en">Support (English)</a> · <a href="/privacy/">{2}</a> · <a href="/LICENSE.txt">MIT</a></footer>'.format(SOURCE,esc(d['source']),esc(d['privacy']))
+            language_control = switcher(locale, page, d, registry, content)
+            footer = '<footer><a href="{0}">{1}</a> · <a href="{3}">{4}</a> · <a href="/privacy/">{2}</a> · <a href="/LICENSE.txt">MIT</a></footer>'.format(SOURCE,esc(d['source']),esc(d['privacy']),route(locale,'support'),esc(d['support']))
             if page == 'fixture':
-                head += '<link rel="stylesheet" href="/assets/fixture.css"></head><body>'
+                head += '<link rel="stylesheet" href="/assets/fixture.css"><script defer src="/assets/languages.js"></script></head><body>'
                 # Keep the trusted scripts separate from translated data. Escape < even inside JSON.
                 data = json.dumps({k:d[k] for k in LOG_KEYS},ensure_ascii=False).replace('<','\\u003c')
                 init = '<script id="fixture-messages" type="application/json">'+data+'</script><script src="/assets/fixture-i18n.js"></script><script src="/assets/fixture-layout.js"></script><script type="module" src="/assets/fixture-actions.js"></script>'
                 body = Template((source / 'templates/fixture.html').read_text()).substitute(**{k:esc(v) for k,v in d.items()},navigation=navigation+paragraphs(d['bleGuide'],d['nfcGuide'],d['trouble'])+footer)
-                body += init
+                body = language_control + body + init
             else:
-                head += '</head><body>'
-                body = '<main><h1>{}</h1>{}{}'.format(esc(d[page]),navigation,paragraphs(*blocks[page]))
+                head += '<script defer src="/assets/languages.js"></script></head><body>'
+                body = '<main><h1>{}</h1>{}{}'.format(esc(d[page]),navigation,support_html(d,locale) if page == 'support' else paragraphs(*blocks[page]))
+                body = language_control + body
                 body += '<p><a href="{}">{}</a> · <a href="{}#readme">{}</a></p>'.format(route(locale,'fixture'),esc(d['fixture']),SOURCE,esc(d['source']))
                 if page == 'home' and (output / 'assets/screenshots/home.png').exists():
                     body += '<div class="gallery">'+''.join('<figure><a href="/assets/screenshots/{0}.png"><img src="/assets/screenshots/{0}.png" alt="{1}" width="1206" height="2622" loading="lazy"></a><figcaption>{1}</figcaption></figure>'.format(name,esc(d[label])) for name,label in [('home','home'),('fixture','fixture'),('site-controls','siteControls')])+'</div>'
@@ -119,7 +142,6 @@ def build(output, metadata=None, source=ROOT / 'site'):
             write(output,mirror,md)
             llms += '- [{}]({}) — [Markdown]({})\n'.format(d[page], ORIGIN+url, ORIGIN+mirror)
         llms += '\n[{}]({})\n[{}]({}/privacy/)\n[MIT]({}/LICENSE.txt)\n'.format(d['source'],SOURCE,d['privacy'],ORIGIN,ORIGIN)
-        llms += '\n[Support (English)]({}/support/)\n'.format(ORIGIN)
         if locale['code']=='en':
             llms += '\n## Languages\n'+''.join('- [{}]({}{}llms.txt)\n'.format(content[r['code']]['name'],ORIGIN,'/'+r['code']+'/') for r in registry[1:])
         write(output,prefix+'llms.txt',llms)
@@ -135,7 +157,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
             for key in ('betaAppDescription','whatToTest'):
                 (directory / (key+'.txt')).write_text(fields[key]+'\n')
     sitemap = ET.Element('urlset',xmlns='http://www.sitemaps.org/schemas/sitemap/0.9')
-    for url in urls+['/privacy/', '/support/']:
+    for url in urls+['/privacy/']:
         ET.SubElement(ET.SubElement(sitemap,'url'),'loc').text=ORIGIN+url
     (output / 'sitemap.xml').write_bytes(ET.tostring(sitemap,encoding='utf-8',xml_declaration=True))
     validate(output,urls)

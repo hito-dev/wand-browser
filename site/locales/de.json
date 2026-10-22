@@ -36,5 +36,21 @@
   "written": "Text geschrieben",
   "binaryWritten": "Binärdatensatz geschrieben",
   "height": "{percent} % Konsolenhöhe",
-  "siteControls": "Website-Einstellungen"
+  "siteControls": "Website-Einstellungen",
+  "support": "Wand Browser Hilfe",
+  "supportDescription": "Hilfe zu Wand Browser, Bluetooth, NFC, Website-Berechtigungen und Website-Daten auf dem iPhone.",
+  "supportIssues": "ein GitHub-Issue öffnen",
+  "supportProduct": "Wand-Produktseite",
+  "supportContact": "Brauchen Sie Hilfe, haben Sie einen Fehler gefunden oder einen Funktionswunsch? Schreiben Sie an {email} oder {issues}.",
+  "supportSafety": "Nennen Sie iPhone-Modell, iOS- und Wand-Version, Schritte zur Reproduktion sowie gegebenenfalls Website und Geräte- oder Tag-Modell. Entfernen Sie private Daten aus Screenshots und Protokollen. Senden Sie niemals Passwörter, Wiederherstellungsphrasen, private Schlüssel oder vertrauliche Tag-Inhalte. GitHub-Issues sind öffentlich.",
+  "supportStartTitle": "Erste Schritte",
+  "supportStart": "Erfordert iOS 18 oder neuer. Bluetooth und NFC benötigen ein echtes iPhone und kompatible Hardware. Testen Sie {fixture} in Wand oder besuchen Sie {product}.",
+  "supportBleTitle": "Bluetooth-Gerät erscheint nicht oder verbindet sich nicht",
+  "supportBle": "Aktivieren Sie Bluetooth in den iPhone-Einstellungen und erlauben Sie Wand den Zugriff. Halten Sie das Gerät nah, eingeschaltet und im Werbemodus. Filter und Dienste der Website müssen passen; die Testseite zeigt nur Namen mit hito oder Hito am Anfang. Wählen Sie das Gerät in Wands nativer Auswahl; Koppeln in den Einstellungen allein gewährt keinen Website-Zugriff. Prüfen Sie bei Fehlern Verbindungen zu anderen Geräten und versuchen Sie es erneut. Wand unterstützt einen Teil von Web Bluetooth mit BLE-GATT-Diensten und -Charakteristiken.",
+  "supportNfcTitle": "NFC-Tag lässt sich nicht lesen oder beschreiben",
+  "supportNfc": "Starten Sie den Scan der Website und halten Sie einen kompatiblen NDEF-Tag an die Oberseite des iPhones, solange die NFC-Systemoberfläche offen ist. Lassen Sie Wand im Vordergrund; starten Sie nach Ablauf der Sitzung erneut. Schreiben erfordert einen beschreibbaren NDEF-Tag mit ausreichend Platz und ersetzt vorhandene Inhalte: Nutzen Sie eigene Test-Tags. Web NFC liest keine Zahlungskarten und emuliert keine NFC-Karten.",
+  "supportPermissionsTitle": "Website-Berechtigungen",
+  "supportPermissions": "Hardware-APIs benötigen eine HTTPS-Seite auf oberster Ebene und Wand im Vordergrund; eingebettete Frames können die Bridge nicht nutzen. Bestätigen Sie die Anfrage und wählen Sie das freizugebende Bluetooth-Gerät. Zugriff endet beim Wechsel zu einem neuen Dokument, Neuladen, Hintergrundwechsel oder Widerruf in Site controls. Fordern Sie danach erneut Zugriff an. Prüfen Sie Site controls bei verweigertem Zugriff.",
+  "supportDataTitle": "Website-Daten oder Verlauf löschen",
+  "supportData": "Site controls → Clear website data entfernt Speicher, Cookies und Caches. Dabei können Sie abgemeldet und gespeicherte Vollbildeinstellungen je Website entfernt werden. Clear neben Recent pages auf dem Startbildschirm löscht den Verlauf. Dies sind getrennte Aktionen."
 }

@@ -72,3 +72,11 @@
 
 #log, input { direction: ltr; text-align: left; }
 nav a { display: inline-block; padding: 4px; font-size: .85rem; }
+
+/* Keep the independent controls and console scroll regions below the switcher. */
+body {
+  padding-top: 0;
+  top: calc(var(--viewport-top, 0px) + 68px + env(safe-area-inset-top));
+  height: calc(var(--viewport-height, 100dvh) - 68px - env(safe-area-inset-top));
+}
+#controls { padding-top: 12px; }

@@ -36,5 +36,21 @@
   "written": "Maandishi yameandikwa",
   "binaryWritten": "Rekodi ya binary imeandikwa",
   "height": "Urefu wa dashibodi: {percent}%",
-  "siteControls": "Vidhibiti vya tovuti"
+  "siteControls": "Vidhibiti vya tovuti",
+  "support": "Usaidizi wa Wand Browser",
+  "supportDescription": "Msaada wa Wand Browser, Bluetooth, NFC, ruhusa na data za tovuti kwenye iPhone.",
+  "supportIssues": "fungua suala la GitHub",
+  "supportProduct": "ukurasa wa bidhaa wa Wand",
+  "supportContact": "Unahitaji msaada, umepata hitilafu au una ombi la kipengele? Tuma barua kwa {email} au {issues}.",
+  "supportSafety": "Taja modeli ya iPhone, matoleo ya iOS na Wand, hatua za kurudia tatizo na ikifaa anwani ya tovuti na modeli ya kifaa au lebo. Ondoa taarifa binafsi kwenye picha na kumbukumbu. Usitume nywila, maneno ya kurejesha, funguo binafsi au maudhui nyeti ya lebo. Masuala ya GitHub ni ya umma.",
+  "supportStartTitle": "Kuanza",
+  "supportStart": "Inahitaji iOS 18 au mpya zaidi. Bluetooth na NFC zinahitaji iPhone halisi na vifaa vinavyooana. Jaribu {fixture} katika Wand au tembelea {product}.",
+  "supportBleTitle": "Kifaa cha Bluetooth hakionekani au hakiunganishi",
+  "supportBle": "Washa Bluetooth katika mipangilio ya iPhone na ruhusu Wand. Weka kifaa karibu, kikiwa macho na kinatangaza uwepo wake. Vichujio na huduma za tovuti lazima zilingane; jaribio huorodhesha majina yanayoanza na hito au Hito pekee. Chagua katika kichaguzi asilia cha Wand; kuoanisha katika Mipangilio pekee hakutoi ruhusa kwa tovuti. Ikishindwa, angalia miunganisho mingine kisha jaribu tena. Wand inatumia sehemu ya Web Bluetooth kupitia huduma na sifa za BLE GATT.",
+  "supportNfcTitle": "Lebo ya NFC haisomeki au haiandikiki",
+  "supportNfc": "Anzisha uchanganuzi wa tovuti na shikilia lebo NDEF inayooana karibu na juu ya iPhone wakati kiolesura cha NFC cha mfumo kiko wazi. Weka Wand mbele; anza tena muda wa kipindi ukiisha. Kuandika kunahitaji lebo NDEF inayoweza kuandikwa yenye nafasi ya kutosha na hubadilisha maudhui: tumia lebo zako za majaribio. Web NFC haisomi kadi za malipo wala kuiga kadi za NFC.",
+  "supportPermissionsTitle": "Ruhusa za tovuti",
+  "supportPermissions": "API za vifaa zinahitaji ukurasa wa HTTPS wa ngazi ya juu na Wand mbele; fremu zilizopachikwa haziwezi kutumia daraja. Kubali ombi na uchague kifaa cha Bluetooth cha kushiriki. Ruhusa huisha ukihamia hati mpya, kupakia upya, kupeleka Wand nyuma au kuifuta katika Site controls. Omba tena baadaye. Angalia Site controls ikiwa imekataliwa.",
+  "supportDataTitle": "Futa data za tovuti au historia",
+  "supportData": "Site controls → Clear website data huondoa hifadhi, vidakuzi na kache. Inaweza kukuondoa kwenye akaunti na hufuta mapendeleo ya skrini nzima kwa kila tovuti. Clear karibu na Recent pages kwenye skrini kuu hufuta historia. Hizi ni hatua tofauti."
 }

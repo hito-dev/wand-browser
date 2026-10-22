@@ -36,5 +36,21 @@
   "written": "文本已写入",
   "binaryWritten": "二进制记录已写入",
   "height": "控制台高度 {percent}%",
-  "siteControls": "网站控制项"
+  "siteControls": "网站控制项",
+  "support": "Wand Browser 支持",
+  "supportDescription": "获取有关 iPhone 上 Wand Browser、蓝牙、NFC、网站权限和网站数据的帮助。",
+  "supportIssues": "在 GitHub 提交问题",
+  "supportProduct": "Wand 产品页面",
+  "supportContact": "需要帮助、发现错误或希望提出功能建议？请发邮件至 {email}，或{issues}。",
+  "supportSafety": "请提供 iPhone 型号、iOS 和 Wand 版本、复现步骤，以及相关网站地址和设备或标签型号。请删除截图和日志中的私人信息。切勿发送密码、恢复短语、私钥或敏感标签内容。GitHub 问题是公开的。",
+  "supportStartTitle": "开始使用",
+  "supportStart": "需要 iOS 18 或更新版本。蓝牙和 NFC 需要实体 iPhone 和兼容硬件。在 Wand 中尝试{fixture}，或访问{product}。",
+  "supportBleTitle": "蓝牙设备未显示或无法连接",
+  "supportBle": "在 iPhone 设置中开启蓝牙并允许 Wand 使用。让设备保持在附近、唤醒且正在广播。网站请求的过滤条件和服务必须匹配设备；测试页面只显示名称以 hito 或 Hito 开头的设备。请在 Wand 的原生选择器中选择设备；仅在设置中配对不会授予网站访问权限。连接失败时，检查设备是否已连接到其他地方，然后重试。Wand 通过 BLE GATT 服务和特征支持部分 Web Bluetooth 功能。",
+  "supportNfcTitle": "NFC 标签无法读取或写入",
+  "supportNfc": "启动网站的扫描操作，在系统 NFC 界面打开时，将兼容的 NDEF 标签靠近 iPhone 顶部。保持 Wand 在前台；会话超时后请重新扫描。写入需要容量充足的可写 NDEF 标签，并会替换原有内容：请使用自己的测试标签。Web NFC 不支持读取支付卡或模拟 NFC 卡。",
+  "supportPermissionsTitle": "网站权限",
+  "supportPermissions": "硬件 API 需要顶层 HTTPS 页面且 Wand 在前台；嵌入式框架无法使用硬件桥接。批准网站请求并选择要共享的蓝牙设备。导航到新文档、重新加载、进入后台或在 Site controls 中撤销权限时，访问权限会终止。之后请重新申请。若访问被拒绝，请检查 Site controls。",
+  "supportDataTitle": "清除网站数据或浏览历史",
+  "supportData": "使用 Site controls → Clear website data 删除存储、Cookie 和缓存。这可能使您退出网站，并删除各网站保存的全屏偏好。使用主屏幕上 Recent pages 旁的 Clear 删除浏览历史。这是两个独立操作。"
 }

@@ -36,5 +36,21 @@
   "written": "Tekst zapisany",
   "binaryWritten": "Rekord binarny zapisany",
   "height": "Wysokość konsoli: {percent}%",
-  "siteControls": "Ustawienia witryny"
+  "siteControls": "Ustawienia witryny",
+  "support": "Pomoc Wand Browser",
+  "supportDescription": "Pomoc dotycząca Wand Browser, Bluetooth, NFC, uprawnień i danych witryn na iPhonie.",
+  "supportIssues": "otwórz zgłoszenie na GitHubie",
+  "supportProduct": "stronę produktu Wand",
+  "supportContact": "Potrzebujesz pomocy, znalazłeś błąd lub chcesz zaproponować funkcję? Napisz na {email} albo {issues}.",
+  "supportSafety": "Podaj model iPhone’a, wersje iOS i Wand, kroki odtworzenia oraz w razie potrzeby adres witryny i model urządzenia lub tagu. Usuń prywatne informacje ze zrzutów i dzienników. Nigdy nie wysyłaj haseł, fraz odzyskiwania, kluczy prywatnych ani poufnej zawartości tagów. Zgłoszenia na GitHubie są publiczne.",
+  "supportStartTitle": "Pierwsze kroki",
+  "supportStart": "Wymagany iOS 18 lub nowszy. Bluetooth i NFC wymagają fizycznego iPhone’a i zgodnego sprzętu. Wypróbuj {fixture} w Wand lub odwiedź {product}.",
+  "supportBleTitle": "Urządzenie Bluetooth nie pojawia się lub nie łączy",
+  "supportBle": "Włącz Bluetooth w ustawieniach iPhone’a i zezwól Wand na dostęp. Trzymaj urządzenie blisko, aktywne i rozgłaszające się. Filtry i usługi witryny muszą pasować; test pokazuje tylko nazwy zaczynające się od hito lub Hito. Wybierz urządzenie w natywnym selektorze Wand; samo parowanie w Ustawieniach nie daje witrynie dostępu. Przy błędzie sprawdź inne połączenia i ponów próbę. Wand obsługuje część Web Bluetooth przez usługi i charakterystyki BLE GATT.",
+  "supportNfcTitle": "Nie można odczytać lub zapisać tagu NFC",
+  "supportNfc": "Uruchom skanowanie witryny i przyłóż zgodny tag NDEF do górnej części iPhone’a, gdy systemowy interfejs NFC jest otwarty. Pozostaw Wand na pierwszym planie; uruchom ponownie po upływie limitu sesji. Zapis wymaga zapisywalnego tagu NDEF o odpowiedniej pojemności i zastępuje zawartość: używaj własnych tagów testowych. Web NFC nie odczytuje kart płatniczych ani nie emuluje kart NFC.",
+  "supportPermissionsTitle": "Uprawnienia witryn",
+  "supportPermissions": "API sprzętowe wymagają strony HTTPS najwyższego poziomu i Wand na pierwszym planie; osadzone ramki nie mogą używać mostu. Zatwierdź żądanie i wybierz udostępniane urządzenie Bluetooth. Dostęp kończy się przy przejściu do nowego dokumentu, przeładowaniu, przejściu w tło lub cofnięciu w Site controls. Potem poproś ponownie o dostęp. Przy odmowie sprawdź Site controls.",
+  "supportDataTitle": "Usuwanie danych witryn lub historii",
+  "supportData": "Site controls → Clear website data usuwa pamięć, pliki cookie i pamięci podręczne. Może wylogować z witryn i usuwa ich preferencje pełnego ekranu. Clear obok Recent pages na ekranie głównym usuwa historię. To oddzielne działania."
 }

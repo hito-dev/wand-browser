@@ -36,5 +36,21 @@
   "written": "Teks ditulis",
   "binaryWritten": "Rekaman biner ditulis",
   "height": "Tinggi konsol {percent}%",
-  "siteControls": "Kontrol situs"
+  "siteControls": "Kontrol situs",
+  "support": "Dukungan Wand Browser",
+  "supportDescription": "Bantuan untuk Wand Browser, Bluetooth, NFC, izin dan data situs di iPhone.",
+  "supportIssues": "buka isu GitHub",
+  "supportProduct": "halaman produk Wand",
+  "supportContact": "Butuh bantuan, menemukan bug atau punya permintaan fitur? Kirim email ke {email} atau {issues}.",
+  "supportSafety": "Sertakan model iPhone, versi iOS dan Wand, langkah reproduksi serta jika relevan, alamat situs dan model perangkat atau tag. Hapus informasi pribadi dari tangkapan layar dan log. Jangan kirim kata sandi, frasa pemulihan, kunci pribadi atau isi tag sensitif. Isu GitHub bersifat publik.",
+  "supportStartTitle": "Memulai",
+  "supportStart": "Memerlukan iOS 18 atau lebih baru. Bluetooth dan NFC memerlukan iPhone fisik dan perangkat keras yang kompatibel. Coba {fixture} di Wand atau kunjungi {product}.",
+  "supportBleTitle": "Perangkat Bluetooth tidak muncul atau terhubung",
+  "supportBle": "Aktifkan Bluetooth di Pengaturan iPhone dan izinkan Wand mengaksesnya. Jaga perangkat tetap dekat, aktif dan mengiklankan diri. Filter dan layanan situs harus cocok; pengujian hanya menampilkan nama berawalan hito atau Hito. Pilih di pemilih bawaan Wand; memasangkan di Pengaturan saja tidak memberi akses situs. Jika gagal, periksa koneksi lain lalu coba lagi. Wand mendukung sebagian Web Bluetooth melalui layanan dan karakteristik BLE GATT.",
+  "supportNfcTitle": "Tag NFC tidak dapat dibaca atau ditulis",
+  "supportNfc": "Mulai pemindaian situs dan dekatkan tag NDEF kompatibel ke bagian atas iPhone saat antarmuka NFC sistem terbuka. Biarkan Wand di latar depan; pindai ulang jika sesi kehabisan waktu. Menulis memerlukan tag NDEF yang dapat ditulis dengan kapasitas cukup dan mengganti isi lama: gunakan tag uji milik sendiri. Web NFC tidak membaca kartu pembayaran atau mengemulasi kartu NFC.",
+  "supportPermissionsTitle": "Izin situs",
+  "supportPermissions": "API perangkat keras memerlukan halaman HTTPS tingkat atas dan Wand di latar depan; bingkai tertanam tidak dapat memakai jembatan. Setujui permintaan dan pilih perangkat Bluetooth untuk dibagikan. Akses berakhir saat pindah dokumen, memuat ulang, masuk latar belakang atau dicabut di Site controls. Minta akses lagi sesudahnya. Periksa Site controls jika ditolak.",
+  "supportDataTitle": "Menghapus data situs atau riwayat",
+  "supportData": "Site controls → Clear website data menghapus penyimpanan, cookie dan cache. Ini dapat mengeluarkan Anda dari akun dan menghapus preferensi layar penuh per situs. Clear di samping Recent pages pada layar utama menghapus riwayat. Keduanya tindakan terpisah."
 }

@@ -36,5 +36,21 @@
   "written": "テキストを書き込みました",
   "binaryWritten": "バイナリレコードを書き込みました",
   "height": "コンソールの高さ {percent}%",
-  "siteControls": "サイトの設定"
+  "siteControls": "サイトの設定",
+  "support": "Wand Browser サポート",
+  "supportDescription": "iPhone の Wand Browser、Bluetooth、NFC、サイトの権限とデータについてのヘルプ。",
+  "supportIssues": "GitHub で問題を報告",
+  "supportProduct": "Wand の製品ページ",
+  "supportContact": "お困りの場合、不具合の報告や機能のご要望は、{email} へのメールまたは{issues}からお寄せください。",
+  "supportSafety": "iPhone のモデル、iOS と Wand のバージョン、再現手順、必要に応じてサイトの URL と機器やタグの型番を含めてください。画像とログから個人情報を削除してください。パスワード、復元フレーズ、秘密鍵、機密性のあるタグ内容は送らないでください。GitHub の報告は公開されます。",
+  "supportStartTitle": "はじめに",
+  "supportStart": "iOS 18 以降が必要です。Bluetooth と NFC には実機の iPhone と対応するハードウェアが必要です。Wand で{fixture}を試すか、{product}をご覧ください。",
+  "supportBleTitle": "Bluetooth 機器が表示されない・接続できない",
+  "supportBle": "iPhone の設定で Bluetooth をオンにし、Wand の使用を許可してください。機器を近くに置き、起動してアドバタイズ中にします。サイトのフィルターとサービスが機器に一致する必要があります。テストページは名前が hito または Hito で始まる機器のみ表示します。Wand のネイティブ選択画面で選んでください。設定でペアリングするだけではサイトに権限は与えられません。接続失敗時は他との接続を確認して再試行してください。Wand は BLE GATT サービスと特性を使う Web Bluetooth の一部に対応しています。",
+  "supportNfcTitle": "NFC タグを読み書きできない",
+  "supportNfc": "サイトでスキャンを開始し、システムの NFC 画面が開いている間に対応 NDEF タグを iPhone 上部に近づけてください。Wand を前面に保ち、セッションが時間切れになったら再スキャンしてください。書き込みには容量が十分な書き込み可能 NDEF タグが必要で、既存内容が置き換わります。自分のテスト用タグを使ってください。Web NFC は決済カードの読み取りや NFC カードのエミュレーションには対応しません。",
+  "supportPermissionsTitle": "サイトの権限",
+  "supportPermissions": "ハードウェア API には最上位の HTTPS ページと前面の Wand が必要です。埋め込みフレームではブリッジを使えません。サイトの要求を承認し、共有する Bluetooth 機器を選んでください。別の文書への移動、再読み込み、バックグラウンド移行、Site controls での取り消しで権限は終了します。その後は再度要求してください。拒否された場合は Site controls を確認してください。",
+  "supportDataTitle": "サイトデータや履歴を消去",
+  "supportData": "Site controls → Clear website data でストレージ、Cookie、キャッシュを削除します。ログアウトされる場合があり、サイト別の全画面設定も削除されます。ホーム画面の Recent pages 横の Clear で閲覧履歴を削除します。これらは別々の操作です。"
 }

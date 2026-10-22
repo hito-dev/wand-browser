@@ -36,5 +36,21 @@
   "written": "Texte écrit",
   "binaryWritten": "Enregistrement binaire écrit",
   "height": "{percent} % de hauteur de console",
-  "siteControls": "Réglages du site"
+  "siteControls": "Réglages du site",
+  "support": "Assistance Wand Browser",
+  "supportDescription": "Aide pour Wand Browser, Bluetooth, NFC, les autorisations et les données des sites sur iPhone.",
+  "supportIssues": "ouvrir un ticket GitHub",
+  "supportProduct": "page produit de Wand",
+  "supportContact": "Besoin d’aide, un bug à signaler ou une fonction à proposer ? Écrivez à {email} ou {issues}.",
+  "supportSafety": "Indiquez le modèle d’iPhone, les versions d’iOS et de Wand, les étapes de reproduction et, si pertinent, le site et le modèle d’appareil ou de tag. Retirez les informations privées des captures et journaux. N’envoyez jamais de mots de passe, phrases de récupération, clés privées ou données sensibles de tags. Les tickets GitHub sont publics.",
+  "supportStartTitle": "Premiers pas",
+  "supportStart": "iOS 18 ou ultérieur requis. Bluetooth et NFC nécessitent un iPhone physique et du matériel compatible. Essayez {fixture} dans Wand ou consultez {product}.",
+  "supportBleTitle": "Appareil Bluetooth introuvable ou connexion impossible",
+  "supportBle": "Activez Bluetooth dans les réglages de l’iPhone et autorisez Wand. Gardez l’appareil proche, éveillé et en diffusion. Les filtres et services du site doivent correspondre ; le test ne liste que les noms commençant par hito ou Hito. Choisissez l’appareil dans le sélecteur natif de Wand ; le jumelage dans Réglages seul n’autorise pas le site. En cas d’échec, vérifiez les connexions ailleurs puis réessayez. Wand prend en charge une partie de Web Bluetooth avec les services et caractéristiques BLE GATT.",
+  "supportNfcTitle": "Lecture ou écriture NFC impossible",
+  "supportNfc": "Lancez le scan du site et approchez un tag NDEF compatible du haut de l’iPhone pendant que l’interface NFC système est ouverte. Gardez Wand au premier plan ; relancez si la session expire. L’écriture nécessite un tag NDEF inscriptible de capacité suffisante et remplace son contenu : utilisez vos propres tags de test. Web NFC ne lit pas les cartes de paiement et n’émule pas de cartes NFC.",
+  "supportPermissionsTitle": "Autorisations des sites",
+  "supportPermissions": "Les API matérielles exigent une page HTTPS de premier niveau et Wand au premier plan ; les cadres intégrés ne peuvent pas utiliser le pont. Approuvez la demande et choisissez l’appareil Bluetooth à partager. L’accès prend fin lors d’un changement de document, rechargement, passage en arrière-plan ou retrait dans Site controls. Redemandez ensuite l’accès. Vérifiez Site controls en cas de refus.",
+  "supportDataTitle": "Effacer les données ou l’historique",
+  "supportData": "Site controls → Clear website data supprime le stockage, les cookies et les caches. Cela peut vous déconnecter et supprime les préférences de plein écran par site. Clear à côté de Recent pages sur l’accueil efface l’historique. Ce sont deux actions distinctes."
 }

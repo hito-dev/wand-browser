@@ -36,5 +36,21 @@
   "written": "Metin yazıldı",
   "binaryWritten": "İkili kayıt yazıldı",
   "height": "Konsol yüksekliği %{percent}",
-  "siteControls": "Site kontrolleri"
+  "siteControls": "Site kontrolleri",
+  "support": "Wand Browser Desteği",
+  "supportDescription": "iPhone’da Wand Browser, Bluetooth, NFC, site izinleri ve site verileri için yardım.",
+  "supportIssues": "GitHub’da sorun bildirin",
+  "supportProduct": "Wand ürün sayfasını",
+  "supportContact": "Yardıma mı ihtiyacınız var, hata mı buldunuz veya özellik mi istiyorsunuz? {email} adresine yazın veya {issues}.",
+  "supportSafety": "iPhone modelini, iOS ve Wand sürümlerini, sorunu tekrarlama adımlarını ve ilgiliyse site adresi ile cihaz veya etiket modelini ekleyin. Görüntü ve günlüklerden özel bilgileri kaldırın. Parola, kurtarma ifadesi, özel anahtar veya hassas etiket içeriği göndermeyin. GitHub bildirimleri herkese açıktır.",
+  "supportStartTitle": "Başlangıç",
+  "supportStart": "iOS 18 veya üstü gerekir. Bluetooth ve NFC için fiziksel iPhone ve uyumlu donanım gerekir. Wand’da {fixture} sayfasını deneyin veya {product} ziyaret edin.",
+  "supportBleTitle": "Bluetooth cihazı görünmüyor veya bağlanmıyor",
+  "supportBle": "iPhone Ayarlarında Bluetooth’u açın ve Wand’a izin verin. Cihazı yakın, uyanık ve yayın yapar durumda tutun. Sitenin filtre ve hizmetleri eşleşmelidir; test yalnızca hito veya Hito ile başlayan adları listeler. Wand’ın yerel seçicisinde cihazı seçin; yalnızca Ayarlarda eşleştirmek siteye erişim vermez. Bağlantı başarısızsa başka bağlantıları kontrol edip tekrar deneyin. Wand, BLE GATT hizmetleri ve karakteristikleriyle Web Bluetooth’un bir bölümünü destekler.",
+  "supportNfcTitle": "NFC etiketi okunmuyor veya yazılmıyor",
+  "supportNfc": "Sitenin taramasını başlatın; sistem NFC arayüzü açıkken uyumlu NDEF etiketini iPhone’un üst kısmına tutun. Wand’ı ön planda tutun; süre dolunca yeniden tarayın. Yazma, yeterli kapasiteli yazılabilir NDEF etiketi gerektirir ve mevcut içeriği değiştirir: kendi test etiketlerinizi kullanın. Web NFC ödeme kartlarını okumaz veya NFC kartı taklit etmez.",
+  "supportPermissionsTitle": "Site izinleri",
+  "supportPermissions": "Donanım API’leri üst düzey HTTPS sayfası ve ön planda Wand gerektirir; gömülü çerçeveler köprüyü kullanamaz. İsteği onaylayıp paylaşılacak Bluetooth cihazını seçin. Yeni belgeye geçiş, yenileme, arka plana geçiş veya Site controls içinden iptal erişimi sonlandırır. Sonrasında yeniden erişim isteyin. Reddedildiyse Site controls bölümünü kontrol edin.",
+  "supportDataTitle": "Site verilerini veya geçmişi temizleme",
+  "supportData": "Site controls → Clear website data depolama, çerez ve önbellekleri kaldırır. Oturumunuzu kapatabilir ve siteye özel tam ekran tercihlerini siler. Ana ekranda Recent pages yanındaki Clear geçmişi siler. Bunlar ayrı işlemlerdir."
 }

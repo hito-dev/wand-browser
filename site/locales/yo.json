@@ -36,5 +36,21 @@
   "written": "A ti kọ ọ̀rọ̀",
   "binaryWritten": "A ti kọ àkọsílẹ̀ alákọ̀ọ́méjì",
   "height": "Gíga pátákó ìfiránṣẹ́: {percent}%",
-  "siteControls": "Ìṣàkóso ojúlé"
+  "siteControls": "Ìṣàkóso ojúlé",
+  "support": "Ìrànlọ́wọ́ Wand Browser",
+  "supportDescription": "Ìrànlọ́wọ́ fún Wand Browser, Bluetooth, NFC, ìyọ̀nda àti dátà ojúlé lórí iPhone.",
+  "supportIssues": "ṣí ọ̀ràn lórí GitHub",
+  "supportProduct": "ojú ìwé ọjà Wand",
+  "supportContact": "Ṣé o nílò ìrànlọ́wọ́, rí àṣìṣe tàbí fẹ́ béèrè fún iṣẹ́ tuntun? Fi ímeèlì ránṣẹ́ sí {email} tàbí {issues}.",
+  "supportSafety": "Fi àwòṣe iPhone, ẹ̀yà iOS àti Wand, àwọn ìgbésẹ̀ láti tún ìṣòro náà ṣe àti, bí ó bá yẹ, àdírẹ́sì ojúlé àti àwòṣe ẹ̀rọ tàbí àmì kún un. Yọ ìsọfúnni àṣírí kúrò nínú àwòrán àti àkọsílẹ̀. Má fi ọ̀rọ̀ aṣínà, gbólóhùn ìmúpadàbọ̀, kọ́kọ́rọ́ àṣírí tàbí àkóónú àmì tó ní àṣírí ránṣẹ́. Gbogbo ènìyàn lè rí ọ̀ràn GitHub.",
+  "supportStartTitle": "Bí a ṣe bẹ̀rẹ̀",
+  "supportStart": "Ó nílò iOS 18 tàbí tuntun jù bẹ́ẹ̀ lọ. Bluetooth àti NFC nílò iPhone gidi àti ẹ̀rọ tó bá a mu. Gbìyànjú {fixture} nínú Wand tàbí ṣèbẹ̀wò sí {product}.",
+  "supportBleTitle": "Ẹ̀rọ Bluetooth kò hàn tàbí kò sopọ̀",
+  "supportBle": "Tan Bluetooth nínú Ètò iPhone kí o sì fún Wand ní àṣẹ. Jẹ́ kí ẹ̀rọ wà nítòsí, kí ó jí, kí ó sì máa polówó wíwà rẹ̀. Àlẹ̀mọ́ àti iṣẹ́ ojúlé gbọ́dọ̀ bá a mu; ìdánwò fi orúkọ tó bẹ̀rẹ̀ pẹ̀lú hito tàbí Hito hàn nìkan. Yan ẹ̀rọ nínú olùyàn ìbílẹ̀ Wand; sísopọ̀ nínú Ètò nìkan kò fún ojúlé ní àṣẹ. Bí ó bá kùnà, ṣàyẹ̀wò ìsopọ̀ míì kí o tún gbìyànjú. Wand ṣe àtìlẹ́yìn apá kan Web Bluetooth pẹ̀lú iṣẹ́ àti àbùdá BLE GATT.",
+  "supportNfcTitle": "A kò lè ka tàbí kọ àmì NFC",
+  "supportNfc": "Bẹ̀rẹ̀ ìṣàyẹ̀wò ojúlé kí o sì mú àmì NDEF tó bá a mu sún mọ́ orí iPhone nígbà tí ojú NFC ètò bá ṣí. Jẹ́ kí Wand wà níwájú; tún bẹ̀rẹ̀ bí àkókò ìpàdé bá parí. Kíkọ nílò àmì NDEF tí a lè kọ sí tó ní àyè tó, ó sì máa rọ́pò àkóónú rẹ̀: lo àmì ìdánwò tìrẹ. Web NFC kò ka káàdì ìsanwó tàbí fara wé káàdì NFC.",
+  "supportPermissionsTitle": "Ìyọ̀nda ojúlé",
+  "supportPermissions": "API ẹ̀rọ nílò ojú ìwé HTTPS ìpele òkè àti Wand níwájú; férémù tí a fi sínú ojú ìwé kò lè lo afárá. Fọwọ́ sí ìbéèrè kí o sì yan ẹ̀rọ Bluetooth láti pín. Àṣẹ parí nígbà tí o bá lọ sí ìwé tuntun, tún kojú ìwé, lọ sí abẹ́lẹ̀ tàbí fagilé nínú Site controls. Béèrè àṣẹ lẹ́ẹ̀kan sí i lẹ́yìn náà. Ṣàyẹ̀wò Site controls bí a bá kọ̀ ọ́.",
+  "supportDataTitle": "Pa dátà ojúlé tàbí ìtàn rẹ́",
+  "supportData": "Site controls → Clear website data yọ ibi ìpamọ́, kúkì àti cache. Ó lè mú ọ jáde kúrò nínú àkọọ́lẹ̀, ó sì yọ àṣàyàn ojú kíkún fún ojúlé kọ̀ọ̀kan. Clear lẹ́gbẹ̀ẹ́ Recent pages lójú ilé pa ìtàn rẹ́. Ìṣe ọ̀tọ̀ọ̀tọ̀ ni wọ́n."
 }

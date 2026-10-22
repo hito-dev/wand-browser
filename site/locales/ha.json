@@ -36,5 +36,21 @@
   "written": "An rubuta rubutu",
   "binaryWritten": "An rubuta bayanan tsarin biyu",
   "height": "Tsayin fannin saƙonni: {percent}%",
-  "siteControls": "Sarrafa shafin"
+  "siteControls": "Sarrafa shafin",
+  "support": "Tallafin Wand Browser",
+  "supportDescription": "Taimako kan Wand Browser, Bluetooth, NFC, izini da bayanan shafuka a iPhone.",
+  "supportIssues": "buɗe batu a GitHub",
+  "supportProduct": "shafin samfurin Wand",
+  "supportContact": "Kana buƙatar taimako, ka gano kuskure ko kana neman sabon fasali? Aika imel zuwa {email} ko {issues}.",
+  "supportSafety": "Haɗa samfurin iPhone, nau’ikan iOS da Wand, matakan maimaita matsalar da adireshin shafi da samfurin na’ura ko tag idan ya dace. Cire bayanan sirri daga hotuna da rajistoci. Kada ka aika kalmomin sirri, jimlolin dawo da asusu, maɓallan sirri ko muhimman bayanan tag. Batutuwan GitHub na jama’a ne.",
+  "supportStartTitle": "Farawa",
+  "supportStart": "Ana buƙatar iOS 18 ko sabo. Bluetooth da NFC suna buƙatar iPhone na gaske da kayan aiki masu dacewa. Gwada {fixture} a Wand ko ziyarci {product}.",
+  "supportBleTitle": "Na’urar Bluetooth ba ta bayyana ko haɗuwa",
+  "supportBle": "Kunna Bluetooth a Saitunan iPhone kuma ka ba Wand izini. Riƙe na’urar kusa, a farke kuma tana sanar da kasancewarta. Matatun shafi da ayyukansa dole su dace; gwajin yana nuna sunayen da suka fara da hito ko Hito kawai. Zaɓa a cikin mai zaɓen Wand na asali; haɗa na’ura a Saituna kaɗai ba ya ba shafi izini. Idan ya gaza, bincika wasu haɗuwa sannan sake gwadawa. Wand yana goyon bayan wani ɓangare na Web Bluetooth ta ayyuka da halayen BLE GATT.",
+  "supportNfcTitle": "Ba a iya karanta ko rubuta tag na NFC",
+  "supportNfc": "Fara sikanin shafi kuma ka riƙe tag NDEF mai dacewa kusa da saman iPhone yayin da tsarin NFC yake buɗe. Bar Wand a gaba; sake farawa idan lokacin zaman ya ƙare. Rubutu yana buƙatar tag NDEF mai karɓar rubutu da isasshen sarari kuma yana maye gurbin abin da ke ciki: yi amfani da tag ɗinka na gwaji. Web NFC ba ya karanta katunan biyan kuɗi ko kwaikwayon katunan NFC.",
+  "supportPermissionsTitle": "Izinin shafuka",
+  "supportPermissions": "API na kayan aiki suna buƙatar shafin HTTPS na matakin sama da Wand a gaba; firam ɗin da aka saka ba zai iya amfani da gada ba. Amince da buƙatar kuma zaɓi na’urar Bluetooth da za a raba. Izini yana ƙarewa idan an koma sabon takarda, an sake lodawa, an koma baya ko an soke shi a Site controls. Nemi izini kuma bayan haka. Duba Site controls idan an hana.",
+  "supportDataTitle": "Goge bayanan shafi ko tarihi",
+  "supportData": "Site controls → Clear website data yana cire ma’ajiya, kukis da cache. Zai iya fitar da kai daga asusu kuma yana cire zaɓin cikakken allo na kowane shafi. Clear kusa da Recent pages a allon gida yana goge tarihi. Waɗannan ayyuka ne daban."
 }

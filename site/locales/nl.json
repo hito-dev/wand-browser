@@ -36,5 +36,21 @@
   "written": "Tekst geschreven",
   "binaryWritten": "Binair record geschreven",
   "height": "Consolehoogte: {percent}%",
-  "siteControls": "Site-instellingen"
+  "siteControls": "Site-instellingen",
+  "support": "Wand Browser-ondersteuning",
+  "supportDescription": "Hulp bij Wand Browser, Bluetooth, NFC, websiterechten en websitegegevens op iPhone.",
+  "supportIssues": "een GitHub-issue openen",
+  "supportProduct": "Wand-productpagina",
+  "supportContact": "Hulp nodig, een fout gevonden of een functieverzoek? Mail {email} of {issues}.",
+  "supportSafety": "Vermeld je iPhone-model, iOS- en Wand-versies, stappen om het probleem te herhalen en indien relevant de website en het apparaat- of tagmodel. Verwijder privégegevens uit schermafbeeldingen en logs. Stuur nooit wachtwoorden, herstelzinnen, privésleutels of gevoelige taginhoud. GitHub-issues zijn openbaar.",
+  "supportStartTitle": "Aan de slag",
+  "supportStart": "Vereist iOS 18 of nieuwer. Bluetooth en NFC vereisen een fysieke iPhone en compatibele hardware. Probeer {fixture} in Wand of bezoek {product}.",
+  "supportBleTitle": "Bluetooth-apparaat verschijnt niet of maakt geen verbinding",
+  "supportBle": "Zet Bluetooth aan in de iPhone-instellingen en geef Wand toegang. Houd het apparaat dichtbij, wakker en adverterend. Filters en diensten van de website moeten overeenkomen; de test toont alleen namen die met hito of Hito beginnen. Kies in Wands eigen apparaatkiezer; alleen koppelen in Instellingen geeft een website geen toegang. Controleer bij fouten andere verbindingen en probeer opnieuw. Wand ondersteunt een deel van Web Bluetooth via BLE GATT-diensten en -kenmerken.",
+  "supportNfcTitle": "NFC-tag leest of schrijft niet",
+  "supportNfc": "Start de scan van de website en houd een compatibele NDEF-tag bij de bovenkant van de iPhone terwijl de NFC-systeeminterface open is. Houd Wand op de voorgrond; start opnieuw als de sessie verloopt. Schrijven vereist een beschrijfbare NDEF-tag met genoeg ruimte en vervangt bestaande inhoud: gebruik eigen testtags. Web NFC leest geen betaalkaarten en emuleert geen NFC-kaarten.",
+  "supportPermissionsTitle": "Websiterechten",
+  "supportPermissions": "Hardware-API’s vereisen een HTTPS-pagina op het hoogste niveau en Wand op de voorgrond; ingebedde frames kunnen de bridge niet gebruiken. Keur het verzoek goed en kies het te delen Bluetooth-apparaat. Toegang eindigt bij een nieuw document, herladen, naar de achtergrond gaan of intrekken in Site controls. Vraag daarna opnieuw toegang. Controleer Site controls als toegang geweigerd is.",
+  "supportDataTitle": "Websitegegevens of geschiedenis wissen",
+  "supportData": "Site controls → Clear website data verwijdert opslag, cookies en caches. Dit kan je afmelden en verwijdert opgeslagen voorkeuren voor volledig scherm per site. Clear naast Recent pages op het startscherm wist de geschiedenis. Dit zijn aparte acties."
 }
