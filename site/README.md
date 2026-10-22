@@ -25,9 +25,9 @@ metadata and the sitemap. There are no automatic language redirects.
 Support copy lives in every locale file. `/support/` stays English, while the other
 locales use routes such as `/de/support/`, with translated navigation, Markdown,
 and discovery metadata. App-control names in support instructions remain English.
-The persistent top-left flag-and-code language switcher uses native HTML details
+The persistent top-right flag-and-code language switcher uses native HTML details
 and ordinary links, with Escape dismissal enhanced by `assets/languages.js`.
-It stays at the physical left in RTL layouts and above the fixture scroll panels.
+It stays at the physical right in RTL layouts and above the fixture scroll panels.
 
 The native screenshot capture test targets iPhone 17 Pro. Run it separately with
 `WAND_FIXTURE_URL` pointing to an HTTPS generated fixture directory; export its
