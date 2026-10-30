@@ -13,6 +13,7 @@
     <key>ITSAppUsesNonExemptEncryption</key><false/>
     <key>LSRequiresIPhoneOS</key><true/>
     <key>NSBluetoothAlwaysUsageDescription</key><string>Connect to nearby Bluetooth devices you choose for the website you are visiting.</string>
+    <key>NSCameraUsageDescription</key><string>Allow websites you approve to show video from your camera while you use the page.</string>
     <key>NFCReaderUsageDescription</key><string>Read and write NFC tags for websites you allow during this visit.</string>
     <key>NSAppTransportSecurity</key>
     <dict><key>NSAllowsArbitraryLoadsInWebContent</key><true/></dict>

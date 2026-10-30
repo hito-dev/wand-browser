@@ -27,6 +27,16 @@
   button, input, a { font: inherit; padding: 12px; margin: 6px 0; }
   button { display: block; min-height: 44px; max-width: 100%; }
   input { width: 100%; }
+  #camera-preview {
+    display: block;
+    width: 100%;
+    max-height: min(52vh, 28rem);
+    margin: 12px 0;
+    border-radius: 12px;
+    background: #000;
+    object-fit: contain;
+  }
+  #camera-preview[hidden] { display: none; }
   #console {
     position: relative;
     min-height: 0;

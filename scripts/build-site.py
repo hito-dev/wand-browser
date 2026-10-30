@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ORIGIN = 'https://wand.hito.ai'
 SOURCE = 'https://github.com/hito-dev/wand-browser'
 PAGES = {'home': '', 'fixture': 'fixtures/bridge.html', 'bluetooth': 'web-bluetooth-iphone/', 'nfc': 'web-nfc-iphone/', 'support': 'support/'}
-LOG_KEYS = ('selected', 'connected', 'disconnected', 'read', 'unavailable', 'readingError', 'active', 'written', 'binaryWritten', 'height')
+LOG_KEYS = ('selected', 'connected', 'disconnected', 'read', 'unavailable', 'readingError', 'active', 'written', 'binaryWritten', 'cameraActive', 'cameraStopped', 'height')
 
 def load_content(source=ROOT / 'site'):
     registry = json.loads((source / 'languages.json').read_text())
@@ -109,7 +109,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
             assert url not in urls, 'Duplicate route: ' + url
             urls.append(url)
             navigation = nav(locale, page, d)
-            blocks = {'home': [d['intro'], d['requirements'], d['install']], 'fixture': [d['fixtureIntro'], d['bleGuide'], d['nfcGuide'], d['trouble']], 'bluetooth': [d['bleGuide'], d['requirements'], d['trouble']], 'nfc': [d['nfcGuide'], d['requirements'], d['trouble']]}
+            blocks = {'home': [d['intro'], d['requirements'], d['install']], 'fixture': [d['fixtureIntro'], d['bleGuide'], d['nfcGuide'], d['cameraGuide'], d['trouble']], 'bluetooth': [d['bleGuide'], d['requirements'], d['trouble']], 'nfc': [d['nfcGuide'], d['requirements'], d['trouble']]}
             blocks['support'] = support_blocks(d, locale)
             description = blocks[page][0]
             mirror = url + ('index.md' if url.endswith('/') else '.md')
@@ -124,7 +124,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
                 # Keep the trusted scripts separate from translated data. Escape < even inside JSON.
                 data = json.dumps({k:d[k] for k in LOG_KEYS},ensure_ascii=False).replace('<','\\u003c')
                 init = '<script id="fixture-messages" type="application/json">'+data+'</script><script src="/assets/fixture-i18n.js"></script><script src="/assets/fixture-layout.js"></script><script type="module" src="/assets/fixture-actions.js"></script>'
-                body = Template((source / 'templates/fixture.html').read_text()).substitute(**{k:esc(v) for k,v in d.items()},navigation=navigation+paragraphs(d['bleGuide'],d['nfcGuide'],d['trouble'])+footer)
+                body = Template((source / 'templates/fixture.html').read_text()).substitute(**{k:esc(v) for k,v in d.items()},navigation=navigation+paragraphs(d['bleGuide'],d['nfcGuide'],d['cameraGuide'],d['trouble'])+footer)
                 body = language_control + body + init
             else:
                 head += '<script defer src="/assets/languages.js"></script></head><body>'
@@ -138,7 +138,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
             md = '# {}\n\n{}\n\n'.format(d[page], '\n\n'.join(blocks[page]))
             md += '\n'.join('- [{}]({})'.format(d[p],ORIGIN+route(locale,p)) for p in PAGES)+'\n\n[{}]({})\n[{}]({}/privacy/)\n'.format(d['source'],SOURCE,d['privacy'],ORIGIN)
             if page=='fixture':
-                md += '\n'+'\n'.join('- '+d[k] for k in ('choose','scan','stop','text','write','binary','resize','console'))+'\n'
+                md += '\n'+'\n'.join('- '+d[k] for k in ('choose','scan','stop','text','write','binary','cameraStart','cameraStop','resize','console'))+'\n'
             write(output,mirror,md)
             llms += '- [{}]({}) — [Markdown]({})\n'.format(d[page], ORIGIN+url, ORIGIN+mirror)
         llms += '\n[{}]({})\n[{}]({}/privacy/)\n[MIT]({}/LICENSE.txt)\n'.format(d['source'],SOURCE,d['privacy'],ORIGIN,ORIGIN)
@@ -150,7 +150,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
         if metadata and locale['apple']:
             directory = metadata / locale['apple']
             directory.mkdir(parents=True,exist_ok=True)
-            fields = {'betaAppDescription':d['intro']+'\n\n'+d['requirements'], 'whatToTest': d['testing']+'\n\n'+d['bleGuide']+'\n\n'+d['nfcGuide']+'\n\n'+d['trouble'], 'feedbackEmail':'support-wand@hito.ai', 'marketingUrl':ORIGIN+route(locale,'home'), 'privacyPolicyUrl':ORIGIN+'/privacy/'}
+            fields = {'betaAppDescription':d['intro']+'\n\n'+d['requirements'], 'whatToTest': d['testing']+'\n\n'+d['bleGuide']+'\n\n'+d['nfcGuide']+'\n\n'+d['cameraGuide']+'\n\n'+d['trouble'], 'feedbackEmail':'support-wand@hito.ai', 'marketingUrl':ORIGIN+route(locale,'home'), 'privacyPolicyUrl':ORIGIN+'/privacy/'}
             for key in ('betaAppDescription','whatToTest'):
                 assert len(fields[key]) <= 4000, (locale['code'],key,'Apple field too long')
             (directory / 'metadata.json').write_text(json.dumps(fields,ensure_ascii=False,indent=2)+'\n')

@@ -1,6 +1,63 @@
 
 const run = action => async () => { try { await action(); } catch (e) { log(`${e.name}: ${e.message}`); } };
 let reader, abort;
+let cameraStream;
+let cameraGeneration = 0;
+const cameraStart = document.querySelector("#camera-start");
+const cameraStop = document.querySelector("#camera-stop");
+const cameraPreview = document.querySelector("#camera-preview");
+
+function resetCamera(stream = cameraStream) {
+  cameraGeneration += 1;
+  stream?.getTracks().forEach(track => track.stop());
+  if (!stream || stream === cameraStream) cameraStream = undefined;
+  cameraPreview.pause();
+  cameraPreview.srcObject = null;
+  cameraPreview.hidden = true;
+  cameraStart.disabled = false;
+  cameraStop.disabled = true;
+}
+
+cameraStart.onclick = run(async () => {
+  resetCamera();
+  const generation = cameraGeneration;
+  cameraStart.disabled = true;
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+  } catch (error) {
+    resetCamera();
+    throw error;
+  }
+  if (generation !== cameraGeneration) {
+    stream.getTracks().forEach(track => track.stop());
+    return;
+  }
+  cameraStream = stream;
+  cameraPreview.srcObject = stream;
+  cameraPreview.hidden = false;
+  cameraStop.disabled = false;
+  try {
+    await cameraPreview.play();
+  } catch (error) {
+    resetCamera(stream);
+    throw error;
+  }
+  for (const track of stream.getTracks()) {
+    track.addEventListener("ended", () => {
+      if (stream === cameraStream && stream.getTracks().every(item => item.readyState === "ended")) resetCamera(stream);
+    }, { once: true });
+  }
+  log(t("cameraActive"));
+});
+
+cameraStop.onclick = () => {
+  if (!cameraStream) return;
+  resetCamera();
+  log(t("cameraStopped"));
+};
+
+addEventListener("pagehide", () => resetCamera());
 document.querySelector("#ble").onclick = run(async () => {
   const device = await navigator.bluetooth.requestDevice({
     filters: [{ namePrefix: "hito" }, { namePrefix: "Hito" }],

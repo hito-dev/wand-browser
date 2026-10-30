@@ -1,7 +1,7 @@
 # Wand Browser
 
 An open-source iOS browser for developers. Test JavaScript web apps on iPhone
-with WebBluetooth (BLE/GATT) and WebNFC (NDEF tags).
+with camera video, WebBluetooth (BLE/GATT), and WebNFC (NDEF tags).
 
 ## Test your web app
 
@@ -11,6 +11,8 @@ nearby hardware.
 - **Bluetooth Low Energy:** select a device, connect to GATT services, read and
   write characteristics, and receive notifications through `navigator.bluetooth`.
 - **NFC:** read and write NDEF tags through `NDEFReader`.
+- **Camera:** request permission-controlled video through
+  `navigator.mediaDevices.getUserMedia()`.
 - **History:** reopen recent test pages from the home screen. Wand stores history
   on your device.
 
@@ -23,7 +25,7 @@ or revoke access in Site controls.
 This early version supports a subset of Web Bluetooth and Web NFC.
 Check the API calls your site uses against the
 [bridge implementation](ios/WandBrowser/Resources/HardwareBridge.js).
-Hardware access requires a top-level HTTPS page with Wand in the foreground.
+Hardware and camera access require a top-level HTTPS page with Wand in the foreground.
 NFC support is limited to NDEF tags.
 
 Use a physical iPhone and compatible hardware for BLE and NFC tests. The simulator

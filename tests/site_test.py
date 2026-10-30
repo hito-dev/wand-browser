@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import json
+import plistlib
 from pathlib import Path
 import shutil
 import tempfile
@@ -94,8 +95,11 @@ class SiteTests(unittest.TestCase):
     def test_fixture_contract_and_utilities(self):
         for r in self.registry:
             doc=Document(site.file_for(self.output,site.route(r,'fixture')).read_text())
-            for id in ('ble','scan','abort','text','write','binary','console','console-divider','log','child'):
+            for id in ('ble','scan','abort','text','write','binary','camera-start','camera-stop','camera-preview','console','console-divider','log','child'):
                 self.assertEqual(len([a for _,a in doc.elements if a.get('id')==id]),1)
+            preview=[a for t,a in doc.elements if t=='video' and a.get('id')=='camera-preview'][0]
+            for attribute in ('autoplay','muted','playsinline','hidden','aria-label'):
+                self.assertIn(attribute,preview)
             self.assertEqual(doc.matching('iframe')[0]['src'],'/fixtures/child.html')
             self.assertIn('hidden',doc.matching('iframe')[0])
             url=site.route(r,'fixture').replace('bridge.html','second.html')
@@ -103,6 +107,9 @@ class SiteTests(unittest.TestCase):
             self.assertTrue(utility.matching('meta',name='robots',content='noindex'))
         self.assertTrue(Document((self.output/'fixtures/child.html').read_text()).matching('meta',name='robots',content='noindex'))
         self.assertEqual((self.output/'privacy/index.html').read_bytes(),(site.ROOT/'ios/WandBrowser/Resources/PrivacyPolicy.html').read_bytes())
+        with (site.ROOT/'ios/WandBrowser/Info.plist').open('rb') as stream:
+            info=plistlib.load(stream)
+        self.assertTrue(info['NSCameraUsageDescription'].strip())
     def test_metadata_mapping_and_limits(self):
         self.assertEqual(len(list(self.metadata.glob('*/metadata.json'))),20)
         for r in self.registry:
