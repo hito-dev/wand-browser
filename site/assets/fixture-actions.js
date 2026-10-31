@@ -1,5 +1,6 @@
 
 const run = action => async () => { try { await action(); } catch (e) { log(`${e.name}: ${e.message}`); } };
+document.querySelector("#text").value = `https://example.com/?r=${String(Math.floor(Math.random() * 10000)).padStart(4, "0")}`;
 let reader, abort;
 let cameraStream;
 let cameraGeneration = 0;
