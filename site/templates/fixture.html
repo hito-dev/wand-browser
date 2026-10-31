@@ -7,8 +7,9 @@
 <label>$text <input id="text" value="Hello from Hito Wand"></label>
 <button id="write">$write</button>
 <button id="binary">$binary</button>
-<button id="camera-start">$cameraStart</button>
-<button id="camera-stop" disabled>$cameraStop</button>
+<!-- Temporarily hidden while testing iOS 0.3.0(6); inline styles also cover cached CSS. -->
+<button id="camera-start" hidden style="display: none">$cameraStart</button>
+<button id="camera-stop" hidden style="display: none" disabled>$cameraStop</button>
 <video id="camera-preview" autoplay muted playsinline hidden aria-label="$cameraPreview"></video>
 <p><a href="./second.html">$second</a></p>
 <p><a href="./second.html" target="_blank">$window</a></p>
