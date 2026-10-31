@@ -68,22 +68,48 @@ document.querySelector("#ble").onclick = run(async () => {
   log(t("connected"));
   device.ongattserverdisconnected = () => log(t("disconnected"));
 });
-document.querySelector("#scan").onclick = run(async () => {
-  reader ??= new NDEFReader();
-  abort = new AbortController();
-  reader.onreading = ({ message, serialNumber }) => {
-    log(t("read", {count: message.records.length, serial: serialNumber || t("unavailable")}));
-    for (const record of message.records) {
-      log(`${record.recordType}: ${record.recordType === "text" || record.recordType === "url"
-        ? new TextDecoder(record.encoding ?? "utf-8").decode(record.data)
-        : Array.from(new Uint8Array(record.data.buffer)).join(",")}`);
+const scanButton = document.querySelector("#scan");
+function stopNFCScan() {
+  abort?.abort();
+  scanButton.disabled = false;
+}
+scanButton.onclick = run(async () => {
+  if (abort && !abort.signal.aborted) return;
+  const controller = new AbortController();
+  const scanReader = new NDEFReader();
+  reader = scanReader;
+  abort = controller;
+  scanButton.disabled = true;
+  const current = () => abort === controller && !controller.signal.aborted;
+  scanReader.onreading = ({ message, serialNumber }) => {
+    if (!current()) return;
+    try {
+      log(t("read", {count: message.records.length, serial: serialNumber || t("unavailable")}));
+      for (const record of message.records) {
+        log(`${record.recordType}: ${record.recordType === "text" || record.recordType === "url"
+          ? new TextDecoder(record.encoding ?? "utf-8").decode(record.data)
+          : Array.from(new Uint8Array(record.data.buffer, record.data.byteOffset, record.data.byteLength)).join(",")}`);
+      }
+    } finally {
+      stopNFCScan();
     }
   };
-  reader.onreadingerror = () => log(t("readingError"));
-  await reader.scan({ signal: abort.signal });
-  log(t("active"));
+  scanReader.onreadingerror = () => {
+    if (!current()) return;
+    log(t("readingError"));
+    stopNFCScan();
+  };
+  try {
+    await scanReader.scan({ signal: controller.signal });
+    if (current()) log(t("active"));
+  } catch (error) {
+    const intentional = controller.signal.aborted;
+    if (abort === controller) stopNFCScan();
+    if (!intentional) throw error;
+  }
 });
-document.querySelector("#abort").onclick = () => abort?.abort();
+document.querySelector("#abort").onclick = stopNFCScan;
+addEventListener("pagehide", stopNFCScan);
 document.querySelector("#write").onclick = run(async () => {
   await (reader ?? new NDEFReader()).write(document.querySelector("#text").value);
   log(t("written"));
