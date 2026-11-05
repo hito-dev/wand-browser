@@ -6,7 +6,7 @@
   "nfc": "Web NFC lórí iPhone",
   "intro": "Wand Browser ń jẹ́ kí ojúlé HTTPS lo Bluetooth Low Energy àti NFC lórí iPhone. Ṣàwárí aṣàwákiri orísun ṣíṣí yìí, dán ohun èlò wò, kí o sì kọ́ ojúlé tó ń bá àwọn ẹ̀rọ tó wà nítòsí àti táàgì NDEF sọ̀rọ̀.",
   "requirements": "Ìráyè sí ohun èlò nílò iOS 18 tàbí ẹ̀yà tó tuntun jù bẹ́ẹ̀ lọ àti iPhone gidi. Ìṣàfilọ́lẹ̀ náà wà ní èdè Gẹ̀ẹ́sì ní báyìí. Ojúlé nílò HTTPS, ojú-ewé ìpele òkè àti àkókò lílò ní iwájú. Ojúlé kọ̀ọ̀kan nílò àṣẹ rẹ; àṣẹ parí nígbà tí o bá yí ojú-ewé padà, tún un gbé, lọ sí abẹ́lẹ̀ tàbí fagilé àṣẹ.",
-  "install": "Wo ìtọ́sọ́nà fífi sínú ẹ̀rọ lórí GitHub. Ṣí ojúlé yìí ní Wand Browser, lẹ́yìn náà ṣí ìdánwò ohun èlò. Ìpè TestFlight fún gbogbo ènìyàn kò tíì sí níbí.",
+  "install": "Fi sori ẹrọ láti App Store tàbí darapọ̀ mọ́ beta TestFlight.",
   "bleGuide": "Tẹ “Yan ẹ̀rọ Bluetooth” láti ṣí àṣàyàn ẹ̀rọ. Ìdánwò yìí ń wá àwọn ẹ̀rọ tí orúkọ wọn bẹ̀rẹ̀ pẹ̀lú hito tàbí Hito, ó sì ń béèrè UUID iṣẹ́ Hito. Yan àpò owó ìdánwò tirẹ tó bá a mu; ìdánwò yóò sopọ̀ mọ́ olupèsè GATT rẹ̀, yóò sì fi ìṣẹ̀lẹ̀ ìsopọ̀ hàn. Àwọn ojúlé mìíràn gbọ́dọ̀ béèrè àlẹ̀mọ́ àti iṣẹ́ tiwọn. Síso ẹ̀rọ pọ̀ nìkan kò fún ojúlé ní ààyè.",
   "nfcGuide": "Tẹ “Ṣàyẹ̀wò NFC”, kí o sì mú táàgì NDEF tó bá a mu sún mọ́ òkè iPhone. Pátákó ìfiránṣẹ́ ń fi irú àkọsílẹ̀ àti dátà hàn. Dá àyẹ̀wò dúró kí o tó yí iṣẹ́ padà. Láti kọ, lo táàgì ìdánwò tirẹ tí a lè kọ sí: tẹ ọ̀rọ̀ sí i tàbí dán àkọsílẹ̀ alákọ̀ọ́méjì wò. Kíkọ máa ń rọ́pò ohun tó wà nínú táàgì. Ìdánwò yìí kì í ka káàdì ìsanwó tàbí fara wé káàdì NFC.",
   "cameraGuide": "Tẹ “Bẹ̀rẹ̀ kámẹ́rà”, gba ojúlé àti iOS láàyè, kí o sì jẹ́rìí pé fídíò láàyè hàn. Tẹ “Dá kámẹ́rà dúró” nígbà tí o bá parí. Ìdánwò náà béèrè fídíò nìkan, kì í béèrè gbohùngbohùn tàbí ibi ìkójọpọ̀ fọ́tò.",

@@ -130,6 +130,8 @@ def build(output, metadata=None, source=ROOT / 'site'):
                 head += '<script defer src="/assets/languages.js"></script></head><body>'
                 body = '<main><h1>{}</h1>{}{}'.format(esc(d[page]),navigation,support_html(d,locale) if page == 'support' else paragraphs(*blocks[page]))
                 body = language_control + body
+                if page == 'home':
+                    body += '<p><a href="https://apps.apple.com/app/wand-browser/id6826445524">App Store</a> &middot; <a href="https://testflight.apple.com/join/FMfeBmFW">TestFlight (Beta)</a></p>'
                 body += '<p><a href="{}">{}</a> · <a href="{}#readme">{}</a></p>'.format(route(locale,'fixture'),esc(d['fixture']),SOURCE,esc(d['source']))
                 if page == 'home' and (output / 'assets/screenshots/home.png').exists():
                     body += '<div class="gallery">'+''.join('<figure><a href="/assets/screenshots/{0}.png"><img src="/assets/screenshots/{0}.png" alt="{1}" width="1206" height="2622" loading="lazy"></a><figcaption>{1}</figcaption></figure>'.format(name,esc(d[label])) for name,label in [('home','home'),('fixture','fixture'),('site-controls','siteControls')])+'</div>'
@@ -137,6 +139,8 @@ def build(output, metadata=None, source=ROOT / 'site'):
             write(output,url,head+body+'</body></html>\n')
             md = '# {}\n\n{}\n\n'.format(d[page], '\n\n'.join(blocks[page]))
             md += '\n'.join('- [{}]({})'.format(d[p],ORIGIN+route(locale,p)) for p in PAGES)+'\n\n[{}]({})\n[{}]({}/privacy/)\n'.format(d['source'],SOURCE,d['privacy'],ORIGIN)
+            if page == 'home':
+                md += '\n[App Store](https://apps.apple.com/app/wand-browser/id6826445524)\n[TestFlight (Beta)](https://testflight.apple.com/join/FMfeBmFW)\n'
             if page=='fixture':
                 md += '\n'+'\n'.join('- '+d[k] for k in ('choose','scan','stop','text','write','binary','cameraStart','cameraStop','resize','console'))+'\n'
             write(output,mirror,md)

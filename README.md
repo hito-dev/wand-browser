@@ -3,6 +3,11 @@
 An open-source iOS browser for developers. Test JavaScript web apps on iPhone
 with camera video, WebBluetooth (BLE/GATT), and WebNFC (NDEF tags).
 
+## Install
+
+[App Store](https://apps.apple.com/app/wand-browser/id6826445524) |
+[TestFlight beta](https://testflight.apple.com/join/FMfeBmFW)
+
 ## Test your web app
 
 Open your HTTPS site in Wand to test its Web Bluetooth or Web NFC code against
