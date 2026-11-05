@@ -5,7 +5,12 @@ require 'pathname'
 
 root = File.expand_path('..', __dir__)
 ios = File.join(root, 'ios')
-project = Xcodeproj::Project.new(File.join(ios, 'WandBrowser.xcodeproj'))
+project_path = File.join(ios, 'WandBrowser.xcodeproj')
+existing_app = File.exist?(project_path) ? Xcodeproj::Project.open(project_path).targets.find { |target| target.name == 'WandBrowser' } : nil
+existing_settings = existing_app&.build_configurations&.find { |config| config.name == 'Release' }&.build_settings || {}
+app_version = existing_settings.fetch('MARKETING_VERSION', '0.3.2')
+app_build = existing_settings.fetch('CURRENT_PROJECT_VERSION', '9')
+project = Xcodeproj::Project.new(project_path)
 project.root_object.attributes['LastUpgradeCheck'] = '2660'
 app = project.new_target(:application, 'WandBrowser', :ios, '18.0')
 unit = project.new_target(:unit_test_bundle, 'WandBrowserTests', :ios, '18.0')
@@ -35,15 +40,15 @@ signing = project.main_group.new_file('Signing.xcconfig')
     settings['IPHONEOS_DEPLOYMENT_TARGET'] = '18.0'
     settings['TARGETED_DEVICE_FAMILY'] = '1'
     settings['CODE_SIGN_STYLE'] = 'Automatic'
-    # Both configurations are beta builds; Release archives are intended for TestFlight.
-    settings['PRODUCT_BUNDLE_IDENTIFIER'] = target == app ? 'ai.hito.wand.dev' : "ai.hito.wand.dev.#{target.name}"
-    settings['MARKETING_VERSION'] = target == app ? '0.3.0' : '0.1.0'
-    settings['CURRENT_PROJECT_VERSION'] = target == app ? '5' : '4'
+    # Release uses the production App Store identity; Debug remains separate.
+    settings['PRODUCT_BUNDLE_IDENTIFIER'] = target == app ? (config.name == 'Release' ? 'ai.hito.wand' : 'ai.hito.wand.dev') : "ai.hito.wand.dev.#{target.name}"
+    settings['MARKETING_VERSION'] = target == app ? app_version : '0.1.0'
+    settings['CURRENT_PROJECT_VERSION'] = target == app ? app_build : '4'
     settings['GENERATE_INFOPLIST_FILE'] = target == app ? 'NO' : 'YES'
     settings['SWIFT_EMIT_LOC_STRINGS'] = 'YES'
     settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'YES'
     settings['SUPPORTED_PLATFORMS'] = 'iphoneos iphonesimulator'
-    settings['WAND_FIXTURE_URL'] = 'https://hito-dev.github.io/wand-browser/fixtures/'
+    settings['WAND_FIXTURE_URL'] = 'https://wand.hito.ai/fixtures/'
     config.base_configuration_reference = signing
     if target == app
       settings['ASSETCATALOG_COMPILER_APPICON_NAME'] = 'AppIcon'

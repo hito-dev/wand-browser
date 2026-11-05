@@ -385,7 +385,7 @@
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = WandBrowser;
 				VALIDATE_PRODUCT = YES;
-				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
+				WAND_FIXTURE_URL = "https://wand.hito.ai/fixtures/";
 			};
 			name = Release;
 		};
@@ -511,7 +511,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = WandBrowser/WandBrowser.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = KUV9LF7VX6;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -520,8 +520,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.3.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev;
+				MARKETING_VERSION = 0.3.2;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -529,7 +529,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
-				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
+				WAND_FIXTURE_URL = "https://wand.hito.ai/fixtures/";
 			};
 			name = Release;
 		};
@@ -554,7 +554,7 @@
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WandBrowser.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WandBrowser";
 				VALIDATE_PRODUCT = YES;
-				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
+				WAND_FIXTURE_URL = "https://wand.hito.ai/fixtures/";
 			};
 			name = Release;
 		};
@@ -577,7 +577,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = WandBrowser;
-				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
+				WAND_FIXTURE_URL = "https://wand.hito.ai/fixtures/";
 			};
 			name = Debug;
 		};
@@ -601,7 +601,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WandBrowser.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WandBrowser";
-				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
+				WAND_FIXTURE_URL = "https://wand.hito.ai/fixtures/";
 			};
 			name = Debug;
 		};
@@ -613,7 +613,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = WandBrowser/WandBrowser.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = KUV9LF7VX6;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -622,7 +622,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.3.0;
+				MARKETING_VERSION = 0.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = ai.hito.wand.dev;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -630,7 +630,7 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				WAND_FIXTURE_URL = "https://hito-dev.github.io/wand-browser/fixtures/";
+				WAND_FIXTURE_URL = "https://wand.hito.ai/fixtures/";
 			};
 			name = Debug;
 		};

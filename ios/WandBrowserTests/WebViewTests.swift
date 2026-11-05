@@ -11,7 +11,7 @@ import UIKit
 struct WebViewTests {
     var fixtureBase: URL {
         get throws {
-            let value = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? "https://hito-dev.github.io/wand-browser/fixtures/"
+            let value = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? "https://wand.hito.ai/fixtures/"
             guard let url = URL(string: value), url.scheme == "https", let host = url.host, !host.isEmpty,
                   url.user == nil, url.password == nil, url.query == nil, url.fragment == nil else {
                 throw WebError("TypeError", "WAND_FIXTURE_URL must be an HTTPS directory URL without credentials, query, or fragment.")
