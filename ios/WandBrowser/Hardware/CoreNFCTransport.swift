@@ -1,10 +1,23 @@
 import Foundation
+import OSLog
 @preconcurrency import CoreNFC
 
 @MainActor
 final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFReaderSessionDelegate {
     var onEvent: ((String, JSONValue) -> Void)?
     var onStatus: ((String, Bool) -> Void)?
+    private static let diagnostics = Logger(subsystem: "ai.hito.wand", category: "NFC")
+
+    // Log lifecycle stages and native error codes, never tag identifiers or contents.
+    private func trace(_ stage: String, error: Error? = nil) {
+        if let error {
+            let native = error as NSError
+            Self.diagnostics.debug("stage=\(stage, privacy: .public) domain=\(native.domain, privacy: .public) code=\(native.code)")
+        } else {
+            Self.diagnostics.debug("stage=\(stage, privacy: .public)")
+        }
+    }
+
     private var session: NFCNDEFReaderSession?
     private var activated = false
     private var readers: [String: String] = [:] // scan request -> reader
@@ -56,11 +69,13 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
         let next = NFCNDEFReaderSession(delegate: self, queue: .main, invalidateAfterFirstRead: false)
         next.alertMessage = pendingWrite == nil ? "Hold your iPhone near an NFC tag to read it." : "Hold your iPhone near the tag you want to write."
         session = next; activated = false
+        trace("session.begin")
         next.begin()
         onStatus?("Starting NFC…", false)
     }
     func readerSessionDidBecomeActive(_ session: NFCNDEFReaderSession) {
         guard self.session === session else { return }
+        trace("session.active")
         activated = true
         let pending = starting
         starting.removeAll()
@@ -69,6 +84,7 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
     }
     func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
         guard self.session === session else { return }
+        trace("session.invalidated", error: error)
         self.session = nil; activated = false; tag = nil; tagBusy = false
         pollTask?.cancel(); pollTask = nil
         let code = (error as NSError).code
@@ -88,9 +104,11 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
         onStatus?(cancelled ? "NFC scan cancelled" : "NFC scan ended", !readers.isEmpty)
     }
     func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
+        trace("delegate.ndefMessages")
         // Read/write delegate mode uses didDetect tags instead.
     }
     func readerSession(_ session: NFCNDEFReaderSession, didDetect tags: [any NFCNDEFTag]) {
+        trace("delegate.tags")
         guard self.session === session, !tagBusy else { return }
         guard tags.count == 1, let detected = tags.first else {
             session.alertMessage = "More than one tag found. Present just one tag."
@@ -100,10 +118,12 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
         tagBusy = true
         tag = detected
         let sessionID = ObjectIdentifier(session)
+        trace("tag.connect.begin")
         session.connect(to: detected) { [weak self] error in
             MainActor.assumeIsolated {
                 guard let self, let session = self.session, ObjectIdentifier(session) == sessionID,
                       let detected = self.tag else { return }
+                self.trace("tag.connect.completed", error: error)
                 self.tagBusy = false
                 if let error { self.tagFailure(error, in: session); return }
                 self.process(detected, in: session)
@@ -115,11 +135,13 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
         pollTask?.cancel(); pollTask = nil
         tagBusy = true
         let sessionID = ObjectIdentifier(session)
+        trace("tag.ndefStatus.begin")
         tag.queryNDEFStatus { [weak self] status, capacity, error in
             MainActor.assumeIsolated {
                 guard let self, let session = self.session, ObjectIdentifier(session) == sessionID,
                       let tag = self.tag else { return }
                 if let error { self.tagFailure(error, in: session); return }
+                self.trace("tag.ndefStatus.completed")
                 guard status != .notSupported else {
                     self.tagFailure(WebError("NotSupportedError", "This tag is not NDEF formatted."), in: session); return
                 }
@@ -134,7 +156,8 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
                     }
                     if !write.overwrite {
                         let requestID = write.request
-                        tag.readNDEF { [weak self] message, error in
+                        self.trace("tag.read.begin")
+                    tag.readNDEF { [weak self] message, error in
                             let empty = message?.records.allSatisfy { $0.typeNameFormat == .empty } ?? true
                             MainActor.assumeIsolated {
                                 guard let self, let session = self.session, ObjectIdentifier(session) == sessionID,
@@ -149,6 +172,7 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
                         }
                     } else { self.performWrite(write, to: tag, in: session) }
                 } else {
+                    self.trace("tag.read.begin")
                     tag.readNDEF { [weak self] message, error in
                         let decoded: Result<[NDEFRecord], WebError>
                         do { decoded = .success(try (message?.records ?? []).map { try NDEFRecord.decode($0) }) }
@@ -159,6 +183,7 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
                             if let error { self.tagFailure(error, in: session); return }
                             do {
                                 let records = try decoded.get()
+                                self.trace("tag.read.decoded")
                                 for reader in self.readers.values {
                                     self.onEvent?("nfc.reading", .object(["reader": .string(reader), "serialNumber": .string(""),
                                                                       "records": .array(records.map(\.json))]))
@@ -177,6 +202,7 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
         guard pendingWrite?.request == write.request else { restartPolling(in: session); return }
         let sessionID = ObjectIdentifier(session)
         let requestID = write.request
+        trace("tag.write.begin")
         tag.writeNDEF(write.message) { [weak self] error in
             MainActor.assumeIsolated {
                 guard let self, let session = self.session, ObjectIdentifier(session) == sessionID,
@@ -190,6 +216,7 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
         }
     }
     private func tagFailure(_ error: Error, in session: NFCNDEFReaderSession) {
+        trace("tag.failure", error: error)
         let error = error as? WebError ?? WebError("NotReadableError", error.localizedDescription)
         finishWrite(.failure(error))
         for reader in readers.values { onEvent?("nfc.error", .object(["reader": .string(reader), "error": error.json])) }
@@ -246,6 +273,7 @@ final class CoreNFCTransport: NSObject, NFCTransport, @preconcurrency NFCNDEFRea
         previous?.invalidate()
     }
     func reset() {
+        trace("session.reset")
         for continuation in starting.values { continuation.resume(throwing: WebError.aborted) }
         starting.removeAll(); readers.removeAll()
         finishWrite(.failure(.aborted))
