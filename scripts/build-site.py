@@ -124,7 +124,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
                 # Keep the trusted scripts separate from translated data. Escape < even inside JSON.
                 data = json.dumps({k:d[k] for k in LOG_KEYS},ensure_ascii=False).replace('<','\\u003c')
                 init = '<script id="fixture-messages" type="application/json">'+data+'</script><script src="/assets/fixture-i18n.js"></script><script src="/assets/fixture-layout.js"></script><script type="module" src="/assets/fixture-actions.js"></script>'
-                body = Template((source / 'templates/fixture.html').read_text()).substitute(**{k:esc(v) for k,v in d.items()},navigation=navigation+paragraphs(d['bleGuide'],d['nfcGuide'],d['cameraGuide'],d['trouble'])+footer)
+                body = Template((source / 'templates/fixture.html').read_text()).substitute(**{k:esc(v) for k,v in d.items()},navigation=navigation+paragraphs(d['bleGuide'],d['cameraGuide'],d['trouble'])+footer)
                 body = language_control + body + init
             else:
                 head += '<script defer src="/assets/languages.js"></script></head><body>'
