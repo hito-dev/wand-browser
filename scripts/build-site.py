@@ -142,7 +142,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
             if page == 'home':
                 md += '\n[App Store](https://apps.apple.com/app/wand-browser/id6826445524)\n[TestFlight (Beta)](https://testflight.apple.com/join/FMfeBmFW)\n'
             if page=='fixture':
-                md += '\n'+'\n'.join('- '+d[k] for k in ('choose','scan','stop','text','write','binary','cameraStart','cameraStop','resize','console'))+'\n'
+                md += '\n'+'\n'.join('- '+d[k] for k in ('choose','scan','stop','text','write','binary','cameraChoice','cameraRear','cameraFront','cameraStart','cameraStop','resize','console'))+'\n'
             write(output,mirror,md)
             llms += '- [{}]({}) — [Markdown]({})\n'.format(d[page], ORIGIN+url, ORIGIN+mirror)
         llms += '\n[{}]({})\n[{}]({}/privacy/)\n[MIT]({}/LICENSE.txt)\n'.format(d['source'],SOURCE,d['privacy'],ORIGIN,ORIGIN)

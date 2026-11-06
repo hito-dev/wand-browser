@@ -4,6 +4,7 @@ document.querySelector("#text").value = `https://example.com/?r=${String(Math.fl
 let reader, abort;
 let cameraStream;
 let cameraGeneration = 0;
+const cameraFacing = document.querySelector("#camera-facing");
 const cameraStart = document.querySelector("#camera-start");
 const cameraStop = document.querySelector("#camera-stop");
 const cameraPreview = document.querySelector("#camera-preview");
@@ -15,6 +16,7 @@ function resetCamera(stream = cameraStream) {
   cameraPreview.pause();
   cameraPreview.srcObject = null;
   cameraPreview.hidden = true;
+  cameraFacing.disabled = false;
   cameraStart.disabled = false;
   cameraStop.disabled = true;
 }
@@ -22,10 +24,11 @@ function resetCamera(stream = cameraStream) {
 cameraStart.onclick = run(async () => {
   resetCamera();
   const generation = cameraGeneration;
+  cameraFacing.disabled = true;
   cameraStart.disabled = true;
   let stream;
   try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: cameraFacing.value } }, audio: false });
   } catch (error) {
     resetCamera();
     throw error;
@@ -49,8 +52,13 @@ cameraStart.onclick = run(async () => {
       if (stream === cameraStream && stream.getTracks().every(item => item.readyState === "ended")) resetCamera(stream);
     }, { once: true });
   }
+  cameraFacing.disabled = false;
   log(t("cameraActive"));
 });
+
+cameraFacing.onchange = () => {
+  if (cameraStream) return cameraStart.onclick();
+};
 
 cameraStop.onclick = () => {
   if (!cameraStream) return;

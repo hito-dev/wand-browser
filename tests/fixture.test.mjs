@@ -17,6 +17,7 @@ function cameraFixture(getUserMedia, NDEFReader = class {}) {
   const logs = [];
   const events = {};
   const elements = Object.fromEntries(['ble', 'scan', 'abort', 'text', 'write', 'binary', 'camera-start', 'camera-stop'].map(id => [id, { disabled: id === 'camera-stop' }]));
+  elements['camera-facing'] = { value: 'environment', disabled: false };
   elements['camera-preview'] = {
     hidden: true,
     srcObject: null,
@@ -59,7 +60,7 @@ test('camera fixture starts video, replaces old tracks, and stops cleanly', asyn
   const ui = cameraFixture(async constraints => { calls.push(constraints); return streams.shift(); });
 
   await ui.elements['camera-start'].onclick();
-  assert.equal(JSON.stringify(calls[0]), JSON.stringify({ video: true, audio: false }));
+  assert.equal(JSON.stringify(calls[0]), JSON.stringify({ video: { facingMode: { ideal: 'environment' } }, audio: false }));
   assert.equal(ui.elements['camera-preview'].srcObject, first.stream);
   assert.equal(ui.elements['camera-preview'].hidden, false);
   assert.equal(ui.elements['camera-preview'].playCalls, 1);
@@ -67,7 +68,9 @@ test('camera fixture starts video, replaces old tracks, and stops cleanly', asyn
   assert.equal(ui.elements['camera-stop'].disabled, false);
   assert.deepEqual(ui.logs, ['cameraActive']);
 
-  await ui.elements['camera-start'].onclick();
+  ui.elements['camera-facing'].value = 'user';
+  await ui.elements['camera-facing'].onchange();
+  assert.equal(calls[1].video.facingMode.ideal, 'user');
   assert.equal(first.track.stopCalls, 1);
   assert.equal(ui.elements['camera-preview'].srcObject, second.stream);
   ui.elements['camera-stop'].onclick();
@@ -178,4 +181,38 @@ test('NFC fixture recovers from permission denial and cancellation before activa
   await start;
   assert.equal(pending.elements.scan.disabled, false);
   assert.deepEqual(pending.logs, []);
+});
+
+
+test('camera switching releases the old stream before requesting and recovers from failure', async () => {
+  const first = streamFixture();
+  let calls = 0;
+  const ui = cameraFixture(async () => {
+    if (++calls === 1) return first.stream;
+    assert.equal(first.track.stopCalls, 1);
+    throw Object.assign(new Error('unavailable'), { name: 'NotReadableError' });
+  });
+  await ui.elements['camera-start'].onclick();
+  ui.elements['camera-facing'].value = 'user';
+  await ui.elements['camera-facing'].onchange();
+  assert.equal(ui.elements['camera-facing'].disabled, false);
+  assert.equal(ui.elements['camera-start'].disabled, false);
+  assert.equal(ui.elements['camera-preview'].srcObject, null);
+});
+
+test('camera selector is disabled during acquisition and late switches are discarded on exit', async () => {
+  const first = streamFixture();
+  const late = streamFixture();
+  let resolve;
+  let calls = 0;
+  const ui = cameraFixture(() => ++calls === 1 ? Promise.resolve(first.stream) : new Promise(done => { resolve = done; }));
+  await ui.elements['camera-start'].onclick();
+  ui.elements['camera-facing'].value = 'user';
+  const switching = ui.elements['camera-facing'].onchange();
+  assert.equal(ui.elements['camera-facing'].disabled, true);
+  ui.events.pagehide();
+  resolve(late.stream);
+  await switching;
+  assert.equal(late.track.stopCalls, 1);
+  assert.equal(ui.elements['camera-preview'].hidden, true);
 });

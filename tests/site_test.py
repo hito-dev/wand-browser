@@ -95,8 +95,11 @@ class SiteTests(unittest.TestCase):
     def test_fixture_contract_and_utilities(self):
         for r in self.registry:
             doc=Document(site.file_for(self.output,site.route(r,'fixture')).read_text())
-            for id in ('ble','scan','abort','text','write','binary','camera-start','camera-stop','camera-preview','console','console-divider','log','child'):
+            for id in ('ble','scan','abort','text','write','binary','camera-facing','camera-start','camera-stop','camera-preview','console','console-divider','log','child'):
                 self.assertEqual(len([a for _,a in doc.elements if a.get('id')==id]),1)
+            self.assertTrue(doc.matching('label', **{'for':'camera-facing'}))
+            self.assertTrue(doc.matching('option', value='environment', selected=None))
+            self.assertTrue(doc.matching('option', value='user'))
             preview=[a for t,a in doc.elements if t=='video' and a.get('id')=='camera-preview'][0]
             for attribute in ('autoplay','muted','playsinline','hidden','aria-label'):
                 self.assertIn(attribute,preview)

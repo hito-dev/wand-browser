@@ -24,7 +24,7 @@
       20px max(24px, env(safe-area-inset-left));
   }
   h1 { margin-top: 0; font-size: 1.6rem; }
-  button, input, a { font: inherit; padding: 12px; margin: 6px 0; }
+  button, input, select, a { font: inherit; padding: 12px; margin: 6px 0; }
   button { display: block; min-height: 44px; max-width: 100%; }
   input { width: 100%; }
   #camera-preview {
