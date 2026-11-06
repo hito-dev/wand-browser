@@ -26,9 +26,10 @@ cameraStart.onclick = run(async () => {
   const generation = cameraGeneration;
   cameraFacing.disabled = true;
   cameraStart.disabled = true;
+  const facing = cameraFacing.value;
   let stream;
   try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: cameraFacing.value } }, audio: false });
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: facing } }, audio: false });
   } catch (error) {
     resetCamera();
     throw error;
@@ -36,6 +37,11 @@ cameraStart.onclick = run(async () => {
   if (generation !== cameraGeneration) {
     stream.getTracks().forEach(track => track.stop());
     return;
+  }
+  const actualFacing = stream.getVideoTracks?.()[0]?.getSettings?.().facingMode;
+  if (actualFacing && actualFacing !== facing) {
+    resetCamera(stream);
+    throw new DOMException(`Requested ${facing} camera, but WebKit returned ${actualFacing}.`, "NotReadableError");
   }
   cameraStream = stream;
   cameraPreview.srcObject = stream;

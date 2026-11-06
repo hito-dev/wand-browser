@@ -28,6 +28,7 @@ function cameraFixture(getUserMedia, NDEFReader = class {}) {
   };
   const context = vm.createContext({
     AbortController,
+    DOMException,
     navigator: { mediaDevices: { getUserMedia } },
     document: { querySelector(selector) { return elements[selector.slice(1)]; } },
     addEventListener(name, handler) { const previous = events[name]; events[name] = () => { previous?.(); handler(); }; },
@@ -60,7 +61,7 @@ test('camera fixture starts video, replaces old tracks, and stops cleanly', asyn
   const ui = cameraFixture(async constraints => { calls.push(constraints); return streams.shift(); });
 
   await ui.elements['camera-start'].onclick();
-  assert.equal(JSON.stringify(calls[0]), JSON.stringify({ video: { facingMode: { ideal: 'environment' } }, audio: false }));
+  assert.equal(JSON.stringify(calls[0]), JSON.stringify({ video: { facingMode: { exact: 'environment' } }, audio: false }));
   assert.equal(ui.elements['camera-preview'].srcObject, first.stream);
   assert.equal(ui.elements['camera-preview'].hidden, false);
   assert.equal(ui.elements['camera-preview'].playCalls, 1);
@@ -70,7 +71,7 @@ test('camera fixture starts video, replaces old tracks, and stops cleanly', asyn
 
   ui.elements['camera-facing'].value = 'user';
   await ui.elements['camera-facing'].onchange();
-  assert.equal(calls[1].video.facingMode.ideal, 'user');
+  assert.equal(calls[1].video.facingMode.exact, 'user');
   assert.equal(first.track.stopCalls, 1);
   assert.equal(ui.elements['camera-preview'].srcObject, second.stream);
   ui.elements['camera-stop'].onclick();
@@ -215,4 +216,31 @@ test('camera selector is disabled during acquisition and late switches are disca
   await switching;
   assert.equal(late.track.stopCalls, 1);
   assert.equal(ui.elements['camera-preview'].hidden, true);
+});
+
+
+test('rear selection rejects a front stream returned by WebKit', async () => {
+  const active = streamFixture();
+  active.track.getSettings = () => ({ facingMode: 'user' });
+  active.stream.getVideoTracks = () => [active.track];
+  const ui = cameraFixture(async () => active.stream);
+  await ui.elements['camera-start'].onclick();
+  assert.equal(active.track.stopCalls, 1);
+  assert.equal(ui.elements['camera-preview'].hidden, true);
+  assert.equal(ui.elements['camera-start'].disabled, false);
+  assert.deepEqual(ui.logs, ['NotReadableError: Requested environment camera, but WebKit returned user.']);
+});
+
+test('rear camera unavailability is reported without falling back to front', async () => {
+  let calls = 0;
+  const ui = cameraFixture(async constraints => {
+    calls++;
+    assert.equal(constraints.video.facingMode.exact, 'environment');
+    throw new DOMException('Rear camera unavailable', 'OverconstrainedError');
+  });
+  await ui.elements['camera-start'].onclick();
+  assert.equal(calls, 1);
+  assert.equal(ui.elements['camera-preview'].hidden, true);
+  assert.equal(ui.elements['camera-facing'].disabled, false);
+  assert.deepEqual(ui.logs, ['OverconstrainedError: Rear camera unavailable']);
 });
