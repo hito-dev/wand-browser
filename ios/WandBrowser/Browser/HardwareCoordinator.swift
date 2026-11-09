@@ -114,6 +114,10 @@ final class HardwareCoordinator: NSObject, ObservableObject, WKScriptMessageHand
     }
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage,
                                replyHandler: @escaping @MainActor @Sendable (Any?, String?) -> Void) {
+        guard message.webView === webView, foreground else {
+            replyHandler(["error": WebError.aborted.json.foundation], nil)
+            return
+        }
         let frame = message.frameInfo
         let origin = SiteOrigin(scheme: frame.securityOrigin.protocol, host: frame.securityOrigin.host, port: frame.securityOrigin.port)
         receive(message.body, origin: origin, mainFrame: frame.isMainFrame, reply: replyHandler)

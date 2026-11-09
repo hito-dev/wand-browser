@@ -5,6 +5,8 @@ import ImageIO
 
 @MainActor
 final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUIDelegate {
+    let profile: SiteProfile?
+    @Published var externalDestination: URL?
     @Published var address = ""
     @Published var title = "Wand Browser"
     @Published var loading = false
@@ -145,13 +147,14 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
     let webView: WKWebView
     private var observers: [NSKeyValueObservation] = []
 
-    init(hardware: HardwareCoordinator = HardwareCoordinator(), dataStore: WKWebsiteDataStore = .default(), historyDefaults: UserDefaults = .standard) {
+    init(hardware: HardwareCoordinator = HardwareCoordinator(), dataStore: WKWebsiteDataStore = .default(), historyDefaults: UserDefaults = .standard, profile: SiteProfile? = nil) {
+        self.profile = profile
         self.historyDefaults = historyDefaults
         history = historyDefaults.data(forKey: Self.historyKey).flatMap { try? JSONDecoder().decode([HistoryEntry].self, from: $0) } ?? []
         fullscreenOrigins = Set(historyDefaults.stringArray(forKey: Self.fullscreenKey) ?? [])
         self.hardware = hardware
         let configuration = WKWebViewConfiguration()
-        configuration.websiteDataStore = dataStore
+        configuration.websiteDataStore = profile.map { WKWebsiteDataStore(forIdentifier: $0.id) } ?? dataStore
         configuration.preferences.isElementFullscreenEnabled = true
         let controller = configuration.userContentController
         controller.addScriptMessageHandler(hardware, contentWorld: .page, name: "wand")
@@ -218,6 +221,7 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
         load(url)
     }
     func load(_ url: URL) {
+        guard permitTopLevel(url) else { return }
         error = nil; showingHome = false
         webView.load(URLRequest(url: url))
     }
@@ -262,12 +266,46 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
             // Subframes retain WebKit's normal navigation behavior; the native hardware gate rejects them.
             decisionHandler(.allow); return
         }
+        if profile != nil && !(showingHome && url.absoluteString == "about:blank") && !permitTopLevel(url) {
+            decisionHandler(.cancel); return
+        }
         if url.absoluteString == "about:blank" { decisionHandler(.allow); return }
         guard ["https", "http"].contains(url.scheme?.lowercased() ?? "") else {
             error = "This link uses a URL scheme Wand Browser does not support."
             decisionHandler(.cancel); return
         }
         decisionHandler(.allow)
+    }
+    private func permitTopLevel(_ url: URL) -> Bool {
+        guard let profile else { return true }
+        guard profile.permits(url) else {
+            if ["https", "http"].contains(url.scheme?.lowercased() ?? ""), url.user == nil, url.password == nil {
+                externalDestination = url
+            }
+            return false
+        }
+        return true
+    }
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse,
+                 decisionHandler: @escaping @MainActor @Sendable (WKNavigationResponsePolicy) -> Void) {
+        guard navigationResponse.isForMainFrame, profile != nil else { decisionHandler(.allow); return }
+        guard let url = navigationResponse.response.url, permitTopLevel(url) else {
+            decisionHandler(.cancel); return
+        }
+        decisionHandler(.allow)
+    }
+
+    func retire() async {
+        webView.stopLoading()
+        dismissJavaScriptDialog()
+        hardware.navigationStarted()
+        hardware.setForeground(false)
+        webView.navigationDelegate = nil
+        webView.uiDelegate = nil
+        webView.configuration.userContentController.removeScriptMessageHandler(forName: "wand", contentWorld: .page)
+        await webView.setCameraCaptureState(.none)
+        await webView.setMicrophoneCaptureState(.none)
+        webView.removeFromSuperview()
     }
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         resetFavicon()
