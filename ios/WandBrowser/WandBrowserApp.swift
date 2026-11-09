@@ -11,7 +11,7 @@ struct WandBrowserApp: App {
         WindowGroup {
             VStack(spacing: 0) {
                 ProfileControls(session: session, browser: browser)
-                BrowserView(browser: browser).id(ObjectIdentifier(browser))
+                BrowserView(browser: browser).id(ObjectIdentifier(browser)).disabled(session.switching)
             }
                 .onChange(of: phase) { _, next in
                     // System permission/NFC sheets can make the scene inactive.
@@ -37,17 +37,26 @@ final class BrowserSession: ObservableObject {
         catch { self.error = error.localizedDescription }
     }
     func open(_ profile: SiteProfile?, url: URL? = nil) async {
-        guard !switching, profile?.deletionPending != true else { return }
+        guard !switching else { return }
+        if let profile {
+            guard registry?.profiles.contains(where: { $0.id == profile.id && !$0.deletionPending }) == true else { return }
+        }
         switching = true
         defer { switching = false }
+        let defaults: UserDefaults
+        if let profile {
+            guard let scoped = UserDefaults(suiteName: "browser.profile." + profile.id.uuidString) else {
+                error = "Could not open profile preferences."; return
+            }
+            defaults = scoped
+        } else { defaults = .standard }
         await browser.retire()
-        let defaults = profile.flatMap { UserDefaults(suiteName: "browser.profile." + $0.id.uuidString) } ?? .standard
         browser = BrowserModel(historyDefaults: defaults, profile: profile)
         if let url = url ?? profile.flatMap({ URL(string: $0.origin) }) { browser.load(url) }
     }
     func create(_ url: URL) async {
         do {
-            guard let registry else { return }
+            guard !switching, let registry else { return }
             let profile = try registry.createOrReopen(url)
             profiles = registry.profiles
             await open(profile, url: url)
@@ -79,8 +88,11 @@ private struct ProfileControls: View {
             Menu {
                 Button("Ordinary browsing") { Task { await session.open(nil) } }
                 ForEach(session.profiles) { profile in
-                    Button(profile.origin) { Task { await session.open(profile) } }
-                        .disabled(profile.deletionPending)
+                    if profile.deletionPending {
+                        Button("Retry deletion: " + profile.origin) { Task { await session.delete(profile) } }
+                    } else {
+                        Button(profile.origin) { Task { await session.open(profile) } }
+                    }
                 }
                 if let url = browser.currentURL, url.scheme == "https", browser.profile == nil {
                     Button("Open in site profile") { requestedURL = url }
@@ -101,7 +113,7 @@ private struct ProfileControls: View {
                 requestedURL = nil
             }
         } message: {
-            Text("This site will use separate storage and a fresh login. Top-level browsing stays on this exact HTTPS origin. Embedded content follows normal WebKit rules.")
+            Text("\(requestedURL.flatMap(SiteOrigin.init(url:))?.display ?? "This site") will use separate storage and a fresh login. Top-level browsing stays on this exact HTTPS origin. Embedded content follows normal WebKit rules.")
         }
         .confirmationDialog("Delete this profile and all its website data?", isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } })) {
             Button("Delete", role: .destructive) {

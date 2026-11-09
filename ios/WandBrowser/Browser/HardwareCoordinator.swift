@@ -34,6 +34,8 @@ final class HardwareCoordinator: NSObject, ObservableObject, WKScriptMessageHand
 
     private(set) var document = DocumentSession()
     private(set) var foreground = true
+    private var retired = false
+    func retire() { retired = true; foreground = false; invalidate() }
     weak var webView: WKWebView?
     var fullscreenState: () -> Bool = { false }
     var setFullscreen: ((Bool) throws -> Void)?
@@ -94,7 +96,7 @@ final class HardwareCoordinator: NSObject, ObservableObject, WKScriptMessageHand
                                     in: nil, in: .page, completionHandler: nil)
     }
     func setForeground(_ active: Bool) {
-        guard foreground != active else { return }
+        guard !retired, foreground != active else { return }
         foreground = active
         if active { activate() } else { invalidate() }
     }

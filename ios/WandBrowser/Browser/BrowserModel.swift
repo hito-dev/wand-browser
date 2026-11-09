@@ -6,6 +6,7 @@ import ImageIO
 @MainActor
 final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUIDelegate {
     let profile: SiteProfile?
+    private(set) var retired = false
     @Published var externalDestination: URL?
     @Published var address = ""
     @Published var title = "Wand Browser"
@@ -155,7 +156,7 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
         self.hardware = hardware
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = profile.map { WKWebsiteDataStore(forIdentifier: $0.id) } ?? dataStore
-        configuration.preferences.isElementFullscreenEnabled = true
+        configuration.preferences.isElementFullscreenEnabled = profile == nil
         let controller = configuration.userContentController
         controller.addScriptMessageHandler(hardware, contentWorld: .page, name: "wand")
         if let path = Bundle.main.url(forResource: "HardwareBridge", withExtension: "js"),
@@ -221,7 +222,7 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
         load(url)
     }
     func load(_ url: URL) {
-        guard permitTopLevel(url) else { return }
+        guard !retired, permitTopLevel(url) else { return }
         error = nil; showingHome = false
         webView.load(URLRequest(url: url))
     }
@@ -296,10 +297,13 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
     }
 
     func retire() async {
+        retired = true
+        externalDestination = nil
+        resetFavicon()
         webView.stopLoading()
         dismissJavaScriptDialog()
         hardware.navigationStarted()
-        hardware.setForeground(false)
+        hardware.retire()
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
         webView.configuration.userContentController.removeScriptMessageHandler(forName: "wand", contentWorld: .page)
@@ -308,6 +312,7 @@ final class BrowserModel: NSObject, ObservableObject, WKNavigationDelegate, WKUI
         webView.removeFromSuperview()
     }
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        externalDestination = nil
         resetFavicon()
         dismissJavaScriptDialog()
         hardware.navigationStarted()
