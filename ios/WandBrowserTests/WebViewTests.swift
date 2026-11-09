@@ -22,21 +22,61 @@ struct WebViewTests {
         var window = try host(browser!)
         try await open(browser!)
         _ = try await evaluate(browser!.webView, "localStorage.setItem('profileProbe', marker); document.cookie = 'profileProbe=' + marker + '; Path=/; Secure'; return 'ok';", arguments: ["marker": marker])
+        _ = try await evaluate(browser!.webView, """
+            const db = await new Promise((resolve, reject) => {
+                const request = indexedDB.open('wandProfileProbe', 1);
+                request.onupgradeneeded = () => request.result.createObjectStore('markers');
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+            await new Promise((resolve, reject) => {
+                const tx = db.transaction('markers', 'readwrite');
+                tx.objectStore('markers').put(marker, 'value');
+                tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
+            });
+            db.close();
+            const cache = await caches.open('wandProfileProbe');
+            await cache.put(new Request(new URL('profile-marker', location.href)), new Response(marker));
+            return 'ok';
+            """, arguments: ["marker": marker])
         await browser!.retire(); window.isHidden = true; window.rootViewController = nil; browser = nil
         for profile in [second, nil] as [SiteProfile?] {
             browser = make(profile); window = try host(browser!)
             try await open(browser!)
             #expect(try await evaluate(browser!.webView, "return String(localStorage.getItem('profileProbe'))") == "null")
             #expect(try await evaluate(browser!.webView, "return String(document.cookie.includes('profileProbe='))") == "false")
+            #expect(try await evaluate(browser!.webView, "return String(await caches.has('wandProfileProbe'))") == "false")
+            #expect(try await evaluate(browser!.webView, "return String((await indexedDB.databases()).some(db => db.name === 'wandProfileProbe'))") == "false")
             await browser!.retire(); window.isHidden = true; window.rootViewController = nil; browser = nil
         }
         browser = make(first); window = try host(browser!)
         try await open(browser!)
         #expect(try await evaluate(browser!.webView, "return localStorage.getItem('profileProbe')") == marker)
         #expect(try await evaluate(browser!.webView, "return String(document.cookie.includes(marker))", arguments: ["marker": marker]) == "true")
+        #expect(try await evaluate(browser!.webView, """
+            const db = await new Promise((resolve, reject) => {
+                const request = indexedDB.open('wandProfileProbe', 1);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+            const value = await new Promise((resolve, reject) => {
+                const request = db.transaction('markers').objectStore('markers').get('value');
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+            db.close(); return value;
+            """) == marker)
+        #expect(try await evaluate(browser!.webView, "const cache = await caches.open('wandProfileProbe'); return await (await cache.match(new URL('profile-marker', location.href))).text();") == marker)
         await browser!.retire(); window.isHidden = true; window.rootViewController = nil; browser = nil
         try await BrowserSession.removeStore(first.id)
         try await BrowserSession.removeStore(second.id)
+        browser = make(first); window = try host(browser!)
+        try await open(browser!)
+        #expect(try await evaluate(browser!.webView, "return String(localStorage.getItem('profileProbe'))") == "null")
+        #expect(try await evaluate(browser!.webView, "return String(await caches.has('wandProfileProbe'))") == "false")
+        #expect(try await evaluate(browser!.webView, "return String((await indexedDB.databases()).some(db => db.name === 'wandProfileProbe'))") == "false")
+        await browser!.retire(); window.isHidden = true; window.rootViewController = nil; browser = nil
+        try await BrowserSession.removeStore(first.id)
     }
     // Feasibility probe, not a production isolation implementation. Run on device.
     @Test func isolationNativeBoundaryProbe() async throws {

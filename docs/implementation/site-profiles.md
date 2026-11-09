@@ -33,7 +33,8 @@ website from transmitting its data. There is no App Attest proof.
 
 ## Validation status
 
-The profile registry and existing hardware suites pass on a physical iPhone.
-Full release acceptance, including IndexedDB, service workers, caches, upgrade,
-and physical hardware lifecycle checks, remains pending. The new fixture is
+On zaephone, 23 native tests passed, including the registry, cookie/local-storage,
+IndexedDB and CacheStorage separation, reopening, and deletion/recreation.
+Service workers, full UI flows, upgrade, and physical hardware lifecycle acceptance
+remain pending; these results do not establish those checks. The new fixture is
 `tests/fixtures/profiles.html`; it must be published before reviewer use.

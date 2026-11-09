@@ -1,7 +1,7 @@
 # 0.3.2 site-profile candidate
 
-Marketing version remains 0.3.2. The build number must be selected after checking
-App Store Connect; this is a new candidate, distinct from the earlier camera build.
+Candidate: **0.3.2 (9)**. The owner confirmed the latest existing build is
+**0.3.1 (8)**. Apple processing and distribution eligibility remain unverified.
 Production bundle ID: ai.hito.wand.
 
 ## What to test
@@ -29,8 +29,8 @@ isolation, or App Attest guarantee is made. Profiles do not grant hardware acces
 
 ## Release gates
 
-Cookie/local-storage separation and reopening passed on zaephone. IndexedDB,
-caches, service workers, full UI flows, production hardware lifecycle, and upgrade
-checks still require recorded results. No TestFlight upload has been performed.
+Cookie/local-storage, IndexedDB, and CacheStorage separation, reopening, and
+deletion/recreation passed on zaephone. Service workers, full UI flows, production
+hardware lifecycle, and upgrade checks still require recorded results. No TestFlight upload has been performed.
 Use a clean checkout and the tracked archive/export verifier tools. Keep public
 release manual and defer App Store review submission until TestFlight validation.
