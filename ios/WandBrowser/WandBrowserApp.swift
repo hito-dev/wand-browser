@@ -35,6 +35,39 @@ final class BrowserSession: ObservableObject {
     init() {
         do { registry = try SiteProfileRegistry(); profiles = registry!.profiles }
         catch { self.error = error.localizedDescription }
+        configureProfileAPI()
+    }
+    private func configureProfileAPI() {
+        let current = browser
+        current.hardware.profileState = { [weak current] in
+            .object(["policy": .string(SiteProfile.policy),
+                     "active": .bool(current?.profile != nil),
+                     "origin": current?.profile.map { .string($0.origin) } ?? .null,
+                     "strictEmbeddedIsolation": .bool(false), "attestation": .bool(false)])
+        }
+        current.hardware.cancelProfile = { [weak current] in current?.dismissJavaScriptDialog() }
+        current.hardware.requestProfile = { [weak self, weak current] in
+            guard let self, let current, self.browser === current, !self.switching,
+                  let url = current.currentURL, let origin = SiteOrigin(url: url), origin.scheme == "https" else {
+                throw WebError.aborted
+            }
+            if current.profile != nil { return current.hardware.profileState!() }
+            guard current.javaScriptDialog == nil else {
+                throw WebError("InvalidStateError", "Another dialog is open.")
+            }
+            let token = current.hardware.document.token
+            let approved: Bool = await withCheckedContinuation { continuation in
+                current.javaScriptDialog = JavaScriptDialog(origin: origin.display,
+                    message: "Open \(origin.display) in a site profile? This uses separate storage and a fresh login, and locks top-level browsing to this origin. Embedded content follows normal WebKit rules.",
+                    kind: .confirm) { continuation.resume(returning: $0 != nil) }
+            }
+            guard current.hardware.document.token == token, self.browser === current,
+                  current.hardware.foreground else { throw WebError.aborted }
+            guard approved else { throw WebError("NotAllowedError", "Profile request denied.") }
+            await self.create(url)
+            // Replacing the document invalidates its bridge request; read state in the new page.
+            throw WebError.aborted
+        }
     }
     func open(_ profile: SiteProfile?, url: URL? = nil) async {
         guard !switching else { return }
@@ -52,6 +85,7 @@ final class BrowserSession: ObservableObject {
         } else { defaults = .standard }
         await browser.retire()
         browser = BrowserModel(historyDefaults: defaults, profile: profile)
+        configureProfileAPI()
         if let url = url ?? profile.flatMap({ URL(string: $0.origin) }) { browser.load(url) }
     }
     func create(_ url: URL) async {

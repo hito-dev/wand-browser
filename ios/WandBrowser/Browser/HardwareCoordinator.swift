@@ -37,6 +37,9 @@ final class HardwareCoordinator: NSObject, ObservableObject, WKScriptMessageHand
     private var retired = false
     func retire() { retired = true; foreground = false; invalidate() }
     weak var webView: WKWebView?
+    var profileState: (() -> JSONValue)?
+    var requestProfile: (() async throws -> JSONValue)?
+    var cancelProfile: (() -> Void)?
     var fullscreenState: () -> Bool = { false }
     var setFullscreen: ((Bool) throws -> Void)?
     private var fullscreenRevision = 0
@@ -105,6 +108,7 @@ final class HardwareCoordinator: NSObject, ObservableObject, WKScriptMessageHand
         activate()
     }
     func invalidate() {
+        cancelProfile?()
         send("reset", .null)
         document.invalidate()
         tasks.values.forEach { $0.cancel() }; tasks.removeAll()
@@ -156,6 +160,17 @@ final class HardwareCoordinator: NSObject, ObservableObject, WKScriptMessageHand
     }
     private func execute(_ request: BridgeRequest) async throws -> JSONValue {
         switch request.op {
+        case "profile.state":
+            try request.args.rejectUnknown([])
+            guard let profileState else { throw WebError("NotSupportedError", "Profiles unavailable.") }
+            return profileState()
+        case "profile.request":
+            try request.args.rejectUnknown([])
+            guard selection == nil, approval == nil, let requestProfile else {
+                throw WebError("InvalidStateError", "Profile approval unavailable.")
+            }
+            return try await requestProfile()
+
         case "fullscreen.request", "fullscreen.exit":
             try request.args.rejectUnknown([])
             guard let setFullscreen else { throw WebError("NotSupportedError", "Wand fullscreen is unavailable.") }

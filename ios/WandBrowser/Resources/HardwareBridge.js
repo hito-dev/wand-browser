@@ -316,8 +316,21 @@
     fullscreenActive = state.active;
     if (changed) fullscreen.dispatchEvent(new Event("change"));
   }
+  let profileSnapshot = null;
+  class WandProfile extends EventTarget {
+    async getState() {
+      const state = await request("profile.state");
+      if (JSON.stringify(state) !== JSON.stringify(profileSnapshot)) {
+        profileSnapshot = state;
+        this.dispatchEvent(new Event("change"));
+      }
+      return state;
+    }
+    async requestIsolation() { gesture(); return request("profile.request"); }
+  }
+  const profile = new WandProfile();
   // Keep native Fullscreen API methods and document state untouched.
-  if (!("wand" in window)) Object.defineProperty(window, "wand", { value: Object.freeze({ fullscreen }) });
+  if (!("wand" in window)) Object.defineProperty(window, "wand", { value: Object.freeze({ fullscreen, profile }) });
 
   function reset() {
     rejectReady(fail("AbortError", "The document visit ended."));
@@ -358,6 +371,8 @@
     initialize(next, fullscreenState) {
       if (token) reset();
       token = next; updateFullscreen(fullscreenState); resolveReady();
+      profileSnapshot = null;
+      profile.dispatchEvent(new Event("change"));
     },
     receive
   }) });
