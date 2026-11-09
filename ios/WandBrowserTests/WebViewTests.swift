@@ -9,6 +9,33 @@ import UIKit
 @MainActor
 @Suite(.serialized)
 struct WebViewTests {
+    // Feasibility probe, not a production isolation implementation. Run on device.
+    @Test func isolationNativeBoundaryProbe() async throws {
+        let browser = BrowserModel(hardware: HardwareCoordinator(bluetooth: TestBluetooth(), nfc: TestNFC()), dataStore: .nonPersistent())
+        let window = try host(browser)
+        defer { window.isHidden = true; browser.webView.removeFromSuperview() }
+        try await open(browser)
+        let policy = IsolationProbeDelegate()
+        browser.webView.navigationDelegate = policy
+        browser.webView.uiDelegate = policy
+        let result = try await evaluate(browser.webView, """
+            const frame = document.createElement('iframe');
+            document.body.append(frame);
+            const child = frame.contentWindow;
+            let devices = [], error = null;
+            try {
+                devices = await Promise.race([
+                    child.navigator.mediaDevices.enumerateDevices().then(ds => ds.map(d => ({kind:d.kind, label:d.label}))),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000))
+                ]);
+            } catch (e) { error = e.name + ':' + e.message; }
+            const result = {childAccessible: !!child.document, secure: child.isSecureContext, devices, error};
+            frame.remove();
+            return JSON.stringify(result);
+            """)
+        print("ISOLATION_PROBE: \(result); deniedNavigations=\(policy.deniedNavigations); capturePrompts=\(policy.capturePrompts)")
+        #expect(!result.isEmpty)
+    }
     var fixtureBase: URL {
         get throws {
             let value = ProcessInfo.processInfo.environment["WAND_FIXTURE_URL"] ?? "https://wand.hito.ai/fixtures/"
@@ -221,5 +248,24 @@ struct WebViewTests {
         #expect(!coordinator.hasNFCGrant)
         #expect(coordinator.allowedDevices.isEmpty)
         coordinator.invalidate()
+    }
+}
+
+@MainActor
+private final class IsolationProbeDelegate: NSObject, WKNavigationDelegate, WKUIDelegate {
+    var deniedNavigations = 0
+    var capturePrompts = 0
+    func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction,
+                 decisionHandler: @escaping @MainActor @Sendable (WKNavigationActionPolicy) -> Void) {
+        if action.targetFrame?.isMainFrame != true {
+            deniedNavigations += 1
+            decisionHandler(.cancel)
+        } else { decisionHandler(.allow) }
+    }
+    func webView(_ webView: WKWebView, requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo, type: WKMediaCaptureType,
+                 decisionHandler: @escaping @MainActor @Sendable (WKPermissionDecision) -> Void) {
+        capturePrompts += 1
+        decisionHandler(.deny)
     }
 }
