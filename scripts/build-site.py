@@ -92,7 +92,7 @@ def build(output, metadata=None, source=ROOT / 'site'):
     shutil.copyfile(source / 'robots.txt', output / 'robots.txt')
     write(output, '/privacy/', (ROOT / 'ios/WandBrowser/Resources/PrivacyPolicy.html').read_text())
     write(output, '/.nojekyll', '')
-    for name in ('child.html', 'hito_ble_transport.js', 'sdk-provenance.json'):
+    for name in ('child.html', 'profiles.html', 'hito_ble_transport.js', 'sdk-provenance.json'):
         dest = output / 'fixtures' / name
         dest.parent.mkdir(exist_ok=True)
         text = (ROOT / 'tests/fixtures' / name).read_text()

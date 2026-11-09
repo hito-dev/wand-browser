@@ -30,6 +30,12 @@ class SiteTests(unittest.TestCase):
         cls.registry,cls.content=site.load_content()
     @classmethod
     def tearDownClass(cls): cls.tmp.cleanup()
+    def test_profile_fixture_is_published(self):
+        text = (self.output/'fixtures/profiles.html').read_text()
+        self.assertIn('wand.profile.requestIsolation()', text)
+        self.assertIn('wand.profile.getState()', text)
+        self.assertTrue(Document(text).matching('meta', name='robots', content='noindex'))
+
     def test_all_indexable_routes_and_discovery(self):
         expected={site.ORIGIN+u for u in self.urls}|{site.ORIGIN+'/privacy/'}
         self.assertEqual(len(expected),126)
