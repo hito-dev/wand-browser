@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wand site profiles</title>
+<main><h1>Site profiles</h1>
+<p>Profiles separate website storage and lock top-level navigation to an HTTPS origin. Embedded content follows WebKit rules. No attestation is provided.</p>
+<button id="state">Read profile state</button>
+<button id="request">Request site profile</button>
+<button id="store">Save random marker</button>
+<button id="read">Read marker</button>
+<p><a href="https://example.com/">Test external navigation</a></p>
+<pre id="output" role="status"></pre></main>
+<script>
+const output = document.getElementById('output');
+const show = value => { output.textContent = JSON.stringify(value, null, 2); };
+const perform = action => async () => { try { show(await action()); } catch (e) { show({error:e.name,message:e.message}); } };
+document.getElementById('state').onclick = perform(() => wand.profile.getState());
+document.getElementById('request').onclick = perform(() => wand.profile.requestIsolation());
+document.getElementById('store').onclick = perform(() => { const value = crypto.randomUUID(); localStorage.setItem('wand.profile.marker',value); return value; });
+document.getElementById('read').onclick = perform(() => localStorage.getItem('wand.profile.marker'));
+</script></html>

@@ -13,6 +13,7 @@ struct WandBrowserApp: App {
                 ProfileControls(session: session, browser: browser)
                 BrowserView(browser: browser).id(ObjectIdentifier(browser)).disabled(session.switching)
             }
+                .task { await session.retryPendingDeletions() }
                 .onChange(of: phase) { _, next in
                     // System permission/NFC sheets can make the scene inactive.
                     // Only genuine backgrounding ends a visit.
@@ -64,18 +65,23 @@ final class BrowserSession: ObservableObject {
             guard current.hardware.document.token == token, self.browser === current,
                   current.hardware.foreground else { throw WebError.aborted }
             guard approved else { throw WebError("NotAllowedError", "Profile request denied.") }
-            await self.create(url)
+            guard await self.create(url) else {
+                throw WebError("InvalidStateError", self.error ?? "Could not open the site profile.")
+            }
             // Replacing the document invalidates its bridge request; read state in the new page.
             throw WebError.aborted
         }
     }
     func open(_ profile: SiteProfile?, url: URL? = nil) async {
         guard !switching else { return }
+        switching = true
+        defer { switching = false }
+        await replaceBrowser(profile, url: url)
+    }
+    private func replaceBrowser(_ profile: SiteProfile?, url: URL? = nil) async {
         if let profile {
             guard registry?.profiles.contains(where: { $0.id == profile.id && !$0.deletionPending }) == true else { return }
         }
-        switching = true
-        defer { switching = false }
         let defaults: UserDefaults
         if let profile {
             guard let scoped = UserDefaults(suiteName: "browser.profile." + profile.id.uuidString) else {
@@ -88,23 +94,44 @@ final class BrowserSession: ObservableObject {
         configureProfileAPI()
         if let url = url ?? profile.flatMap({ URL(string: $0.origin) }) { browser.load(url) }
     }
-    func create(_ url: URL) async {
+    @discardableResult
+    func create(_ url: URL) async -> Bool {
         do {
-            guard !switching, let registry else { return }
+            guard !switching, let registry else { return false }
             let profile = try registry.createOrReopen(url)
             profiles = registry.profiles
             await open(profile, url: url)
-        } catch { self.error = error.localizedDescription }
+            return browser.profile?.id == profile.id
+        } catch { self.error = error.localizedDescription; return false }
+    }
+    static func removeStore(_ id: UUID) async throws {
+        for attempt in 0..<10 {
+            do { try await WKWebsiteDataStore.remove(forIdentifier: id); return }
+            catch {
+                let failure = error as NSError
+                guard failure.domain == "WKWebSiteDataStore", failure.code == 1, attempt < 9 else { throw error }
+                try await Task.sleep(for: .milliseconds(250))
+            }
+        }
+    }
+    func retryPendingDeletions() async {
+        let pending = profiles.filter(\.deletionPending)
+        for profile in pending {
+            guard !Task.isCancelled else { return }
+            await delete(profile)
+        }
     }
     func delete(_ profile: SiteProfile) async {
         guard !switching, let registry else { return }
+        switching = true
+        defer { switching = false }
         do {
             try registry.markForDeletion(profile.id)
             profiles = registry.profiles
-            if browser.profile?.id == profile.id { await open(nil) }
-            switching = true
-            defer { switching = false }
-            try await WKWebsiteDataStore.remove(forIdentifier: profile.id)
+            if browser.profile?.id == profile.id { await replaceBrowser(nil) }
+            // Let SwiftUI detach the retired view before removing its data store.
+            await Task.yield()
+            try await Self.removeStore(profile.id)
             UserDefaults.standard.removePersistentDomain(forName: "browser.profile." + profile.id.uuidString)
             try registry.finishDeletion(profile.id)
             profiles = registry.profiles

@@ -386,6 +386,7 @@ private struct JavaScriptDialogView: View {
                 if dialog.kind != .alert { Button("Cancel", role: .cancel) { dialog.complete(nil); dismiss() } }
             }.navigationTitle("Website message").navigationBarTitleDisplayMode(.inline)
                 .onAppear { text = dialog.text }
+                .onDisappear { dialog.complete(nil) }
         }
     }
 }

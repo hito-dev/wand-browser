@@ -39,6 +39,24 @@ function browser({ protocol = "https:", frame = false, initialized = true, respo
   };
 }
 
+test("profile state, native denial and gesture boundaries", async () => {
+  const state = { policy: "storage-origin-v1", active: true, origin: "https://example.com", strictEmbeddedIsolation: false, attestation: false };
+  const app = browser({ respond: async request => request.op === "profile.state"
+    ? { ok: state } : { error: { name: "NotAllowedError", message: "Denied" } } });
+  let changes = 0;
+  app.context.wand.profile.addEventListener("change", () => changes++);
+  assert.equal((await app.context.wand.profile.getState()).origin, state.origin);
+  await app.context.wand.profile.getState();
+  assert.equal(changes, 1);
+  await assert.rejects(app.context.wand.profile.requestIsolation(), { name: "NotAllowedError" });
+  app.context.navigator.userActivation.isActive = false;
+  const before = app.calls.length;
+  await assert.rejects(app.context.wand.profile.requestIsolation(), { name: "SecurityError" });
+  assert.equal(app.calls.length, before);
+  app.initialize();
+  assert.equal(changes, 2);
+});
+
 test("Wand fullscreen reflects native changes and leaves WebKit APIs untouched", async () => {
   const nativeExit = () => {}, nativeRequest = () => {};
   let active = false, revision = 0;

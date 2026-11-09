@@ -9,6 +9,35 @@ import UIKit
 @MainActor
 @Suite(.serialized)
 struct WebViewTests {
+    @Test func profileStorageSeparationAndReopen() async throws {
+        let url = try fixtureBase
+        let first = try SiteProfile(url: url)
+        let second = try SiteProfile(url: url)
+        let marker = UUID().uuidString
+        func make(_ profile: SiteProfile?) -> BrowserModel {
+            BrowserModel(hardware: HardwareCoordinator(bluetooth: TestBluetooth(), nfc: TestNFC()),
+                         dataStore: .nonPersistent(), profile: profile)
+        }
+        var browser: BrowserModel? = make(first)
+        var window = try host(browser!)
+        try await open(browser!)
+        _ = try await evaluate(browser!.webView, "localStorage.setItem('profileProbe', marker); document.cookie = 'profileProbe=' + marker + '; Path=/; Secure'; return 'ok';", arguments: ["marker": marker])
+        await browser!.retire(); window.isHidden = true; window.rootViewController = nil; browser = nil
+        for profile in [second, nil] as [SiteProfile?] {
+            browser = make(profile); window = try host(browser!)
+            try await open(browser!)
+            #expect(try await evaluate(browser!.webView, "return String(localStorage.getItem('profileProbe'))") == "null")
+            #expect(try await evaluate(browser!.webView, "return String(document.cookie.includes('profileProbe='))") == "false")
+            await browser!.retire(); window.isHidden = true; window.rootViewController = nil; browser = nil
+        }
+        browser = make(first); window = try host(browser!)
+        try await open(browser!)
+        #expect(try await evaluate(browser!.webView, "return localStorage.getItem('profileProbe')") == marker)
+        #expect(try await evaluate(browser!.webView, "return String(document.cookie.includes(marker))", arguments: ["marker": marker]) == "true")
+        await browser!.retire(); window.isHidden = true; window.rootViewController = nil; browser = nil
+        try await BrowserSession.removeStore(first.id)
+        try await BrowserSession.removeStore(second.id)
+    }
     // Feasibility probe, not a production isolation implementation. Run on device.
     @Test func isolationNativeBoundaryProbe() async throws {
         let browser = BrowserModel(hardware: HardwareCoordinator(bluetooth: TestBluetooth(), nfc: TestNFC()), dataStore: .nonPersistent())
