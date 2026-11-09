@@ -121,6 +121,73 @@ struct SiteOrigin: Equatable, Sendable {
     }
 }
 
+/// A storage boundary, not a claim that embedded documents cannot execute.
+struct SiteProfile: Codable, Equatable, Identifiable, Sendable {
+    let id: UUID
+    let origin: String
+    var deletionPending: Bool = false
+    static let policy = "storage-origin-v1"
+
+    init(url: URL) throws {
+        guard url.scheme?.lowercased() == "https", url.user == nil, url.password == nil,
+              let site = SiteOrigin(url: url) else {
+            throw WebError("SecurityError", "Site profiles require an HTTPS origin.")
+        }
+        id = UUID()
+        origin = site.display
+    }
+
+    func permits(_ url: URL) -> Bool {
+        !deletionPending && url.user == nil && url.password == nil &&
+            SiteOrigin(url: url)?.display == origin
+    }
+}
+
+@MainActor
+final class SiteProfileRegistry {
+    private let defaults: UserDefaults
+    private let key = "browser.siteProfiles.v1"
+    private(set) var profiles: [SiteProfile]
+
+    init(defaults: UserDefaults = .standard) throws {
+        self.defaults = defaults
+        if let data = defaults.data(forKey: key) {
+            // Never silently replace a corrupted registry and orphan user data.
+            profiles = try JSONDecoder().decode([SiteProfile].self, from: data)
+        } else { profiles = [] }
+    }
+
+    func createOrReopen(_ url: URL) throws -> SiteProfile {
+        let candidate = try SiteProfile(url: url)
+        if let existing = profiles.first(where: { $0.origin == candidate.origin }) {
+            guard !existing.deletionPending else {
+                throw WebError("InvalidStateError", "Profile deletion must finish before reopening this site.")
+            }
+            return existing
+        }
+        try save(profiles + [candidate])
+        return candidate
+    }
+
+    func markForDeletion(_ id: UUID) throws {
+        var next = profiles
+        guard let index = next.firstIndex(where: { $0.id == id }) else { return }
+        next[index].deletionPending = true
+        try save(next)
+    }
+
+    // Call only after WebKit has successfully removed the persistent store.
+    func finishDeletion(_ id: UUID) throws {
+        try save(profiles.filter { $0.id != id })
+    }
+
+    private func save(_ next: [SiteProfile]) throws {
+        let data = try JSONEncoder().encode(next)
+        defaults.set(data, forKey: key)
+        profiles = next
+    }
+}
+
 /// A capability for one committed document. Never accept a website's claimed origin.
 struct DocumentSession {
     private(set) var token = UUID().uuidString

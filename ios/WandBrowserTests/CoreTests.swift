@@ -5,6 +5,28 @@ import WebKit
 @testable import WandBrowser
 
 struct CoreTests {
+    @Test @MainActor func siteProfileOriginsPersistenceAndDeletion() throws {
+        let suite = "profile-test-" + UUID().uuidString
+        let defaults = try #require(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let registry = try SiteProfileRegistry(defaults: defaults)
+        let url = try #require(URL(string: "https://example.com/a"))
+        let first = try registry.createOrReopen(url)
+        #expect(first.permits(URL(string: "https://example.com:443/b")!))
+        #expect(!first.permits(URL(string: "https://sub.example.com/")!))
+        #expect(!first.permits(URL(string: "https://example.com:8443/")!))
+        #expect(!first.permits(URL(string: "http://example.com/")!))
+        #expect(!first.permits(URL(string: "https://user@example.com/")!))
+        let reopened = try SiteProfileRegistry(defaults: defaults)
+        #expect(try reopened.createOrReopen(url).id == first.id)
+        try reopened.markForDeletion(first.id)
+        #expect(throws: WebError.self) { try reopened.createOrReopen(url) }
+        let pending = try SiteProfileRegistry(defaults: defaults)
+        #expect(pending.profiles.first?.deletionPending == true)
+        try pending.finishDeletion(first.id)
+        #expect(try pending.createOrReopen(url).id != first.id)
+        #expect(throws: WebError.self) { try registry.createOrReopen(URL(string: "http://example.com")!) }
+    }
     @Test @MainActor func fullscreenAddressFormattingAndIconCandidates() throws {
         let url = try #require(URL(string: "https://EXAMPLE.com:8443/path%20name?q=secret#fragment"))
         let display = BrowserModel.displayAddress(url)
